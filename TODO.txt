@@ -1,0 +1,6 @@
+ezlogxx
+
+layout
+qt meta properties
+namespace EZLogger
+
