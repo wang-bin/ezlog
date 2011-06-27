@@ -1,6 +1,13 @@
 ezlogxx
 
+format: %hh%:%mm%:%ss%--%file%func%@%line%
+key words: year month day hour min sec msec tid pid file func line fmt(自定义格式化字符串）
+分隔符%,
+循环prontf
+
+参考 boost.thread
+mutex
 layout
 qt meta properties
-namespace EZLogger
+namespace EZLogg
 
