@@ -21,28 +21,28 @@ long pid()
 	return getpid();
 }
 
-struct EZMutexPrivate {
+struct ezmutexprivate {
 	pthread_mutex_t mutex;
 };
 
-EZMutex::EZMutex()
-:d(new EZMutexPrivate)
+ezmutex::ezmutex()
+:d(new ezmutexprivate)
 {
 	pthread_mutex_init(&d->mutex, NULL);
 }
 
-EZMutex::~EZMutex()
+ezmutex::~ezmutex()
 {
 	pthread_mutex_destroy(&d->mutex);
 	delete d;
 }
 
-void EZMutex::lock()
+void ezmutex::lock()
 {
 	pthread_mutex_lock(&d->mutex);
 }
 
-void EZMutex::unlock()
+void ezmutex::unlock()
 {
 	pthread_mutex_destroy(&d->mutex);
 }

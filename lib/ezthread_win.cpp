@@ -15,28 +15,28 @@ long pid()
 	return _getpid();
 }
 
-struct EZMutexPrivate {
+struct ezmutexprivate {
 	CRITICAL_SECTION _criticalSection;
 };
 
-EZMutex::EZMutex()
-:d(new EZMutexPrivate)
+ezmutex::ezmutex()
+:d(new ezmutexprivate)
 {
 	InitializeCriticalSection(&d->_criticalSection);
 }
 
-EZMutex::~EZMutex()
+ezmutex::~ezmutex()
 {
 	DeleteCriticalSection(&d->_criticalSection);
 	delete d;
 }
 
-void EZMutex::lock()
+void ezmutex::lock()
 {
 	EnterCriticalSection(&d->_criticalSection);
 }
 
-void EZMutex::unlock()
+void ezmutex::unlock()
 {
 	LeaveCriticalSection(&d->_criticalSection);
 }

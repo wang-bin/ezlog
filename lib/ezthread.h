@@ -4,41 +4,41 @@
 #if CONFIG_THREAD_BOOST
 #include <boost/thread/thread.hpp>
 #include <boost/thread/mutex.hpp>
-typedef boost::mutex EZMutex;
-typedef boost::mutex::scoped_lock EZScopedLock;
+typedef boost::mutex ezmutex;
+typedef boost::mutex::scoped_lock ezscoped_lock;
 #endif
 
 unsigned long threadId();
 long pid();
 
-struct EZMutexPrivate;
-class EZMutex
+struct ezmutexprivate;
+class ezmutex
 {
 public:
-	EZMutex();
-	~EZMutex();
+	ezmutex();
+	~ezmutex();
 
 	void lock();
 	void unlock();
 private:
-	struct EZMutexPrivate *d;
-	EZMutex(const EZMutex&);
-	EZMutex& operator = (const EZMutex&);
+	struct ezmutexprivate *d;
+	ezmutex(const ezmutex&);
+	ezmutex& operator = (const ezmutex&);
 };
 
-class EZScopedLock
+class ezscoped_lock
 {
 public:
-	inline EZScopedLock(EZMutex& pMutex):
+	inline ezscoped_lock(ezmutex& pMutex):
 		mutex(pMutex) {
 		mutex.lock();
 	}
 
-	inline ~EZScopedLock() {
+	inline ~ezscoped_lock() {
 		mutex.unlock();
 	}
 private:
-	EZMutex& mutex;
+	ezmutex& mutex;
 };
 
 #endif // EZTHREAD_H
