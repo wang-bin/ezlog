@@ -1,6 +1,6 @@
 /******************************************************************************
-	ezlog test
-	Copyright (C) 2011 Wangbin <wbsecg1@gmail.com>
+	eztime: a tiny time wrapper for c++
+	Copyright (C) 2011 Wang Bin <wbsecg1@gmail.com>
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -17,19 +17,35 @@
 	51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ******************************************************************************/
 
-#include "ezlog.h"
+#ifndef EZTIME_H
+#define EZTIME_H
 
-int main(int argc, char** argv)
-{
-	ezlog_init_output("log.txt", Append);
-	ezlog_init_format("YY%-%MM%-%DD% %hh%:%mm%:%ss% [tid:%tid% pid:%pid%]-[%file%] %func% @%line%: ");
-	ezlog_msg("Hello, cruel world!");
-	ezlog_error("Damn! %s", __DATE__);
-	ezlog_msg();
+#include <time.h>
+#include "global.h"
 
-	ezlog_log("Only in log file!");
+#ifdef OS_WIN
+#include <windows.h>
+#endif //WINCE
 
-	ezlog_fini();
-	return 0;
-}
+typedef struct _eztime {
+	int year, month, day;
+	int hour, min, sec;
+	int msec;
+	void init(){
+#ifdef OS_WIN
+		SYSTEMTIME stUTC;
+		::GetSystemTime(&stUTC);
+		year = stUTC.wYear, month = stUTC.wMonth, day = stUTC.wDay;
+		hour = stUTC.wHour, min = stUTC.wMinute, sec = stUTC.wSecond;
+		msec = stUTC.wMilliseconds;
+#else
+		time_t seconds = time(NULL);
+		struct tm* t = localtime(&seconds);
+		year = t->tm_year + 1900, month = t->tm_mon + 1, day = t->tm_mday;
+		hour = t->tm_hour, min = t->tm_min, sec = t->tm_sec, msec = 0;
+#endif //WINCE
+	}
+	_eztime() { init();}
+} eztime;
 
+#endif // EZTIME_H

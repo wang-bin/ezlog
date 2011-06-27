@@ -1,6 +1,6 @@
 /******************************************************************************
-	ezlog test
-	Copyright (C) 2011 Wangbin <wbsecg1@gmail.com>
+	ezthread: a tiny thread wrapper for c++
+	Copyright (C) 2011 Wang Bin <wbsecg1@gmail.com>
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -17,19 +17,41 @@
 	51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ******************************************************************************/
 
-#include "ezlog.h"
+#ifndef EZTHREAD_H
+#define EZTHREAD_H
 
-int main(int argc, char** argv)
+#if CONFIG_THREAD_BOOST
+#include <boost/thread/thread.hpp>
+#include <boost/thread/mutex.hpp>
+typedef boost::mutex ezmutex;
+typedef boost::mutex::scoped_lock ezscoped_lock;
+#endif
+
+unsigned long threadId();
+long pid();
+
+struct ezmutexprivate;
+class ezmutex
 {
-	ezlog_init_output("log.txt", Append);
-	ezlog_init_format("YY%-%MM%-%DD% %hh%:%mm%:%ss% [tid:%tid% pid:%pid%]-[%file%] %func% @%line%: ");
-	ezlog_msg("Hello, cruel world!");
-	ezlog_error("Damn! %s", __DATE__);
-	ezlog_msg();
+public:
+	ezmutex();
+	~ezmutex();
+	void lock();
+	void unlock();
 
-	ezlog_log("Only in log file!");
+private:
+	struct ezmutexprivate *d;
+	ezmutex(const ezmutex&);
+	ezmutex& operator = (const ezmutex&);
+};
 
-	ezlog_fini();
-	return 0;
-}
+class ezscoped_lock
+{
+public:
+	inline ezscoped_lock(ezmutex& pMutex): mutex(pMutex) { mutex.lock();}
+	inline ~ezscoped_lock() { mutex.unlock();}
+private:
+	ezmutex& mutex;
+};
 
+#endif // EZTHREAD_H

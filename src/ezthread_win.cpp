@@ -1,6 +1,6 @@
 /******************************************************************************
-	ezlog test
-	Copyright (C) 2011 Wangbin <wbsecg1@gmail.com>
+	ezthread: a tiny thread wrapper for c++
+	Copyright (C) 2011 Wang Bin <wbsecg1@gmail.com>
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -17,19 +17,43 @@
 	51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ******************************************************************************/
 
-#include "ezlog.h"
+#include "ezthread.h"
+#include <windows.h>
+#include <process.h>
 
-int main(int argc, char** argv)
+unsigned long threadId()
 {
-	ezlog_init_output("log.txt", Append);
-	ezlog_init_format("YY%-%MM%-%DD% %hh%:%mm%:%ss% [tid:%tid% pid:%pid%]-[%file%] %func% @%line%: ");
-	ezlog_msg("Hello, cruel world!");
-	ezlog_error("Damn! %s", __DATE__);
-	ezlog_msg();
+	return GetCurrentThreadId();
+}
 
-	ezlog_log("Only in log file!");
+long pid()
+{
+	return _getpid();
+}
 
-	ezlog_fini();
-	return 0;
+struct ezmutexprivate {
+	CRITICAL_SECTION _criticalSection;
+};
+
+ezmutex::ezmutex()
+:d(new ezmutexprivate)
+{
+	InitializeCriticalSection(&d->_criticalSection);
+}
+
+ezmutex::~ezmutex()
+{
+	DeleteCriticalSection(&d->_criticalSection);
+	delete d;
+}
+
+void ezmutex::lock()
+{
+	EnterCriticalSection(&d->_criticalSection);
+}
+
+void ezmutex::unlock()
+{
+	LeaveCriticalSection(&d->_criticalSection);
 }
 

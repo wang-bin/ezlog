@@ -1,6 +1,6 @@
 /******************************************************************************
-	ezlog test
-	Copyright (C) 2011 Wangbin <wbsecg1@gmail.com>
+	global.h: Macros
+	Copyright (C) 2011 Wang Bin <wbsecg1@gmail.com>
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -17,19 +17,17 @@
 	51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ******************************************************************************/
 
-#include "ezlog.h"
+#ifndef GLOBAL_H
+#define GLOBAL_H
 
-int main(int argc, char** argv)
-{
-	ezlog_init_output("log.txt", Append);
-	ezlog_init_format("YY%-%MM%-%DD% %hh%:%mm%:%ss% [tid:%tid% pid:%pid%]-[%file%] %func% @%line%: ");
-	ezlog_msg("Hello, cruel world!");
-	ezlog_error("Damn! %s", __DATE__);
-	ezlog_msg();
 
-	ezlog_log("Only in log file!");
+#if __GNUC__
+#else
+#define __PRETTY_FUNCTION__ __FUNCTION__
+#endif
 
-	ezlog_fini();
-	return 0;
-}
+#if defined(_MSC_VER) || defined(_WINDOWS_) || defined(WIN32) || defined(WINCE) || defined(_WIN32_WCE) || defined(UNDER_CE)
+#define OS_WIN
+#endif
 
+#endif // GLOBAL_H

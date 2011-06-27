@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 TEMPLATE = subdirs
-SUBDIRS = lib test
+SUBDIRS = src test
 
 OTHER_FILES += \
 			TODO.txt

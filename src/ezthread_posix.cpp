@@ -1,6 +1,6 @@
 /******************************************************************************
-	ezlog test
-	Copyright (C) 2011 Wangbin <wbsecg1@gmail.com>
+	ezthread: a tiny thread wrapper for c++
+	Copyright (C) 2011 Wang Bin <wbsecg1@gmail.com>
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -17,19 +17,49 @@
 	51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ******************************************************************************/
 
-#include "ezlog.h"
+#include "ezthread.h"
+#include <pthread.h>
+#include <unistd.h>
 
-int main(int argc, char** argv)
+/*
+#include <unistd.h>
+#include <sys/syscall.h>
+#include <sys/types.h>
+pid_t tid = (pid_t) syscall (SYS_gettid);
+*/
+unsigned long threadId()
 {
-	ezlog_init_output("log.txt", Append);
-	ezlog_init_format("YY%-%MM%-%DD% %hh%:%mm%:%ss% [tid:%tid% pid:%pid%]-[%file%] %func% @%line%: ");
-	ezlog_msg("Hello, cruel world!");
-	ezlog_error("Damn! %s", __DATE__);
-	ezlog_msg();
+	return pthread_self();
+}
 
-	ezlog_log("Only in log file!");
+long pid()
+{
+	return getpid();
+}
 
-	ezlog_fini();
-	return 0;
+struct ezmutexprivate {
+	pthread_mutex_t mutex;
+};
+
+ezmutex::ezmutex()
+:d(new ezmutexprivate)
+{
+	pthread_mutex_init(&d->mutex, NULL);
+}
+
+ezmutex::~ezmutex()
+{
+	pthread_mutex_destroy(&d->mutex);
+	delete d;
+}
+
+void ezmutex::lock()
+{
+	pthread_mutex_lock(&d->mutex);
+}
+
+void ezmutex::unlock()
+{
+	pthread_mutex_destroy(&d->mutex);
 }
 

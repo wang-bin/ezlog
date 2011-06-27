@@ -1,10 +1,10 @@
 TEMPLATE = app
-CONFIG   += console
+CONFIG   += console static
 CONFIG   -= app_bundle
 
 DESTDIR = ./
 TARGET	= test
-INCLUDEPATH += ../lib
+INCLUDEPATH += ../src
 LIBS += -L../lib -lezlog
 
 SOURCES += main.cpp
