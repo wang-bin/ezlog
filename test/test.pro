@@ -1,4 +1,5 @@
 TEMPLATE = app
+Qt		 -= gui
 CONFIG   += console static
 CONFIG   -= app_bundle
 

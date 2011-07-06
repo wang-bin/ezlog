@@ -1,4 +1,10 @@
 ezlogxx
+strftime(s, sizeof(s), "%Y-%m-%d %H:%M:%S", localtime(&t));
+klist
+{
+	const char* key;
+	int (*print_key)(const char* func, const char* file, const char* other, int line)
+}
 
 level: ERROR INFO
 

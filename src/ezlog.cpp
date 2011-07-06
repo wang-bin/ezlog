@@ -37,7 +37,7 @@ ezmutex mutex;
 //typedef	int (*ezfprintf)(const struct tm*);//(FILE*, const char*, ...);
 const char* fomat_list[] =
 {
-	"%04d-%02d-%02d %02d:%02d:%02d [tid:0x%lx pid:0x%lx]-[%s] %s @%d: \t"//, geit_time}//,fprintf}//(stdout, "%04d-%02d-%02d %02d:%02d:%02d-", geitTime()->tm_year + 1900, geitTime()->tm_mon + 1, geitTime()->tm_mday, geitTime()->tm_hour, geitTime()->tm_min, geitTime()->tm_sec)}
+	"%04d-%02d-%02d %02d:%02d:%02d [tid:%#lx pid:%#lx]-[%s] %s @%d: \t"//, geit_time}//,fprintf}//(stdout, "%04d-%02d-%02d %02d:%02d:%02d-", geitTime()->tm_year + 1900, geitTime()->tm_mon + 1, geitTime()->tm_mday, geitTime()->tm_hour, geitTime()->tm_min, geitTime()->tm_sec)}
 };
 
 const char* formats[] = {
@@ -82,9 +82,9 @@ int format_print(FILE* f, char* str, const eztime& t, const char* file, const ch
 		else if(!strcmp(pch, "line"))
 			r += fprintf(f, "%d", line);
 		else if(!strcmp(pch, "tid"))
-			r += fprintf(f, "0x%lx", threadId());
+			r += fprintf(f, "%#lx", threadId());
 		else if(!strcmp(pch, "pid"))
-			r += fprintf(f, "0x%lx", pid());
+			r += fprintf(f, "%#lx", pid());
 		else
 			r += fprintf(f, "%s", pch);
 		*(pch+strlen(pch)) = '%'; //strtok will replace '%' with '\0'.
@@ -94,6 +94,9 @@ int format_print(FILE* f, char* str, const eztime& t, const char* file, const ch
 	return r;
 }
 
+/*
+  out is stdout, stderr or 0. Each will put log message to a log file if exists.
+*/
 int _ezlog_print(FILE* out, const char* file, const int line, const char* func, const char* fmt, ...)
 {
 	int r=0;
