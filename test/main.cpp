@@ -27,7 +27,7 @@ int main(int argc, char** argv)
 	ezlog_error("Damn! %s", __DATE__);
 	ezlog_msg();
 
-	ezlog_log("Only in log file!");
+	ezlog_file("Only in log file!");
 
 	ezlog_fini();
 	return 0;

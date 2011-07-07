@@ -6,7 +6,7 @@
 TEMPLATE = subdirs
 SUBDIRS = src test
 
-OTHER_FILES += \
+OTHER_FILES += README \
 			TODO.txt
 
 win32 {

@@ -112,7 +112,7 @@ int _ezlog_print(FILE* out, const char* file, const int line, const char* func, 
 	//r += fprintf(out, fomat_list[0],
 	//	t.year, t.month, t.day, t.hour, t.min, t.sec
 	//, threadId(), pid(), file, func, line);
-	if (format_str==NULL) ezlog_init_format(formats[0]);
+	if (format_str==NULL) ezlog_init_format(formats[0]); //Directly print it
 	format_print(out, format_str, t, file, func, line);
 	r += vfprintf(out, fmt, args);
 	r += fprintf(out, "\n");

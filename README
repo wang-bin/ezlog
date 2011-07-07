@@ -1,0 +1,29 @@
+A tiny log library for C/C++.
+
+Platform tested: linux, win32, wince
+
+Usage:
+1. Setup the log file and write mode. If log file is empty, then log will only display on the terminal.
+	Log file can append to an existing file overwrite it.
+
+	ezlog_init_output("log.txt", Append);
+
+2.  Setup log information format. Key words: YY, MM, DD, hh, mm, ss, tid, pid, file, func, line.
+	It's easy to understand what they mean, so I will not explain these. A key word must between two "%",
+	except the first and the last. If string between "%" is not a key word, ezlog will print it with out any change.
+
+	ezlog_init_format("YY%-%MM%-%DD% %hh%:%mm%:%ss% [tid:%tid% pid:%pid%]-[%file%] %func% @%line%: %");
+
+3.	Start your logging. ezlog supports put log information to stdout, stderr and a log file. The information is
+	displayed with the former format. You can add additional messages. It supports printf like format. If nothing
+	else you want to put, just keep the parameter empty.
+
+	ezlog_msg("Hello, cruel world!");		//stdout
+	ezlog_error("Damn! %s", __DATE__);		//stderr
+	ezlog_msg();							//Only display the formated message you defined
+
+	ezlog_file("Only in log file!");			//log file
+
+4.	Clean up.
+
+	ezlog_fini();
