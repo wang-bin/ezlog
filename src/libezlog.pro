@@ -1,10 +1,14 @@
-
 QT       =
 
 TEMPLATE = lib
 CONFIG += static
-DESTDIR = ../lib
 TARGET = ezlog
+QMAKE_CXXFLAGS += "-std=c++0x"
+
+!*msvc*: LIBS += -lpthread
+
+include(../config.pri)
+DESTDIR=$$replace(DESTDIR, $${DESTDIR}, ../$${DESTDIR})
 
 SOURCES += \
 	ezlog.cpp \
@@ -17,11 +21,8 @@ HEADERS += \
 	global.h \
 	eztime.h
 
-win32 {
-	OBJECTS_DIR = ../.obj/win32
+*msvc* {
 	SOURCES += ezthread_win.cpp
-} else {
-	unix:OBJECTS_DIR = ../.obj/unix
-	macx:OBJECTS_DIR = ../.obj/macx
+} else:*g++* {
 	SOURCES += ezthread_posix.cpp
 }

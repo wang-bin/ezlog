@@ -7,5 +7,6 @@ DESTDIR = ./
 TARGET	= test
 INCLUDEPATH += ../src
 LIBS += -L../lib -lezlog
+!*msvc*: LIBS += -lpthread
 
 SOURCES += main.cpp

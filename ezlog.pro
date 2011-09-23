@@ -4,7 +4,9 @@
 #
 #-------------------------------------------------
 TEMPLATE = subdirs
-SUBDIRS = src test
+SUBDIRS = libezlog test
+libezlog.file = src/libezlog.pro
+test.depends = libezlog
 
 OTHER_FILES += README \
 			TODO.txt
