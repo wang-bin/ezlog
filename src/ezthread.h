@@ -26,6 +26,9 @@
 typedef boost::mutex ezmutex;
 typedef boost::mutex::scoped_lock ezscoped_lock;
 #endif
+#if STD_THREAD
+#include <mutex>
+#endif
 
 unsigned long threadId();
 long pid();

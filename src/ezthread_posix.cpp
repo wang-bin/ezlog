@@ -21,6 +21,8 @@
 #include <pthread.h>
 #include <unistd.h>
 
+#include "global.h"
+
 /*
 #include <unistd.h>
 #include <sys/syscall.h>
@@ -29,7 +31,11 @@ pid_t tid = (pid_t) syscall (SYS_gettid);
 */
 unsigned long threadId()
 {
+#if defined(OS_WIN) && (__GNUC_MINOR__ < 6)
+	return pthread_self().x;
+#else
 	return pthread_self();
+#endif
 }
 
 long pid()

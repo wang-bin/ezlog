@@ -30,4 +30,6 @@
 #define OS_WIN
 #endif
 
+#define STD_THREAD 0
+
 #endif // GLOBAL_H
