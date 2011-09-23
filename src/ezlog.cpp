@@ -24,6 +24,7 @@
 #include "ezthread.h"
 #include "eztime.h"
 
+
 //const char* log_file; //replace File* _out, close when finish current log
 static FILE* _out;
 static int log_mode;
@@ -133,7 +134,7 @@ int _ezlog_print(FILE* out, const char* file, const int line, const char* func, 
 
 //init_stdout, init_stderr, init_file
 int ezlog_init_output(const char* path, LogOpenMode mode) {
-	ezscoped_lock lock(mutex);
+	//ezscoped_lock lock(mutex);
 	if(!strcmp(path, "stdout")) {
 		_out = stdout;
 		return 0;
@@ -155,7 +156,7 @@ int ezlog_init_output(const char* path, LogOpenMode mode) {
 
 void ezlog_init_format(const char *format)
 {
-	ezscoped_lock lock(mutex);
+	//ezscoped_lock lock(mutex);
 	if(format_str!=NULL) {
 		free(format_str);
 		format_str = NULL;
