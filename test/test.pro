@@ -1,12 +1,13 @@
 TEMPLATE = app
-Qt		 -= gui
-CONFIG   += console static
+QT       -= gui
+CONFIG   += console
 CONFIG   -= app_bundle
 
-DESTDIR = ./
-TARGET	= test
-INCLUDEPATH += ../src
-LIBS += -L../lib -lezlog
-!*msvc*: LIBS += -lpthread
+TARGET = tst_ezlog
+include(../src/libezlog.pri)
+
+#win32:LIBS += -lUser32
 
 SOURCES += main.cpp
+HEADERS +=
+!*msvc*: LIBS += -lpthread

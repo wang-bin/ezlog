@@ -57,7 +57,7 @@ const char* formats[] = {
 */
 int format_print(FILE* f, char* str, const eztime& t, const char* file, const char* func, int line)
 {
-	ezscoped_lock lock(mutex);
+    //ezscoped_lock lock(mutex);
 	int r = 0;
 	char *pch = strtok (str,"%");
 	while (pch != NULL) {

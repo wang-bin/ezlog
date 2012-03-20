@@ -8,8 +8,7 @@ SUBDIRS = libezlog test
 libezlog.file = src/libezlog.pro
 test.depends = libezlog
 
-OTHER_FILES += README \
-			TODO.txt
+OTHER_FILES += README TODO.txt .gitignore
 
 win32 {
 	INCLUDEPATH += #$VS90COMNTOOLS/../../VC/include
