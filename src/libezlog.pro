@@ -1,7 +1,6 @@
 TEMPLATE = lib
 
-QT +=
-QT       -= gui
+QT =
 CONFIG   += console
 CONFIG   -= app_bundle
 
