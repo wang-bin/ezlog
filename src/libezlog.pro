@@ -16,14 +16,16 @@ else:win32: SOURCES +=
 
 HEADERS += ezlog_global.h ezlog.h \
         ezthread.h \
-        global.h \
         eztime.h \
-    ezlog_global.h
+    ezlog_global.h \
+    list.h \
+    appender.h
 
 
 SOURCES += \
         ezlog.cpp \
-        ezthread.cpp
+        ezthread.cpp \
+    appender.cpp
 
 QMAKE_CXXFLAGS += "-std=c++0x"
 
