@@ -31,9 +31,9 @@ int main(int argc, char** argv)
 
 	ezlog_file("Only in log file!");
 
-	__log_to_appenders("FUCK APPENDER");
-	__log_to_appenders("FUCK APPENDER 2");
-	ezlog_fini();
+    //__log_to_appenders("FUCK APPENDER");
+    //__log_to_appenders("FUCK APPENDER 2");
+    ezlog_fini();
 	return 0;
 }
 
