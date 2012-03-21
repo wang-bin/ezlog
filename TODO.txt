@@ -1,3 +1,6 @@
+loglevel
+error message system
+
 qDebug sql handler
 
 log file name: datetime.app.log
