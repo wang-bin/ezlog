@@ -26,7 +26,11 @@ struct list_head {
     struct list_head *next, *prev;
 };
 
+//#ifdef __GNUC__
 #define LIST_HEAD_INIT(name) { &(name), &(name) }
+//#else
+//#define LIST_HEAD_INIT(name) INIT_LIST_HEAD(&(name))
+//#endif
 
 #define LIST_HEAD(name) \
     struct list_head name = LIST_HEAD_INIT(name)
