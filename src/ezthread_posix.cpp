@@ -21,7 +21,7 @@
 #include <pthread.h>
 #include <unistd.h>
 
-#include "global.h"
+#include "ezlog_global.h"
 
 /*
 #include <unistd.h>
