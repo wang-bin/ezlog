@@ -136,11 +136,11 @@
 
 
 #if defined(Q_DLL_LIBRARY)
-#  undef Q_DLL_EXPORT
-#  define Q_DLL_EXPORT Q_DECL_EXPORT
+#  undef Q_EXPORT
+#  define Q_EXPORT Q_DECL_EXPORT
 #else
-#  undef Q_DLL_EXPORT
-#  define Q_DLL_EXPORT //Q_DECL_IMPORT //only for vc?
+#  undef Q_EXPORT
+#  define Q_EXPORT //Q_DECL_IMPORT //only for vc?
 #endif
 
 #endif // EZLOG_GLOBAL_H

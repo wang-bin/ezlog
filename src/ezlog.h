@@ -24,17 +24,17 @@
 #include "ezlog_global.h"
 #include "appender.h"
 
-void ezlog_init_format(const char* format);
+Q_EXPORT void ezlog_init_format(const char* format);
 
 #define ezlog_msg(fmt, ...) _ezlog_print(stdout, __FILE__, __LINE__, __PRETTY_FUNCTION__, ""#fmt, ##__VA_ARGS__)
 #define ezlog_error(fmt, ...) _ezlog_print(stderr, __FILE__, __LINE__, __PRETTY_FUNCTION__, ""#fmt, ##__VA_ARGS__)
 #define ezlog_file(fmt, ...) _ezlog_print(0, __FILE__, __LINE__, __PRETTY_FUNCTION__, ""#fmt, ##__VA_ARGS__)
 //DO NOT use (fmt, args...), MSVC does not support it. use (fmt, ...)
 
-void ezlog_fini() __attribute__((destructor)); //other compilers? exit_func;
+Q_EXPORT void ezlog_fini() __attribute__((destructor)); //other compilers? exit_func;
 /*
   Internal. out is stdout, stderr or 0. Each will put log message to a log file if exists.
 */
-int _ezlog_print(FILE* out, const char* file, const int line, const char* func, const char* fmt, ...);
+Q_EXPORT int _ezlog_print(FILE* out, const char* file, const int line, const char* func, const char* fmt, ...);
 
 #endif //EZLOG_H

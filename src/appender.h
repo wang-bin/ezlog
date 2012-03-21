@@ -20,13 +20,13 @@
 
 #ifndef APPENDER_H
 #define APPENDER_H
-
+#include "ezlog_global.h"
 
 typedef void (*appender)(const char* msg);
 
 
-void ezlog_registerAppender(appender handle); //installHandler(handler)
-void ezlog_unregisterAppender(appender handle);
+Q_EXPORT void ezlog_registerAppender(appender handle); //installHandler(handler)
+Q_EXPORT void ezlog_unregisterAppender(appender handle);
 
 
 enum LogOpenMode {
@@ -35,13 +35,13 @@ enum LogOpenMode {
 
 #define IS_OPEN_ON_WRITE(m) ((m & OPEN_ON_WRITE) == OPEN_ON_WRITE)
 
-void ezlog_add_logfile(const char* path, int mode); //LogOpenMode
-void ezlog_remove_logfile(const char* path);
+Q_EXPORT void ezlog_add_logfile(const char* path, int mode); //LogOpenMode
+Q_EXPORT void ezlog_remove_logfile(const char* path);
 
 //pre defined appenders: file, console
 //just output the layout_string()
-void console_appender(const char* msg);
-void file_appender(const char* msg);
+Q_EXPORT void console_appender(const char* msg);
+Q_EXPORT void file_appender(const char* msg);
 
 // for internal use
 void __log_to_appenders(const char* msg);
