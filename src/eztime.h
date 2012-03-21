@@ -21,7 +21,7 @@
 #define EZTIME_H
 
 #include <time.h>
-#include "global.h"
+#include "ezlog_global.h"
 
 #ifdef OS_WIN
 #include <windows.h>
