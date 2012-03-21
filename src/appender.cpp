@@ -42,13 +42,11 @@ typedef struct {
 	struct list_head list;
 } logfile_node;
 
-static struct list_head appenders_head = {0, 0};
-static struct list_head logfiles_head = {0, 0};
+LIST_HEAD(appenders_head);
+LIST_HEAD(logfiles_head);
 
 void ezlog_registerAppender(appender handle)
 {
-	if (appenders_head.next == 0 && appenders_head.prev == 0)
-		INIT_LIST_HEAD(&appenders_head);
 	appender_node *node = (appender_node*)malloc(sizeof(appender_node));
 	node->handle = handle;
 	list_add_tail(&(node->list), &appenders_head);
@@ -96,9 +94,6 @@ void ezlog_add_logfile(const char *path, int mode)
 {
 	//ezscoped_lock lock(mutex);
 
-	if (logfiles_head.next == 0 && logfiles_head.prev == 0)
-		INIT_LIST_HEAD(&logfiles_head);
-
 	logfile_node *node = (logfile_node*)malloc(sizeof(logfile_node));
 	if (!IS_OPEN_ON_WRITE(mode)) {
 		FILE *file = __open_logfile(path, mode);
@@ -114,7 +109,7 @@ void ezlog_add_logfile(const char *path, int mode)
 void ezlog_remove_logfile(const char *path)
 {
 	struct list_head *pos = &logfiles_head;
-	list_for_each(pos, &logfiles_head) {
+	list_for_each(pos, &logfiles_head) { //list_for_each_entry
 		logfile_node* node = list_entry(pos, logfile_node, list);
 		if (strcmp(node->name, path) == 0) {
 			if (!IS_OPEN_ON_WRITE(node->mode))
@@ -134,7 +129,7 @@ void console_appender(const char *msg)
 void file_appender(const char *msg)
 {
 	struct list_head *pos = &logfiles_head;
-	list_for_each(pos, &logfiles_head) {
+	list_for_each(pos, &logfiles_head) { //list_for_each_entry
 		logfile_node* node = list_entry(pos, logfile_node, list);
 		printf("%p %s\n", node->file, msg);
 		if (IS_OPEN_ON_WRITE(node->mode)) {
@@ -153,7 +148,7 @@ void file_appender(const char *msg)
 void __log_to_appenders(const char* msg)
 {
 	struct list_head *pos = &appenders_head;
-	list_for_each(pos, &appenders_head) {
+	list_for_each(pos, &appenders_head) { //list_for_each_entry
 		appender_node* node = list_entry(pos, appender_node, list);
 		node->handle(msg);
 	}
