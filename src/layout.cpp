@@ -30,7 +30,8 @@
 
 typedef struct
 {
-	const char* key;
+    const char* key;
+    char* delimiter; //0: if key != 0; a string between % and % if key == 0
     typedef int (*print_call)(char*, ezlog_info* info);
     print_call print;
 } key_print;
@@ -104,19 +105,20 @@ int print_msg(char* str, ezlog_info* info)
 
 
 
-static const key_print year_print = {"YY", print_year};
-static const key_print month_print = {"MM", print_month};
-static const key_print day_print = {"DD", print_day};
-static const key_print hour_print = {"hh", print_hour};
-static const key_print min_print = {"mm", print_min};
-static const key_print sec_print = {"ss", print_sec};
-static const key_print msec_print = {"ms", print_msec};
-static const key_print file_print = {"file", print_file};
-static const key_print func_print = {"func", print_func};
-static const key_print line_print = {"line", print_line};
-static const key_print pid_print = {"pid", print_pid};
-static const key_print tid_print = {"tid", print_tid};
-static const key_print msg_print = {"", print_msg};
+static const key_print year_print = {"YY", 0, print_year};
+static const key_print month_print = {"MM", 0, print_month};
+static const key_print day_print = {"DD", 0, print_day};
+static const key_print hour_print = {"hh", 0, print_hour};
+static const key_print min_print = {"mm", 0, print_min};
+static const key_print sec_print = {"ss", 0, print_sec};
+static const key_print msec_print = {"ms", 0, print_msec};
+static const key_print file_print = {"file", 0, print_file};
+static const key_print func_print = {"func", 0, print_func};
+static const key_print line_print = {"line", 0, print_line};
+static const key_print pid_print = {"pid", 0, print_pid};
+static const key_print tid_print = {"tid", 0, print_tid};
+static const key_print msg_print = {"msg", 0, print_msg};
+
 
 typedef struct {
     const key_print *printer;
@@ -207,43 +209,36 @@ void ezlog_init_layout(const char *format)
             key_print_node *node = (key_print_node*)malloc(sizeof(key_print_node));
             node->printer = &pid_print;
             list_add_tail(&(node->list), &key_print_head);
-        } else {
+        } else if(!strcmp(pch, "msg")) {
             key_print_node *node = (key_print_node*)malloc(sizeof(key_print_node));
             node->printer = &msg_print;
+            list_add_tail(&(node->list), &key_print_head);
+        } else {
+            key_print_node *node = (key_print_node*)malloc(sizeof(key_print_node));
+            key_print *dummy_print = (key_print*)malloc(sizeof(key_print));
+            dummy_print->key = 0;
+            //FIXME: when to release the memory?
+            dummy_print->delimiter = (char*)malloc(strlen(pch) + 1);
+            strcpy(dummy_print->delimiter, pch);
+            dummy_print->print = 0;
+            node->printer = dummy_print;
             list_add_tail(&(node->list), &key_print_head);
         }
         *(pch+strlen(pch)) = '%'; //strtok will replace '%' with '\0'.
         pch = strtok (NULL, "%"); //why NULL?
     }
 }
-/*
-char* ezlog_layout_msg(const char *msg_extra)
-{
-    eztime t;
 
-    ezlog_info info; //static
-    info.file = file;
-    info.func = func;
-    info.line = line;
-    info.t = &t;
-    info.pid = pid();
-    info.tid = threadId();
-    info.msg = msg_extra;
-
-    static char result_msg[1024];
-    return __layout_string(result_msg, &info);
-}
-*/
 void __format_string(char* result_msg, ezlog_info* info)
 {
     int index = 0;
     struct list_head *pos = &key_print_head;
     list_for_each(pos, &key_print_head) {
         key_print_node* node = list_entry(pos, key_print_node, list);
-        index += node->printer->print(&result_msg[index], info);
+        //printf("index=%d, key=%s, delimiter=%s\n", index, node->printer->key, node->printer->delimiter);
+        if (node->printer->key == 0)
+            index += sprintf(result_msg + index, "%s", node->printer->delimiter);
+        else
+            index += node->printer->print(result_msg + index, info);
     }
-
-    //return result_msg; //not thread safe if do not copy
 }
-
-//copy outside. new char[strlen or char[1024]
