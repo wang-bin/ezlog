@@ -24,11 +24,11 @@
 #include "ezlog_global.h"
 
 enum {
-    DEFAULT_LAYOUT = 0
+	DEFAULT_LAYOUT = 0
 };
 
 const char* const layout_format[] = {
-    "YY%-%MM%-%DD% %hh%:%mm%:%ss% [tid:%tid% pid:%pid%]-[%file%] %func% @%line%: %msg"
+	"YY%-%MM%-%DD% %hh%:%mm%:%ss% [tid:%tid% pid:%pid%]-[%file%] %func% @%line%: %msg"
 };
 
 
@@ -44,13 +44,13 @@ Q_EXPORT void ezlog_init_layout(const char* format); //move to layout.h
 
 struct _eztime;
 typedef struct {
-    const char* file;
-    const char* func;
-    int line;
-    const _eztime* t;
-    unsigned long tid;
-    long pid;
-    const char* msg;
+	const char* file;
+	const char* func;
+	int line;
+	const _eztime* t;
+	unsigned long tid;
+	long pid;
+	const char* msg;
 } ezlog_info;
 
 //the result string. use by ezlog.cpp to be put into appenders.

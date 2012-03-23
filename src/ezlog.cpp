@@ -32,7 +32,7 @@ ezmutex mutex;
 
 void ezlog_init_default()
 {
-    ezlog_init_layout(layout_format[DEFAULT_LAYOUT]);
+	ezlog_init_layout(layout_format[DEFAULT_LAYOUT]);
 }
 
 /*!
@@ -44,32 +44,32 @@ int _ezlog_print(const char* file, const int line, const char* func, const char*
 {
 	int r=0;
 
-    char msg[512];
+	char msg[512];
 	va_list args;
 	va_start(args, fmt);
-    r += vsprintf(msg, fmt, args);
+	r += vsprintf(msg, fmt, args);
 	va_end(args);
-    r += sprintf(msg + r, "\n");
+	r += sprintf(msg + r, "\n");
 
-    eztime t;
-    ezlog_info info; //static
-    info.file = file;
-    info.func = func;
-    info.line = line;
-    info.t = &t;
-    info.pid = pid();
-    info.tid = threadId();
-    info.msg = msg;
+	eztime t;
+	ezlog_info info; //static
+	info.file = file;
+	info.func = func;
+	info.line = line;
+	info.t = &t;
+	info.pid = pid();
+	info.tid = threadId();
+	info.msg = msg;
 
-    static char result_msg[1024];
-    memset(result_msg, 0, sizeof(result_msg));
-    __format_msg(result_msg, &info);
-    __log_to_appenders(result_msg);
+	static char result_msg[1024];
+	memset(result_msg, 0, sizeof(result_msg));
+	__format_msg(result_msg, &info);
+	__log_to_appenders(result_msg);
 
 	return r;
 }
 
 
 void ezlog_fini() {
-    ezlog_unregisterAllAppenders();
+	ezlog_unregisterAllAppenders();
 }

@@ -22,19 +22,19 @@
 # And rename xx-buildlib and LIBXX_PRI_INCLUDED
 # the contents of libXX.pro is:
 #
-#    TEMPLATE = lib
-#    QT -= gui
-#    CONFIG *= xx-buildlib
-#    include(libXX.pri)
-#    HEADERS = ...
-#    SOURCES = ...
-#    ...
+#	TEMPLATE = lib
+#	QT -= gui
+#	CONFIG *= xx-buildlib
+#	include(libXX.pri)
+#	HEADERS = ...
+#	SOURCES = ...
+#	...
 # the content of other pro using this library is:
 #
-#    TEMPLATE = app
-#    include(dir_of_XX/libXX.pri)
-#    HEADERS = ...
-#    SOURCES = ...
+#	TEMPLATE = app
+#	include(dir_of_XX/libXX.pri)
+#	HEADERS = ...
+#	SOURCES = ...
 #
 
 
@@ -65,65 +65,65 @@ QMAKE_LFLAGS_RPATH += #will append to rpath dir
 
 !ezlog-buildlib {
 
-        #The following may not need to change
-        CONFIG *= link_prl
-        LIBS += -L$$PROJECT_LIBDIR -l$$qtLibName($$NAME)
-        isEqual(staticlink, 1) {
-                PRE_TARGETDEPS += $$PROJECT_LIBDIR/$$qtStaticLib($$NAME)
-        } else {
-                win32 {
-                        PRE_TARGETDEPS += $$PROJECT_LIBDIR/$$qtSharedLib($$NAME, $$LIB_VERSION)
-                } else {
-                        PRE_TARGETDEPS += $$PROJECT_LIBDIR/$$qtSharedLib($$NAME)
-                        unix: QMAKE_RPATHDIR += $$DESTDIR:$$PROJECT_LIBDIR #executable's dir
-                }
-        }
+	#The following may not need to change
+	CONFIG *= link_prl
+	LIBS += -L$$PROJECT_LIBDIR -l$$qtLibName($$NAME)
+	isEqual(staticlink, 1) {
+		PRE_TARGETDEPS += $$PROJECT_LIBDIR/$$qtStaticLib($$NAME)
+	} else {
+		win32 {
+				PRE_TARGETDEPS += $$PROJECT_LIBDIR/$$qtSharedLib($$NAME, $$LIB_VERSION)
+		} else {
+				PRE_TARGETDEPS += $$PROJECT_LIBDIR/$$qtSharedLib($$NAME)
+				unix: QMAKE_RPATHDIR += $$DESTDIR:$$PROJECT_LIBDIR #executable's dir
+		}
+	}
 } else {
-        #Add your additional configuration first
+#Add your additional configuration first
 #	win32: LIBS += -lUser32
 
 
-        #The following may not need to change
+#The following may not need to change
 
-        #TEMPLATE = lib
-        VERSION = $$LIB_VERSION
-        TARGET = $$PROJECT_TARGETNAME
-        DESTDIR= $$PROJECT_LIBDIR
+	#TEMPLATE = lib
+	VERSION = $$LIB_VERSION
+	TARGET = $$PROJECT_TARGETNAME
+	DESTDIR= $$PROJECT_LIBDIR
 
-        CONFIG *= create_prl #
-        isEqual(staticlink, 1) {
-                CONFIG -= shared dll ##otherwise the following shared is true, why?
-                CONFIG *= staticlib
-        }
-        else {
-                DEFINES += Q_DLL_LIBRARY #win32-msvc*
-                CONFIG *= shared #shared includes dll
-        }
+	CONFIG *= create_prl #
+	isEqual(staticlink, 1) {
+		CONFIG -= shared dll ##otherwise the following shared is true, why?
+		CONFIG *= staticlib
+	}
+	else {
+		DEFINES += Q_DLL_LIBRARY #win32-msvc*
+		CONFIG *= shared #shared includes dll
+	}
 
-        shared {
-                DLLDESTDIR = ../bin #copy shared lib there
-                CONFIG(release, debug|release):
-                        !isEmpty(QMAKE_STRIP): QMAKE_POST_LINK = -$$QMAKE_STRIP $$PROJECT_LIBDIR/$$qtSharedLib($$NAME)
+	shared {
+		DLLDESTDIR = ../bin #copy shared lib there
+		CONFIG(release, debug|release):
+			!isEmpty(QMAKE_STRIP): QMAKE_POST_LINK = -$$QMAKE_STRIP $$PROJECT_LIBDIR/$$qtSharedLib($$NAME)
 
-                #copy from the pro creator creates.
-                symbian {
-                        MMP_RULES += EXPORTUNFROZEN
-                        TARGET.UID3 = 0xE4CC8061
-                        TARGET.CAPABILITY =
-                        TARGET.EPOCALLOWDLLDATA = 1
-                        addFiles.sources = $$qtSharedLib($$NAME, $$LIB_VERSION)
-                        addFiles.path = !:/sys/bin
-                        DEPLOYMENT += addFiles
-                }
-        }
-        unix:!symbian {
-                maemo5 {
-                        target.path = /opt/usr/lib
-                } else {
-                        target.path = /usr/lib
-                }
-                INSTALLS += target
-        }
+		#copy from the pro creator creates.
+		symbian {
+			MMP_RULES += EXPORTUNFROZEN
+			TARGET.UID3 = 0xE4CC8061
+			TARGET.CAPABILITY =
+			TARGET.EPOCALLOWDLLDATA = 1
+			addFiles.sources = $$qtSharedLib($$NAME, $$LIB_VERSION)
+			addFiles.path = !:/sys/bin
+			DEPLOYMENT += addFiles
+		}
+	}
+	unix:!symbian {
+		maemo5 {
+			target.path = /opt/usr/lib
+		} else {
+			target.path = /usr/lib
+		}
+		INSTALLS += target
+	}
 
 }
 
@@ -132,4 +132,3 @@ unset(PROJECT_SRCPATH)
 unset(PROJECT_LIBDIR)
 unset(PROJECT_TARGETNAME)
 unset(staticlink)
-

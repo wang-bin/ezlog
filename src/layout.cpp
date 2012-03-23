@@ -30,77 +30,75 @@
 
 typedef struct
 {
-    const char* key;
-    char* delimiter; //0: if key != 0; a string between % and % if key == 0
-    typedef int (*print_call)(char*, ezlog_info* info);
-    print_call print;
+	const char* key;
+	char* delimiter; //0: if key != 0; a string between % and % if key == 0
+	typedef int (*print_call)(char*, ezlog_info* info);
+	print_call print;
 } key_print;
 
 int print_year(char* str, ezlog_info* info)
 {
-    return sprintf(str, "%d", info->t->year);
+	return sprintf(str, "%d", info->t->year);
 }
 
 int print_month(char* str, ezlog_info* info)
 {
-    return sprintf(str, "%d", info->t->month);
+	return sprintf(str, "%d", info->t->month);
 }
 
 int print_day(char* str, ezlog_info* info)
 {
-    return sprintf(str, "%d", info->t->day);
+	return sprintf(str, "%d", info->t->day);
 }
 
 int print_hour(char* str, ezlog_info* info)
 {
-    return sprintf(str, "%d", info->t->hour);
+	return sprintf(str, "%d", info->t->hour);
 }
 
 int print_min(char* str, ezlog_info* info)
 {
-    return sprintf(str, "%d", info->t->min);
+	return sprintf(str, "%d", info->t->min);
 }
 
 int print_sec(char* str, ezlog_info* info)
 {
-    return sprintf(str, "%d", info->t->sec);
+	return sprintf(str, "%d", info->t->sec);
 }
 
 int print_msec(char* str, ezlog_info* info)
 {
-    return sprintf(str, "%d", info->t->msec);
+	return sprintf(str, "%d", info->t->msec);
 }
-
 
 int print_file(char* str, ezlog_info* info)
 {
-    return sprintf(str, "%s", info->file);
+	return sprintf(str, "%s", info->file);
 }
 
 int print_func(char* str, ezlog_info* info)
 {
-    return sprintf(str, "%s", info->func);
+	return sprintf(str, "%s", info->func);
 }
 
 int print_line(char* str, ezlog_info* info)
 {
-    return sprintf(str, "%d", info->line);
+	return sprintf(str, "%d", info->line);
 }
-
 
 int print_pid(char* str, ezlog_info* info)
 {
-    return sprintf(str, "%ld", info->pid);
+	return sprintf(str, "%ld", info->pid);
 }
 
 int print_tid(char* str, ezlog_info* info)
 {
-    return sprintf(str, "%lu", info->tid);
+	return sprintf(str, "%lu", info->tid);
 }
 
 int print_msg(char* str, ezlog_info* info)
 {
-    return sprintf(str, "%s", info->msg);
+	return sprintf(str, "%s", info->msg);
 }
 
 
@@ -121,8 +119,8 @@ static const key_print msg_print = {"msg", 0, print_msg};
 
 
 typedef struct {
-    const key_print *printer;
-    struct list_head list;
+	const key_print *printer;
+	struct list_head list;
 } key_print_node;
 
 
@@ -132,12 +130,12 @@ LIST_HEAD(key_print_head);
 void ezlog_init_layout(const char *format)
 {
 	//ezscoped_lock lock(mutex);
-    static char* format_str = NULL;
+	static char* format_str = NULL;
 	if(format_str!=NULL) {
 		free(format_str);
 		format_str = NULL;
 	}
-    int format_strlen = strlen(format);
+	int format_strlen = strlen(format);
 	if(format[format_strlen]!='%') {
 		format_strlen += 1;
 	}
@@ -148,97 +146,97 @@ void ezlog_init_layout(const char *format)
 		force end with '%'. If already is, no effect. If not, it will be '%'
 	*/
 	*(format_str+format_strlen-1) = '%';
-    //init key_print_list
+	//init key_print_list
 
-    struct list_head *pos = &key_print_head;
-    list_for_each(pos, &key_print_head) {
-        key_print_node* node = list_entry(pos, key_print_node, list);
-        list_del(&node->list);
-        free(node);
-        node = 0;
-    }
+	struct list_head *pos = &key_print_head;
+	list_for_each(pos, &key_print_head) {
+		key_print_node* node = list_entry(pos, key_print_node, list);
+		list_del(&node->list);
+		free(node);
+		node = 0;
+	}
 
-    char *pch = strtok (format_str,"%");
-    while (pch != NULL) {
-        //printf ("%s\n",pch);
-        if(!strcmp(pch, "YY")) {
-            key_print_node *node = (key_print_node*)malloc(sizeof(key_print_node));
-            node->printer = &year_print;
-            list_add_tail(&(node->list), &key_print_head);
-        } else if(!strcmp(pch, "MM")) {
-            key_print_node *node = (key_print_node*)malloc(sizeof(key_print_node));
-            node->printer = &month_print;
-            list_add_tail(&(node->list), &key_print_head);
-        } else if(!strcmp(pch, "DD")) {
-            key_print_node *node = (key_print_node*)malloc(sizeof(key_print_node));
-            node->printer = &day_print;
-            list_add_tail(&(node->list), &key_print_head);
-        } else if(!strcmp(pch, "hh")) {
-            key_print_node *node = (key_print_node*)malloc(sizeof(key_print_node));
-            node->printer = &hour_print;
-            list_add_tail(&(node->list), &key_print_head);
-        } else if(!strcmp(pch, "mm")) {
-            key_print_node *node = (key_print_node*)malloc(sizeof(key_print_node));
-            node->printer = &min_print;
-            list_add_tail(&(node->list), &key_print_head);
-        } else if(!strcmp(pch, "ss")) {
-            key_print_node *node = (key_print_node*)malloc(sizeof(key_print_node));
-            node->printer = &sec_print;
-            list_add_tail(&(node->list), &key_print_head);
-        } else if(!strcmp(pch, "ms")) {
-            key_print_node *node = (key_print_node*)malloc(sizeof(key_print_node));
-            node->printer = &msec_print;
-            list_add_tail(&(node->list), &key_print_head);
-        } else if(!strcmp(pch, "file")) {
-            key_print_node *node = (key_print_node*)malloc(sizeof(key_print_node));
-            node->printer = &file_print;
-            list_add_tail(&(node->list), &key_print_head);
-        } else if(!strcmp(pch, "func")) {
-            key_print_node *node = (key_print_node*)malloc(sizeof(key_print_node));
-            node->printer = &func_print;
-            list_add_tail(&(node->list), &key_print_head);
-        } else if(!strcmp(pch, "line")) {
-            key_print_node *node = (key_print_node*)malloc(sizeof(key_print_node));
-            node->printer = &line_print;
-            list_add_tail(&(node->list), &key_print_head);
-        } else if(!strcmp(pch, "tid")) {
-            key_print_node *node = (key_print_node*)malloc(sizeof(key_print_node));
-            node->printer = &tid_print;
-            list_add_tail(&(node->list), &key_print_head);
-        } else if(!strcmp(pch, "pid")) {
-            key_print_node *node = (key_print_node*)malloc(sizeof(key_print_node));
-            node->printer = &pid_print;
-            list_add_tail(&(node->list), &key_print_head);
-        } else if(!strcmp(pch, "msg")) {
-            key_print_node *node = (key_print_node*)malloc(sizeof(key_print_node));
-            node->printer = &msg_print;
-            list_add_tail(&(node->list), &key_print_head);
-        } else {
-            key_print_node *node = (key_print_node*)malloc(sizeof(key_print_node));
-            key_print *dummy_print = (key_print*)malloc(sizeof(key_print));
-            dummy_print->key = 0;
-            //FIXME: when to release the memory?
-            dummy_print->delimiter = (char*)malloc(strlen(pch) + 1);
-            strcpy(dummy_print->delimiter, pch);
-            dummy_print->print = 0;
-            node->printer = dummy_print;
-            list_add_tail(&(node->list), &key_print_head);
-        }
-        *(pch+strlen(pch)) = '%'; //strtok will replace '%' with '\0'.
-        pch = strtok (NULL, "%"); //why NULL?
-    }
+	char *pch = strtok (format_str,"%");
+	while (pch != NULL) {
+		//printf ("%s\n",pch);
+		if(!strcmp(pch, "YY")) {
+			key_print_node *node = (key_print_node*)malloc(sizeof(key_print_node));
+			node->printer = &year_print;
+			list_add_tail(&(node->list), &key_print_head);
+		} else if(!strcmp(pch, "MM")) {
+			key_print_node *node = (key_print_node*)malloc(sizeof(key_print_node));
+			node->printer = &month_print;
+			list_add_tail(&(node->list), &key_print_head);
+		} else if(!strcmp(pch, "DD")) {
+			key_print_node *node = (key_print_node*)malloc(sizeof(key_print_node));
+			node->printer = &day_print;
+			list_add_tail(&(node->list), &key_print_head);
+		} else if(!strcmp(pch, "hh")) {
+			key_print_node *node = (key_print_node*)malloc(sizeof(key_print_node));
+			node->printer = &hour_print;
+			list_add_tail(&(node->list), &key_print_head);
+		} else if(!strcmp(pch, "mm")) {
+			key_print_node *node = (key_print_node*)malloc(sizeof(key_print_node));
+			node->printer = &min_print;
+			list_add_tail(&(node->list), &key_print_head);
+		} else if(!strcmp(pch, "ss")) {
+			key_print_node *node = (key_print_node*)malloc(sizeof(key_print_node));
+			node->printer = &sec_print;
+			list_add_tail(&(node->list), &key_print_head);
+		} else if(!strcmp(pch, "ms")) {
+			key_print_node *node = (key_print_node*)malloc(sizeof(key_print_node));
+			node->printer = &msec_print;
+			list_add_tail(&(node->list), &key_print_head);
+		} else if(!strcmp(pch, "file")) {
+			key_print_node *node = (key_print_node*)malloc(sizeof(key_print_node));
+			node->printer = &file_print;
+			list_add_tail(&(node->list), &key_print_head);
+		} else if(!strcmp(pch, "func")) {
+			key_print_node *node = (key_print_node*)malloc(sizeof(key_print_node));
+			node->printer = &func_print;
+			list_add_tail(&(node->list), &key_print_head);
+		} else if(!strcmp(pch, "line")) {
+			key_print_node *node = (key_print_node*)malloc(sizeof(key_print_node));
+			node->printer = &line_print;
+			list_add_tail(&(node->list), &key_print_head);
+		} else if(!strcmp(pch, "tid")) {
+			key_print_node *node = (key_print_node*)malloc(sizeof(key_print_node));
+			node->printer = &tid_print;
+			list_add_tail(&(node->list), &key_print_head);
+		} else if(!strcmp(pch, "pid")) {
+			key_print_node *node = (key_print_node*)malloc(sizeof(key_print_node));
+			node->printer = &pid_print;
+			list_add_tail(&(node->list), &key_print_head);
+		} else if(!strcmp(pch, "msg")) {
+			key_print_node *node = (key_print_node*)malloc(sizeof(key_print_node));
+			node->printer = &msg_print;
+			list_add_tail(&(node->list), &key_print_head);
+		} else {
+			key_print_node *node = (key_print_node*)malloc(sizeof(key_print_node));
+			key_print *dummy_print = (key_print*)malloc(sizeof(key_print));
+			dummy_print->key = 0;
+			//FIXME: when to release the memory?
+			dummy_print->delimiter = (char*)malloc(strlen(pch) + 1);
+			strcpy(dummy_print->delimiter, pch);
+			dummy_print->print = 0;
+			node->printer = dummy_print;
+			list_add_tail(&(node->list), &key_print_head);
+		}
+		*(pch+strlen(pch)) = '%'; //strtok will replace '%' with '\0'.
+		pch = strtok (NULL, "%"); //why NULL?
+	}
 }
 
 void __format_msg(char* result_msg, ezlog_info* info)
 {
-    int index = 0;
-    struct list_head *pos = &key_print_head;
-    list_for_each(pos, &key_print_head) {
-        key_print_node* node = list_entry(pos, key_print_node, list);
-        //printf("index=%d, key=%s, delimiter=%s\n", index, node->printer->key, node->printer->delimiter);
-        if (node->printer->key == 0)
-            index += sprintf(result_msg + index, "%s", node->printer->delimiter);
-        else
-            index += node->printer->print(result_msg + index, info);
-    }
+	int index = 0;
+	struct list_head *pos = &key_print_head;
+	list_for_each(pos, &key_print_head) {
+		key_print_node* node = list_entry(pos, key_print_node, list);
+		//printf("index=%d, key=%s, delimiter=%s\n", index, node->printer->key, node->printer->delimiter);
+		if (node->printer->key == 0)
+			index += sprintf(result_msg + index, "%s", node->printer->delimiter);
+		else
+			index += node->printer->print(result_msg + index, info);
+	}
 }

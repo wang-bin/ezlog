@@ -14,7 +14,7 @@ Usage:
 	If use key word func, the complete function name including return type, class, parameters will be supported
 	if compiled with gcc.
 
-        ezlog_init_format("YY%-%MM%-%DD% %hh%:%mm%:%ss%.%ms% [tid:%tid% pid:%pid%]-[%file%] %func% @%line%: %");
+		ezlog_init_format("YY%-%MM%-%DD% %hh%:%mm%:%ss%.%ms% [tid:%tid% pid:%pid%]-[%file%] %func% @%line%: %");
 
 3.	Start your logging. ezlog supports put log information to stdout, stderr and a log file. The information is
 	displayed with the former format. You can add additional messages. It supports printf like format. If nothing

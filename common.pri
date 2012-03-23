@@ -20,8 +20,8 @@
 CONFIG += profile
 #profiling, -pg is not supported for msvc
 debug:!*msvc*:profile {
-        QMAKE_CXXFLAGS_DEBUG += -pg
-        QMAKE_LFLAGS_DEBUG += -pg
+		QMAKE_CXXFLAGS_DEBUG += -pg
+		QMAKE_LFLAGS_DEBUG += -pg
 		QMAKE_CXXFLAGS_DEBUG = $$unique(QMAKE_CXXFLAGS_DEBUG)
 		QMAKE_LFLAGS_DEBUG = $$unique(QMAKE_LFLAGS_DEBUG)
 }
@@ -33,48 +33,48 @@ _ARCH =
 _EXTRA =
 
 unix {
-		_OS = _unix
-		*linux*: _OS = _linux
-		*maemo* {
-			_OS = _maemo
-			*maemo5*:_OS = _maemo5
-			*maemo6*:_OS = _maemo6
-		}
-		*meego*: _OS = _meego
-		!isEmpty(MEEGO_EDITION): _OS = _$$MEEGO_EDITION
+	_OS = _unix
+	*linux*: _OS = _linux
+	*maemo* {
+		_OS = _maemo
+		*maemo5*:_OS = _maemo5
+		*maemo6*:_OS = _maemo6
+	}
+	*meego*: _OS = _meego
+	!isEmpty(MEEGO_EDITION): _OS = _$$MEEGO_EDITION
 } else:wince* {
-		_OS = _wince
+	_OS = _wince
 } else:win32 { #true for wince
-		_OS = _win32
+	_OS = _win32
 } else:macx {
-		_OS = _macx
+	_OS = _macx
 }
 
 #*arm*: _ARCH = $${_ARCH}_arm
 contains(QT_ARCH, arm.*) {
-        _ARCH = $${_ARCH}_$${QT_ARCH}
+	_ARCH = $${_ARCH}_$${QT_ARCH}
 }
 *64:   _ARCH = $${_ARCH}_x64
 *llvm*: _EXTRA = _llvm
 #*msvc*:
 
 win32-msvc* {
-        #Don't warn about sprintf, fopen etc being 'unsafe'
-        DEFINES += _CRT_SECURE_NO_WARNINGS
+	#Don't warn about sprintf, fopen etc being 'unsafe'
+	DEFINES += _CRT_SECURE_NO_WARNINGS
 }
 
 #################################functions#########################################
 defineReplace(cleanPath) {
-    win32:1 ~= s|\\\\|/|g
-    contains(1, ^/.*):pfx = /
-    else:pfx =
-    segs = $$split(1, /)
-    out =
-    for(seg, segs) {
-        equals(seg, ..):out = $$member(out, 0, -2)
-        else:!equals(seg, .):out += $$seg
-    }
-    return($$join(out, /, $$pfx))
+	win32:1 ~= s|\\\\|/|g
+	contains(1, ^/.*):pfx = /
+	else:pfx =
+	segs = $$split(1, /)
+	out =
+	for(seg, segs) {
+		equals(seg, ..):out = $$member(out, 0, -2)
+		else:!equals(seg, .):out += $$seg
+	}
+	return($$join(out, /, $$pfx))
 }
 
 #Acts like qtLibraryTarget. From qtcreator.pri
@@ -125,7 +125,7 @@ defineReplace(qtSharedLib) {
 
 defineReplace(qtLongName) {
 	unset(LONG_NAME)
-        LONG_NAME = $$1$${_OS}$${_ARCH}$${_EXTRA}
+	LONG_NAME = $$1$${_OS}$${_ARCH}$${_EXTRA}
 	return($$LONG_NAME)
 }
 

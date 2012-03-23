@@ -68,13 +68,13 @@ void ezlog_unregisterAppender(appender handle)
 
 void ezlog_unregisterAllAppenders()
 {
-    struct list_head *pos = &appenders_head;
-    list_for_each(pos, &appenders_head) {
-        appender_node* node = list_entry(pos, appender_node, list);
+	struct list_head *pos = &appenders_head;
+	list_for_each(pos, &appenders_head) {
+		appender_node* node = list_entry(pos, appender_node, list);
 		//FIXME: seg fault!
 		//list_del(&node->list);
 		free(node);
-        node = 0;
+		node = 0;
 	}
 }
 
@@ -113,7 +113,7 @@ void ezlog_add_logfile(const char *path, int mode)
 	}
 	strcpy(node->name, path);
 	node->mode = (LogOpenMode)mode;
-    //printf("%s: %p\n", node->name, node->file);
+	//printf("%s: %p\n", node->name, node->file);
 	list_add_tail(&(node->list), &logfiles_head);
 }
 

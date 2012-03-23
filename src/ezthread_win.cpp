@@ -27,7 +27,7 @@ unsigned long threadId()
 
 long pid()
 {
-    return GetCurrentProcessId();
+	return GetCurrentProcessId();
 }
 
 struct ezmutexprivate {
