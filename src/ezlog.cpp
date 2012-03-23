@@ -63,7 +63,7 @@ int _ezlog_print(const char* file, const int line, const char* func, const char*
 
     static char result_msg[1024];
     memset(result_msg, 0, sizeof(result_msg));
-    __format_string(result_msg, &info);
+    __format_msg(result_msg, &info);
     __log_to_appenders(result_msg);
 
 	return r;

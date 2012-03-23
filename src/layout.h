@@ -23,7 +23,6 @@
 
 #include "ezlog_global.h"
 
-
 enum {
     DEFAULT_LAYOUT = 0
 };
@@ -55,6 +54,6 @@ typedef struct {
 } ezlog_info;
 
 //the result string. use by ezlog.cpp to be put into appenders.
-void __format_string(char* result_msg, ezlog_info* info);
+void __format_msg(char* result_msg, ezlog_info* info);
 
 #endif // LAYOUT_H

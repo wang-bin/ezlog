@@ -229,7 +229,7 @@ void ezlog_init_layout(const char *format)
     }
 }
 
-void __format_string(char* result_msg, ezlog_info* info)
+void __format_msg(char* result_msg, ezlog_info* info)
 {
     int index = 0;
     struct list_head *pos = &key_print_head;
