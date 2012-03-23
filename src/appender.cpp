@@ -66,6 +66,17 @@ void ezlog_unregisterAppender(appender handle)
 	}
 }
 
+void ezlog_unregisterAllAppenders()
+{
+    struct list_head *pos = &appenders_head;
+    list_for_each(pos, &appenders_head) {
+        appender_node* node = list_entry(pos, appender_node, list);
+        list_del(&node->list);
+        free(node);
+        node = 0;
+    }
+}
+
 FILE* __open_logfile(const char *path, int mode)
 {
 	//First time is the same as mode. Then will will append the msg if OPEN_ON_WRITE

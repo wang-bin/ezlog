@@ -27,7 +27,7 @@ typedef void (*appender)(const char* msg);
 
 Q_EXPORT void ezlog_registerAppender(appender handle); //installHandler(handler)
 Q_EXPORT void ezlog_unregisterAppender(appender handle);
-
+Q_EXPORT void ezlog_unregisterAllAppenders();
 
 enum LogOpenMode {
 	Append = 0x01, New = 0x02, OPEN_ON_WRITE = 0x04
