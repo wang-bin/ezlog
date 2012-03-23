@@ -112,7 +112,7 @@ void ezlog_add_logfile(const char *path, int mode)
 	}
 	strcpy(node->name, path);
 	node->mode = (LogOpenMode)mode;
-	printf("%s: %p\n", node->name, node->file);
+    //printf("%s: %p\n", node->name, node->file);
 	list_add_tail(&(node->list), &logfiles_head);
 }
 
@@ -142,7 +142,6 @@ void file_appender(const char *msg)
 	struct list_head *pos = &logfiles_head;
 	list_for_each(pos, &logfiles_head) { //list_for_each_entry
 		logfile_node* node = list_entry(pos, logfile_node, list);
-		printf("%p %s\n", node->file, msg);
 		if (IS_OPEN_ON_WRITE(node->mode)) {
 			FILE *file = __open_logfile(node->name, node->mode);
 			fprintf(file, "%s\n", msg);
