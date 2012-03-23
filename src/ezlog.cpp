@@ -49,7 +49,7 @@ int _ezlog_print(const char* file, const int line, const char* func, const char*
 	va_start(args, fmt);
 	r += vsprintf(msg, fmt, args);
 	va_end(args);
-	r += sprintf(msg + r, "\n");
+	//r += sprintf(msg + r, "\n"); //why not needed?
 
 	eztime t;
 	ezlog_info info; //static
