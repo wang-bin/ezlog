@@ -19,7 +19,6 @@
 
 #include "ezthread.h"
 #include <windows.h>
-#include <process.h>
 
 unsigned long threadId()
 {
@@ -28,7 +27,7 @@ unsigned long threadId()
 
 long pid()
 {
-	return _getpid();
+    return GetCurrentProcessId();
 }
 
 struct ezmutexprivate {
