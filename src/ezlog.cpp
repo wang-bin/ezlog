@@ -30,14 +30,10 @@ ezmutex mutex;
 //__func__
 //strftime()
 
-const char* fomat_list[] =
+void ezlog_init_default()
 {
-	"%04d-%02d-%02d %02d:%02d:%02d [tid:%#lx pid:%#lx]-[%s] %s @%d: \t"//, geit_time}//,fprintf}//(stdout, "%04d-%02d-%02d %02d:%02d:%02d-", geitTime()->tm_year + 1900, geitTime()->tm_mon + 1, geitTime()->tm_mday, geitTime()->tm_hour, geitTime()->tm_min, geitTime()->tm_sec)}
-};
-
-const char* formats[] = {
-	"YY%-%MM%-%DD% %hh%:%mm%:%ss% [tid:%tid% pid:%pid%]-[%file%] %func% @%line%: %"
-};
+    ezlog_init_layout(layout_format[DEFAULT_LAYOUT]);
+}
 
 /*!
 	va_list: fmt

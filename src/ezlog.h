@@ -25,13 +25,18 @@
 #include "appender.h"
 #include "layout.h"
 
-//add log level
-#define ezlog_msg(fmt, ...) _ezlog_print(__FILE__, __LINE__, __PRETTY_FUNCTION__, ""#fmt, ##__VA_ARGS__)
-//#define ezlog_error(fmt, ...) _ezlog_print(__FILE__, __LINE__, __PRETTY_FUNCTION__, ""#fmt, ##__VA_ARGS__)
-//#define ezlog_file(fmt, ...) _ezlog_print(__FILE__, __LINE__, __PRETTY_FUNCTION__, ""#fmt, ##__VA_ARGS__)
+
+Q_EXPORT void ezlog_init_default();
+/*
+ *TODO: Add log level
+ *define ezlog(level, ...) ezlog_##level(...)
+*/
 //DO NOT use (fmt, args...), MSVC does not support it. use (fmt, ...)
+#define ezlog_msg(fmt, ...) _ezlog_print(__FILE__, __LINE__, __PRETTY_FUNCTION__, ""#fmt, ##__VA_ARGS__)
 
 Q_EXPORT void ezlog_fini() __attribute__((destructor)); //other compilers? exit_func;
+
+
 /*
   Internal. out is stdout, stderr or 0. Each will put log message to a log file if exists.
 */

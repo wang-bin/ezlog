@@ -21,15 +21,15 @@
 
 int main(int argc, char** argv)
 {
-	ezlog_registerAppender(file_appender);
-	ezlog_registerAppender(console_appender);
-	ezlog_add_logfile("ezlog.txt", Append | OPEN_ON_WRITE);
-    ezlog_init_layout("YY%-%MM%-%DD% %hh%:%mm%:%ss% [tid:%tid% pid:%pid%]-[%file%] %func% @%line%: ");
-	ezlog_msg("Hello, cruel world!");
-    //ezlog_error("Damn! %s", __DATE__);
-    //ezlog_msg();
+    ezlog_registerAppender(file_appender);
+    ezlog_registerAppender(console_appender);
+    ezlog_add_logfile("ezlog.txt", Append | OPEN_ON_WRITE);
+    ezlog_init_layout(layout_format[DEFAULT_LAYOUT]);
+    ezlog_msg("Bye, cruel world!");
+    ezlog_msg();
 
     ezlog_fini();
+
 	return 0;
 }
 
