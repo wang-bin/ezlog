@@ -1,4 +1,3 @@
-
 #ifndef __LIST_H
 #define __LIST_H
 
@@ -18,9 +17,6 @@
 * using the generic single-entry routines.
 */
 
-#ifdef __cplusplus
-extern "C" {
-#endif //__cplusplus
 
 struct list_head {
     struct list_head *next, *prev;
@@ -251,8 +247,4 @@ static inline void list_splice_init(struct list_head *list,
     &pos->member != (head);                     \
     pos = n, n = list_entry(n->member.next, typeof(*n), member))
 
-#endif
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
+#endif //LIST_H

@@ -28,7 +28,7 @@ SOURCES += \
     appender.cpp \
     layout.cpp
 
-QMAKE_CXXFLAGS += "-std=c++0x"
+#QMAKE_CXXFLAGS += "-std=c++0x"
 
 !*msvc*: LIBS += -lpthread
 

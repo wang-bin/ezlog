@@ -1,3 +1,5 @@
+version
+
 loglevel
 error message system
 
