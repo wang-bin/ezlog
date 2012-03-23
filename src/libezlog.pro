@@ -13,20 +13,20 @@ unix: SOURCES +=
 else:win32: SOURCES +=
 
 
-HEADERS += ezlog_global.h ezlog.h \
-        ezthread.h \
-        eztime.h \
-    ezlog_global.h \
-    list.h \
-    appender.h \
-    layout.h
+HEADERS += ezlog.h \
+		ezthread.h \
+		eztime.h \
+		ezlog_global.h \
+		list.h \
+		appender.h \
+		layout.h
 
 
 SOURCES += \
-        ezlog.cpp \
-        ezthread.cpp \
-    appender.cpp \
-    layout.cpp
+		ezlog.cpp \
+		ezthread.cpp \
+		appender.cpp \
+		layout.cpp
 
 #QMAKE_CXXFLAGS += "-std=c++0x"
 
@@ -34,6 +34,12 @@ SOURCES += \
 
 *msvc* {
 	SOURCES += ezthread_win.cpp
-} else:*g++* {
+} else:*cc* {
 	SOURCES += ezthread_posix.cpp
 }
+
+lib.files =
+sources.files = ezlog_global.h ezlog.h appender.h layout.h
+sources.path = /opt/usr/src/ezlog
+
+INSTALLS += lib sources
