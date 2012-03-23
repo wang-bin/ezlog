@@ -28,7 +28,7 @@ int main(int argc, char** argv)
     ezlog_msg("Bye, cruel world!");
     ezlog_msg();
 
-    ezlog_fini();
+	//ezlog_fini();
 
 	return 0;
 }
