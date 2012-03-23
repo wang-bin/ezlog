@@ -20,7 +20,9 @@
 
 #ifndef LAYOUT_H
 #define LAYOUT_H
-#if 0
+
+#include "ezlog_global.h"
+
 struct _eztime;
 typedef struct {
 	const char* file;
@@ -34,13 +36,11 @@ typedef struct {
 
 
 
-void ezlog_init_layout(const char* format); //move to layout.h
-char* ezlog_layout_msg();
+Q_EXPORT void ezlog_init_layout(const char* format); //move to layout.h
+//char* ezlog_layout_msg(const char* msg_extra);
 
 //for internal use
-struct key_print_list;
 //the result string. use by ezlog.cpp to be put into appenders.
-char* __layout_string(key_print_list* list);
-#endif
+void __format_string(char* result_msg, ezlog_info* info);
 
 #endif // LAYOUT_H

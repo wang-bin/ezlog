@@ -18,13 +18,15 @@ HEADERS += ezlog_global.h ezlog.h \
         eztime.h \
     ezlog_global.h \
     list.h \
-    appender.h
+    appender.h \
+    layout.h
 
 
 SOURCES += \
         ezlog.cpp \
         ezthread.cpp \
-    appender.cpp
+    appender.cpp \
+    layout.cpp
 
 QMAKE_CXXFLAGS += "-std=c++0x"
 
