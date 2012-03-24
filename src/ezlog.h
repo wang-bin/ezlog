@@ -25,6 +25,8 @@
 #include "appender.h"
 #include "layout.h"
 
+Q_EXPORT int ezlog_version();
+Q_EXPORT const char* ezlog_version_string();
 
 Q_EXPORT void ezlog_init_default();
 /*

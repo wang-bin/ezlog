@@ -42,6 +42,16 @@ ezmutex mutex;
 //__func__
 //strftime()
 
+int ezlog_version()
+{
+	return LIB_VERSION;
+}
+
+const char* ezlog_version_string()
+{
+	return version_string;
+}
+
 void ezlog_init_default()
 {
 	ezlog_init_layout(layout_format[DEFAULT_LAYOUT]);

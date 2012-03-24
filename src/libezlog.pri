@@ -42,7 +42,7 @@
 LIBQDEVICEWATCHER_PRI_INCLUDED = 1
 
 staticlink = 0  #1 or 0. use static lib or not
-LIB_VERSION = 1.0.0 #0.x.y may be wrong for dll
+LIB_VERSION = 1.2.0 #0.x.y may be wrong for dll
 #QT += network
 
 NAME = ezlog
@@ -72,10 +72,10 @@ QMAKE_LFLAGS_RPATH += #will append to rpath dir
 		PRE_TARGETDEPS += $$PROJECT_LIBDIR/$$qtStaticLib($$NAME)
 	} else {
 		win32 {
-				PRE_TARGETDEPS += $$PROJECT_LIBDIR/$$qtSharedLib($$NAME, $$LIB_VERSION)
+			PRE_TARGETDEPS += $$PROJECT_LIBDIR/$$qtSharedLib($$NAME, $$LIB_VERSION)
 		} else {
-				PRE_TARGETDEPS += $$PROJECT_LIBDIR/$$qtSharedLib($$NAME)
-				unix: QMAKE_RPATHDIR += $$DESTDIR:$$PROJECT_LIBDIR #executable's dir
+			PRE_TARGETDEPS += $$PROJECT_LIBDIR/$$qtSharedLib($$NAME)
+			unix: QMAKE_RPATHDIR += $$DESTDIR:$$PROJECT_LIBDIR #executable's dir
 		}
 	}
 } else {
