@@ -45,6 +45,7 @@ ezmutex mutex;
 void ezlog_init_default()
 {
 	ezlog_init_layout(layout_format[DEFAULT_LAYOUT]);
+	ezlog_registerAppender(console_appender);
 }
 
 /*!
