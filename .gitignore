@@ -1,20 +1,27 @@
 Makefile*
-*.pro.user*
+*.*pro*.user*
 *.[oa]
 *.so*
 *.dll
 *.exe
 *.rc
+*.out
 
 #vc files
 *.ncb
 *.pdb
 *.layout
 *.suo
+*.idb
+*.obj
+*.dep
+*.manifest
 
 #dirs
 .moc
 .obj
 /bin*
 /lib*
+Debug
+Release
 
