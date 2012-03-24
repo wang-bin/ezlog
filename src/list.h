@@ -130,8 +130,7 @@ static inline void list_move(struct list_head *list, struct list_head *head)
 * @list: the entry to move
 * @head: the head that will follow our entry
 */
-static inline void list_move_tail(struct list_head *list,
-								  struct list_head *head)
+static inline void list_move_tail(struct list_head *list, struct list_head *head)
 {
 	__list_del(list->prev, list->next);
 	list_add_tail(list, head);
