@@ -1,31 +1,54 @@
-A tiny log library for C/C++.
-
+A tiny and easy to use log library for C/C++.
 Platform tested: linux, win32, wince
 
 Usage:
-1. Setup the log file and write mode. If log file is empty, then log will only display on the terminal.
-	Log file can append to an existing file overwrite it.
+0.  Initialize ezlog. e.g.
 
-	ezlog_init_output("log.txt", Append);
+		ezlog_init_default();
 
-2.  Setup log information format. Key words: YY, MM, DD, hh, mm, ss, ms, tid, pid, file, func, line.
+	This will display the message to console, and use the format "YY%-%MM%-%DD% %hh%:%mm%:%ss% {tid:%tid% pid:%pid}[%file%] %func% @%line%: %msg".
+
+	If you need to log to a file
+
+		ezlog_registerAppender(file_appender);
+		ezlog_add_logfile("ezlog.txt", Append | OPEN_ON_WRITE);
+
+	If you want to use other target, you can define your own appender.
+
+		typedef void (*appender)(const char* msg);
+
+	e.g.
+
+		void widget_appender(const char* msg) {
+			log_widget::instance()->appendText(msg);
+		}
+
+1.  Setup log message format. If you use ezlog_init_default() before and wanna keep the default
+	format, skip this step. Log message will use the last format you defined.
+	Key words: YY, MM, DD, hh, mm, ss, ms, tid, pid, file, func, line, msg.
 	It's easy to understand what they mean, so I will not explain these. A key word must between two "%",
 	except the first and the last. If string between "%" is not a key word, ezlog will print it with out any change.
 	If use key word func, the complete function name including return type, class, parameters will be supported
 	if compiled with gcc.
 
-		ezlog_init_format("YY%-%MM%-%DD% %hh%:%mm%:%ss%.%ms% [tid:%tid% pid:%pid%]-[%file%] %func% @%line%: %");
+		ezlog_init_layout("MM%-%DD% %hh%:%mm%:%ss% [tid:%tid%]-[%file%] %func% @%line%: %msg");
 
-3.	Start your logging. ezlog supports put log information to stdout, stderr and a log file. The information is
-	displayed with the former format. You can add additional messages. It supports printf like format. If nothing
+If you use ezlog_init_default(), skip this step.
+
+2.	Start your logging. You can add additional messages. It supports printf like format. If nothing
 	else you want to put, just keep the parameter empty.
 
-	ezlog_msg("Hello, cruel world!");		//stdout
-	ezlog_error("Damn! %s", __DATE__);		//stderr
-	ezlog_msg();							//Only display the formated message you defined
+		ezlog_msg("Hello, cruel world!");
+		ezlog_msg("Damn! %s", __DATE__);
+		ezlog_msg();							//Only display the formated keywords message you defined
 
-	ezlog_file("Only in log file!");			//log file
 
-4.	Clean up.
+3.	Clean up. If you use the gcc toolchain, it will be called after main() auto.
 
-	ezlog_fini();
+		ezlog_fini();
+
+
+
+
+wbsecg1@gmail.com
+20120224
