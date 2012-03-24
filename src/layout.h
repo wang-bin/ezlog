@@ -28,7 +28,7 @@ enum {
 };
 
 const char* const layout_format[] = {
-	"YY%-%MM%-%DD% %hh%:%mm%:%ss% ~tid:%tid% pid:%pid%~[%file%] %func% @%line%: %msg"
+	"YY%-%MM%-%DD% %hh%:%mm%:%ss% {tid:%tid% pid:%pid}[%file%] %func% @%line%: %msg"
 };
 
 Q_EXPORT void ezlog_init_layout(const char* format); //move to layout.h
