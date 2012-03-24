@@ -27,9 +27,6 @@
 #include "eztime.h"
 #include "list.h"
 
-
-//for internal use only!
-
 typedef struct {
 	const char* file;
 	const char* func;
@@ -48,72 +45,29 @@ typedef struct
 	print_call print;
 } key_print;
 
-int print_year(char* str, ezlog_info* info)
-{
-	return sprintf(str, "%d", info->t->year);
-}
 
-int print_month(char* str, ezlog_info* info)
-{
-	return sprintf(str, "%d", info->t->month);
-}
+#define PRINT_DEF(item, tag) \
+	int print_##item(char* str, ezlog_info* info) { \
+		return sprintf(str, "%"#tag, info->item); \
+	}
 
-int print_day(char* str, ezlog_info* info)
-{
-	return sprintf(str, "%d", info->t->day);
-}
-
-int print_hour(char* str, ezlog_info* info)
-{
-	return sprintf(str, "%d", info->t->hour);
-}
-
-int print_min(char* str, ezlog_info* info)
-{
-	return sprintf(str, "%d", info->t->min);
-}
-
-int print_sec(char* str, ezlog_info* info)
-{
-	return sprintf(str, "%d", info->t->sec);
-}
-
-int print_msec(char* str, ezlog_info* info)
-{
-	return sprintf(str, "%d", info->t->msec);
-}
-
-int print_file(char* str, ezlog_info* info)
-{
-	return sprintf(str, "%s", info->file);
-}
-
-int print_func(char* str, ezlog_info* info)
-{
-	return sprintf(str, "%s", info->func);
-}
-
-int print_line(char* str, ezlog_info* info)
-{
-	return sprintf(str, "%d", info->line);
-}
-
-int print_pid(char* str, ezlog_info* info)
-{
-	return sprintf(str, "%ld", info->pid);
-}
-
-int print_tid(char* str, ezlog_info* info)
-{
-	return sprintf(str, "%lu", info->tid);
-}
-
-int print_msg(char* str, ezlog_info* info)
-{
-	return sprintf(str, "%s", info->msg);
-}
-
-
+#define PRINT_DEF_T(item, tag) \
+	int print_##item(char* str, ezlog_info* info) { \
+		return sprintf(str, "%"#tag, info->t->item); \
+	}
+PRINT_DEF(file, s)
+PRINT_DEF(func, s)
+PRINT_DEF(line, d)
+PRINT_DEF(pid, ld)
+PRINT_DEF(tid, #lx) //lu
+PRINT_DEF(msg, s)
+PRINT_DEF_T(year, d)
+PRINT_DEF_T(month, d)
+PRINT_DEF_T(day, d)
+PRINT_DEF_T(hour, d)
+PRINT_DEF_T(min, d)
+PRINT_DEF_T(sec, d)
+PRINT_DEF_T(msec, d)
 
 static const key_print year_print = {"YY", 0, print_year};
 static const key_print month_print = {"MM", 0, print_month};
@@ -134,8 +88,6 @@ typedef struct {
 	const key_print *printer;
 	struct list_head list;
 } key_print_node;
-
-
 
 LIST_HEAD(key_print_head);
 
