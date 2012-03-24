@@ -28,6 +28,18 @@
 #include "list.h"
 
 
+//for internal use only!
+
+typedef struct {
+	const char* file;
+	const char* func;
+	int line;
+	const eztime* t;
+	unsigned long tid;
+	long pid;
+	const char* msg;
+} ezlog_info;
+
 typedef struct
 {
 	const char* key;
@@ -227,6 +239,7 @@ void ezlog_init_layout(const char *format)
 	}
 }
 
+//the result string. use by ezlog.cpp to be put into appenders.
 void __format_msg(char* result_msg, ezlog_info* info)
 {
 	int index = 0;
@@ -240,3 +253,4 @@ void __format_msg(char* result_msg, ezlog_info* info)
 			index += node->printer->print(result_msg + index, info);
 	}
 }
+

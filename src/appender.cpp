@@ -155,7 +155,6 @@ void file_appender(const char *msg)
 
 
 //for internal use
-
 void __log_to_appenders(const char* msg)
 {
 	struct list_head *pos = &appenders_head;
