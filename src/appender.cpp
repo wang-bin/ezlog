@@ -22,6 +22,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "eztime.h"
 #include "list.h"
 
 typedef struct {
@@ -45,11 +46,23 @@ typedef struct {
 LIST_HEAD(appenders_head);
 LIST_HEAD(logfiles_head);
 
+#define SIZE_LOGFILENAME 18 //yyyyMMddhhmmss.log
+static char* default_logfile = (char*)malloc(SIZE_LOGFILENAME);
+static char* last_default_logfile = (char*)malloc(SIZE_LOGFILENAME);
 void ezlog_registerAppender(appender handle)
 {
 	appender_node *node = (appender_node*)malloc(sizeof(appender_node));
 	node->handle = handle;
 	list_add_tail(&(node->list), &appenders_head);
+
+	if (handle == file_appender) {
+		eztime t;
+		memset(default_logfile, 0, SIZE_LOGFILENAME);
+		sprintf(default_logfile, "%d%02d%02d%02d%02d%02d.log", t.year, t.month, t.day
+				, t.hour, t.min, t.sec);
+		ezlog_add_logfile(default_logfile, New | OPEN_ON_WRITE);
+		strcpy(last_default_logfile, default_logfile);
+	}
 }
 
 void ezlog_unregisterAppender(appender handle)
@@ -105,7 +118,7 @@ FILE* __open_logfile(const char *path, int mode)
 void ezlog_add_logfile(const char *path, int mode)
 {
 	//ezscoped_lock lock(mutex);
-
+	ezlog_remove_logfile(last_default_logfile);
 	logfile_node *node = (logfile_node*)malloc(sizeof(logfile_node));
 	if (!IS_OPEN_ON_WRITE(mode)) {
 		FILE *file = __open_logfile(path, mode);

@@ -34,6 +34,10 @@ typedef void (*appender)(const char* msg);
 Q_EXPORT void ezlog_registerAppender(appender handle); //installHandler(handler)
 Q_EXPORT void ezlog_unregisterAppender(appender handle);
 Q_EXPORT void ezlog_unregisterAllAppenders();
+/*
+ *The default log file's name is yyyyMMddhhmmss.log. The default log file will be ignored if
+ *ezlog_add_logfile() is called.
+*/
 Q_EXPORT void ezlog_add_logfile(const char* path, int mode); //LogOpenMode
 Q_EXPORT void ezlog_remove_logfile(const char* path);
 /*
