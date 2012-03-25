@@ -136,6 +136,7 @@ void ezlog_remove_logfile(const char *path)
 void console_appender(const char *msg)
 {
 	fprintf(stdout, "%s\n", msg);
+	fflush(stdout);  //condition?
 }
 
 void file_appender(const char *msg)
@@ -149,6 +150,7 @@ void file_appender(const char *msg)
 			fclose(file);
 		} else {
 			fprintf(node->file, "%s\n", msg);
+			fflush(node->file);  //condition?
 		}
 	}
 }
