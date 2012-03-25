@@ -1,5 +1,5 @@
-version
-
+global layout, appender's layout
+syslog appender
 loglevel
 error message system
 
