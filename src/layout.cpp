@@ -64,12 +64,12 @@ PRINT_DEF(pid, ld)
 PRINT_DEF(tid, #lx) //lu
 PRINT_DEF(msg, s)
 PRINT_DEF_T(year, d)
-PRINT_DEF_T(month, d)
-PRINT_DEF_T(day, d)
-PRINT_DEF_T(hour, d)
-PRINT_DEF_T(min, d)
-PRINT_DEF_T(sec, d)
-PRINT_DEF_T(msec, d)
+PRINT_DEF_T(month, 02d)
+PRINT_DEF_T(day, 02d)
+PRINT_DEF_T(hour, 02d)
+PRINT_DEF_T(min, 02d)
+PRINT_DEF_T(sec, 02d)
+PRINT_DEF_T(msec, 02d)
 
 
 static const key_print year_print = {"YY", 0, print_year};
