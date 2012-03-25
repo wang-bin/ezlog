@@ -28,6 +28,7 @@
 #include "list.h"
 
 typedef struct {
+	const char* level;
 	const char* file;
 	const char* func;
 	int line;
@@ -55,6 +56,7 @@ typedef struct
 	int print_##item(char* str, ezlog_info* info) { \
 		return sprintf(str, "%"#tag, info->t->item); \
 	}
+PRINT_DEF(level, s)
 PRINT_DEF(file, s)
 PRINT_DEF(func, s)
 PRINT_DEF(line, d)
@@ -69,6 +71,7 @@ PRINT_DEF_T(min, d)
 PRINT_DEF_T(sec, d)
 PRINT_DEF_T(msec, d)
 
+
 static const key_print year_print = {"YY", 0, print_year};
 static const key_print month_print = {"MM", 0, print_month};
 static const key_print day_print = {"DD", 0, print_day};
@@ -76,6 +79,7 @@ static const key_print hour_print = {"hh", 0, print_hour};
 static const key_print min_print = {"mm", 0, print_min};
 static const key_print sec_print = {"ss", 0, print_sec};
 static const key_print msec_print = {"ms", 0, print_msec};
+static const key_print level_print = {"level", 0, print_level};
 static const key_print file_print = {"file", 0, print_file};
 static const key_print func_print = {"func", 0, print_func};
 static const key_print line_print = {"line", 0, print_line};
@@ -120,6 +124,7 @@ void ezlog_init_layout(const char *format)
 		node = 0;
 	}
 
+	//TODO: print the keywords use '\'
 	char *pch = strtok (format_str,"%");
 	while (pch != NULL) {
 		//printf ("%s\n",pch);
@@ -150,6 +155,10 @@ void ezlog_init_layout(const char *format)
 		} else if(!strcmp(pch, "ms")) {
 			key_print_node *node = (key_print_node*)malloc(sizeof(key_print_node));
 			node->printer = &msec_print;
+			list_add_tail(&(node->list), &key_print_head);
+		} else if(!strcmp(pch, "level")) {
+			key_print_node *node = (key_print_node*)malloc(sizeof(key_print_node));
+			node->printer = &level_print;
 			list_add_tail(&(node->list), &key_print_head);
 		} else if(!strcmp(pch, "file")) {
 			key_print_node *node = (key_print_node*)malloc(sizeof(key_print_node));

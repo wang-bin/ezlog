@@ -1,5 +1,5 @@
 /******************************************************************************
-	ezlog: a tiny log for c++
+	ezlog: A tiny log for C/C++
 	Copyright (C) 2011 Wang Bin <wbsecg1@gmail.com>
 
 	This program is free software; you can redistribute it and/or modify
@@ -25,23 +25,28 @@
 #include "appender.h"
 #include "layout.h"
 
+
+enum Level {
+	debug, info, warn, error, fatal
+};
+
+
 Q_EXPORT int ezlog_version();
 Q_EXPORT const char* ezlog_version_string();
 
 Q_EXPORT void ezlog_init_default();
-/*
- *TODO: Add log level
- *define ezlog(level, ...) ezlog_##level(...)
-*/
 //DO NOT use (fmt, args...), MSVC does not support it. use (fmt, ...)
-#define ezlog_msg(fmt, ...) _ezlog_print(__FILE__, __LINE__, __PRETTY_FUNCTION__, ""#fmt, ##__VA_ARGS__)
+#define ezlog(level, ...) ezlog_##level(##__VA_ARGS__)
+#define ezlog_msg(...) ezlog_debug(##__VA_ARGS__)
+/*align level string*/
+#define ezlog_debug(fmt, ...) _ezlog_print("DEBUG", __FILE__, __LINE__, __PRETTY_FUNCTION__, ""#fmt, ##__VA_ARGS__)
+#define ezlog_info(fmt, ...) _ezlog_print("INFO ", __FILE__, __LINE__, __PRETTY_FUNCTION__, ""#fmt, ##__VA_ARGS__)
+#define ezlog_warn(fmt, ...) _ezlog_print("WARN ", __FILE__, __LINE__, __PRETTY_FUNCTION__, ""#fmt, ##__VA_ARGS__)
+#define ezlog_error(fmt, ...) _ezlog_print("ERROR", __FILE__, __LINE__, __PRETTY_FUNCTION__, ""#fmt, ##__VA_ARGS__)
+#define ezlog_fatal(fmt, ...) _ezlog_print("FATAL", __FILE__, __LINE__, __PRETTY_FUNCTION__, ""#fmt, ##__VA_ARGS__)
 
 Q_EXPORT void ezlog_fini() __attribute__((destructor)); //other compilers? exit_func;
 
-
-/*
-  Internal. out is stdout, stderr or 0. Each will put log message to a log file if exists.
-*/
-Q_EXPORT int _ezlog_print(const char* file, const int line, const char* func, const char* fmt, ...);
+Q_EXPORT void _ezlog_print(const char* level, const char* file, const int line, const char* func, const char* fmt, ...);
 
 #endif //EZLOG_H

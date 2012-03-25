@@ -26,6 +26,7 @@
 #include "layout.h"
 
 typedef struct {
+	const char* level;
 	const char* file;
 	const char* func;
 	int line;
@@ -63,19 +64,18 @@ void ezlog_init_default()
 	format_print() will not change the source string. Parameter str MUST BE END WITH '%'!
 	The reason is in strtok(), but i don't know it now :(
 */
-int _ezlog_print(const char* file, const int line, const char* func, const char* fmt, ...)
+void _ezlog_print(const char* level, const char* file, const int line, const char* func, const char* fmt, ...)
 {
-	int r=0;
-
 	char msg[512];
 	va_list args;
 	va_start(args, fmt);
-	r += vsprintf(msg, fmt, args);
+	vsprintf(msg, fmt, args);
 	va_end(args);
-	//r += sprintf(msg + r, "\n"); //why not needed?
+	//r += sprintf(msg + r, "\n");
 
 	eztime t;
 	ezlog_info info; //static
+	info.level = level;
 	info.file = file;
 	info.func = func;
 	info.line = line;
@@ -88,8 +88,6 @@ int _ezlog_print(const char* file, const int line, const char* func, const char*
 	memset(result_msg, 0, sizeof(result_msg));
 	__format_msg(result_msg, &info);
 	__log_to_appenders(result_msg);
-
-	return r;
 }
 
 
