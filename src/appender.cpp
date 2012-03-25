@@ -46,9 +46,9 @@ typedef struct {
 LIST_HEAD(appenders_head);
 LIST_HEAD(logfiles_head);
 
-#define SIZE_LOGFILENAME 18 //yyyyMMddhhmmss.log
-static char* default_logfile = (char*)malloc(SIZE_LOGFILENAME);
-static char* last_default_logfile = (char*)malloc(SIZE_LOGFILENAME);
+#define SIZE_LOGFILENAME 19 //yyyyMMddhhmmss.log
+static char default_logfile[SIZE_LOGFILENAME];
+static char last_default_logfile[SIZE_LOGFILENAME];
 void ezlog_registerAppender(appender handle)
 {
 	appender_node *node = (appender_node*)malloc(sizeof(appender_node));

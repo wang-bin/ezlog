@@ -1,5 +1,5 @@
 /******************************************************************************
-	ezlog: a tiny log for c++
+	ezlog: A tiny log for C/C++
 	Copyright (C) 2011 Wang Bin <wbsecg1@gmail.com>
 
 	This program is free software; you can redistribute it and/or modify
