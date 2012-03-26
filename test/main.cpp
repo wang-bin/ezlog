@@ -21,7 +21,6 @@
 
 int main(int argc, char** argv)
 {
-	printf("ezlog version: %d %s\n", ezlog_version(), ezlog_version_string());
 	ezlog_init_default();
 	ezlog_registerAppender(file_appender);
 	ezlog_add_logfile("ezlog.txt", Append | OPEN_ON_WRITE);

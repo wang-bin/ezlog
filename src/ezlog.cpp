@@ -43,6 +43,11 @@ ezmutex mutex;
 //__func__
 //strftime()
 
+/*!
+ * \fn int ezlog_version()
+ * \brief Get ezlog's version
+ *
+ */
 int ezlog_version()
 {
 	return LIB_VERSION;
@@ -55,15 +60,13 @@ const char* ezlog_version_string()
 
 void ezlog_init_default()
 {
+	printf("ezlog version: %s\n", ezlog_version_string());
 	ezlog_init_layout(layout_format[DEFAULT_LAYOUT]);
 	ezlog_registerAppender(console_appender);
 }
 
-/*!
-	va_list: fmt
-	format_print() will not change the source string. Parameter str MUST BE END WITH '%'!
-	The reason is in strtok(), but i don't know it now :(
-*/
+
+
 void _ezlog_print(const char* level, const char* file, const int line, const char* func, const char* fmt, ...)
 {
 	char msg[512];
