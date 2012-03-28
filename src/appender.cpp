@@ -57,6 +57,7 @@ void ezlog_registerAppender(appender handle)
 
 	if (handle == file_appender) {
 		eztime t;
+		getTime(&t);
 		memset(default_logfile, 0, SIZE_LOGFILENAME);
 		sprintf(default_logfile, "%d%02d%02d%02d%02d%02d.log", t.year, t.month, t.day
 				, t.hour, t.min, t.sec);

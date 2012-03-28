@@ -77,6 +77,7 @@ void _ezlog_print(const char* level, const char* file, const int line, const cha
 	//r += sprintf(msg + r, "\n");
 
 	eztime t;
+	getTime(&t);
 	ezlog_info info; //static
 	info.level = level;
 	info.file = file;

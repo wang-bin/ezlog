@@ -20,10 +20,9 @@
 #ifndef EZTIME_H
 #define EZTIME_H
 
-#include <time.h>
 #include "ezlog_global.h"
-
-#ifdef OS_WIN
+#include <time.h>
+#ifdef Q_OS_WIN
 #include <windows.h>
 #endif //WINCE
 
@@ -31,21 +30,8 @@ typedef struct _eztime {
 	int year, month, day;
 	int hour, min, sec;
 	int msec;
-	void init(){
-#ifdef OS_WIN
-		SYSTEMTIME stUTC;
-		::GetSystemTime(&stUTC);
-		year = stUTC.wYear, month = stUTC.wMonth, day = stUTC.wDay;
-		hour = stUTC.wHour, min = stUTC.wMinute, sec = stUTC.wSecond;
-		msec = stUTC.wMilliseconds;
-#else
-		time_t seconds = time(NULL);
-		struct tm* t = localtime(&seconds);
-		year = t->tm_year + 1900, month = t->tm_mon + 1, day = t->tm_mday;
-		hour = t->tm_hour, min = t->tm_min, sec = t->tm_sec, msec = 0;
-#endif //WINCE
-	}
-	_eztime() { init();}
 } eztime;
+
+void getTime(eztime* t);
 
 #endif // EZTIME_H

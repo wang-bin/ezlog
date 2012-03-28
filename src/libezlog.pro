@@ -26,7 +26,8 @@ SOURCES += \
 		ezlog.cpp \
 		ezthread.cpp \
 		appender.cpp \
-		layout.cpp
+		layout.cpp \
+    eztime.cpp
 
 #QMAKE_CXXFLAGS += "-std=c++0x"
 
