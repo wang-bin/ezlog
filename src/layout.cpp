@@ -95,6 +95,12 @@ typedef struct {
 
 LIST_HEAD(key_print_head);
 
+
+/*
+	va_list: fmt
+	this will not change the source string. Parameter 'format' MUST BE END WITH '%'!
+	The reason is in strtok(), but i don't know it now :(
+*/
 void ezlog_init_layout(const char *format)
 {
 	//ezscoped_lock lock(mutex);
@@ -125,7 +131,7 @@ void ezlog_init_layout(const char *format)
 	}
 
 	//TODO: print the keywords use '\'
-	char *pch = strtok (format_str,"%");
+    char *pch = strtok(format_str,"%");
 	while (pch != NULL) {
 		//printf ("%s\n",pch);
 		if(!strcmp(pch, "YY")) {
@@ -184,7 +190,7 @@ void ezlog_init_layout(const char *format)
 			key_print_node *node = (key_print_node*)malloc(sizeof(key_print_node));
 			node->printer = &msg_print;
 			list_add_tail(&(node->list), &key_print_head);
-		} else {
+        } else if (strlen(pch)) { //if meets %%, skip
 			key_print_node *node = (key_print_node*)malloc(sizeof(key_print_node));
 			key_print *dummy_print = (key_print*)malloc(sizeof(key_print));
 			dummy_print->key = 0;
