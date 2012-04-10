@@ -1,32 +1,15 @@
+qdoc
+
 global layout, appender's layout
 syslog appender
-loglevel
 error message system
 
 qDebug sql handler
 
-log file name: datetime.app.log
-
-for developer, need file, function, line, thread information:
-ezlog_msg_debug()
-ezlog_err_debug()
-ezlog_file_debug()
-
 ezlogxx
 strftime(s, sizeof(s), "%Y-%m-%d %H:%M:%S", localtime(&t));
-klist
-{
-	const char* key;
-	int (*print_key)(const char* func, const char* file, const char* other, int line)
-}
-
-level: ERROR INFO
-
-分离eztime
 
 参考 boost.thread
 mutex
 layout
-qt meta properties
-namespace EZLogg
 
