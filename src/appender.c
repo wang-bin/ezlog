@@ -119,9 +119,10 @@ FILE* __open_logfile(const char *path, int mode, logfile_node* node)
 
 void ezlog_add_logfile(const char *path, int mode)
 {
+	logfile_node *node;
 	//ezscoped_lock lock(mutex);
 	ezlog_remove_logfile(last_default_logfile);
-	logfile_node *node = (logfile_node*)malloc(sizeof(logfile_node));
+	node = (logfile_node*)malloc(sizeof(logfile_node));
 	node->first = 1;
 	if (!IS_OPEN_ON_WRITE(mode)) {
 		FILE *file = __open_logfile(path, mode, node);

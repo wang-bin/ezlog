@@ -103,13 +103,15 @@ LIST_HEAD(key_print_head);
 */
 void ezlog_init_layout(const char *format)
 {
-	//ezscoped_lock lock(mutex);
+	int format_strlen;
+	struct list_head *pos;
+	char *pch;
 	static char* format_str = NULL;
 	if(format_str!=NULL) {
 		free(format_str);
 		format_str = NULL;
 	}
-	int format_strlen = strlen(format);
+	format_strlen = strlen(format);
 	if(format[format_strlen]!='%') {
 		format_strlen += 1;
 	}
@@ -122,7 +124,7 @@ void ezlog_init_layout(const char *format)
 	*(format_str+format_strlen-1) = '%';
 	//init key_print_list
 
-	struct list_head *pos = &key_print_head;
+	pos = &key_print_head;
 	list_for_each(pos, &key_print_head) {
 		key_print_node* node = list_entry(pos, key_print_node, list);
 		list_del(&node->list);
@@ -131,7 +133,7 @@ void ezlog_init_layout(const char *format)
 	}
 
 	//TODO: print the keywords use '\'
-    char *pch = strtok(format_str,"%");
+	pch = strtok(format_str,"%");
 	while (pch != NULL) {
 		//printf ("%s\n",pch);
 		if(!strcmp(pch, "YY")) {
@@ -190,7 +192,7 @@ void ezlog_init_layout(const char *format)
 			key_print_node *node = (key_print_node*)malloc(sizeof(key_print_node));
 			node->printer = &msg_print;
 			list_add_tail(&(node->list), &key_print_head);
-        } else if (strlen(pch)) { //if meets %%, skip
+		} else if (strlen(pch)) { //if meets %%, skip
 			key_print_node *node = (key_print_node*)malloc(sizeof(key_print_node));
 			key_print *dummy_print = (key_print*)malloc(sizeof(key_print));
 			dummy_print->key = 0;
