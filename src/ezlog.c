@@ -30,7 +30,7 @@ typedef struct {
 	const char* file;
 	const char* func;
 	int line;
-	const _eztime* t;
+	const eztime* t;
 	unsigned long tid;
 	long pid;
 	const char* msg;
@@ -39,7 +39,6 @@ typedef struct {
 extern void __format_msg(char* result_msg, ezlog_info* info);
 extern void __log_to_appenders(const char* msg);
 
-ezmutex mutex;
 //__func__
 //strftime()
 
