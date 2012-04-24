@@ -30,29 +30,3 @@ long pid()
 	return GetCurrentProcessId();
 }
 
-struct ezmutexprivate {
-	CRITICAL_SECTION _criticalSection;
-};
-
-ezmutex::ezmutex()
-:d(new ezmutexprivate)
-{
-	InitializeCriticalSection(&d->_criticalSection);
-}
-
-ezmutex::~ezmutex()
-{
-	DeleteCriticalSection(&d->_criticalSection);
-	delete d;
-}
-
-void ezmutex::lock()
-{
-	EnterCriticalSection(&d->_criticalSection);
-}
-
-void ezmutex::unlock()
-{
-	LeaveCriticalSection(&d->_criticalSection);
-}
-

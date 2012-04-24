@@ -34,38 +34,12 @@ unsigned long threadId()
 #if defined(OS_WIN) && (__GNUC_MINOR__ < 6)
 	return pthread_self().x;
 #else
-	return pthread_self();
+	return (unsigned long)pthread_self();
 #endif
 }
 
 long pid()
 {
 	return getpid();
-}
-
-struct ezmutexprivate {
-	pthread_mutex_t mutex;
-};
-
-ezmutex::ezmutex()
-:d(new ezmutexprivate)
-{
-	pthread_mutex_init(&d->mutex, NULL);
-}
-
-ezmutex::~ezmutex()
-{
-	pthread_mutex_destroy(&d->mutex);
-	delete d;
-}
-
-void ezmutex::lock()
-{
-	pthread_mutex_lock(&d->mutex);
-}
-
-void ezmutex::unlock()
-{
-	pthread_mutex_destroy(&d->mutex);
 }
 
