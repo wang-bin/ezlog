@@ -23,6 +23,10 @@
 
 #include "ezlog_global.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif //__cplusplus
+
 /*!
   \enum Layout
  */
@@ -30,7 +34,7 @@ enum Layout {
 	DEFAULT_LAYOUT = 0
 };
 
-const char* const layout_format[] = {
+static const char* const layout_format[] = {
 	"%YY%-%MM%-%DD% %hh%:%mm%:%ss% %level% 'tid:%tid% pid:%pid%'[%file%] %func% @%line%: %msg"
 };
 
@@ -42,5 +46,9 @@ const char* const layout_format[] = {
 
 Q_EXPORT void ezlog_init_layout(const char* format);
 //char* ezlog_layout_msg(const char* msg_extra);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // LAYOUT_H

@@ -25,6 +25,9 @@
 #include "appender.h"
 #include "layout.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif //__cplusplus
 
 enum Level {
 	debug, info, warn, error, fatal
@@ -48,5 +51,9 @@ Q_EXPORT void ezlog_init_default();
 Q_EXPORT void ezlog_fini() __attribute__((destructor)); //other compilers? exit_func;
 
 Q_EXPORT void _ezlog_print(const char* level, const char* file, const int line, const char* func, const char* fmt, ...);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif //EZLOG_H

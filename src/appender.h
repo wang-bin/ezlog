@@ -22,9 +22,13 @@
 #define APPENDER_H
 #include "ezlog_global.h"
 
-enum LogOpenMode {
+#ifdef __cplusplus
+extern "C" {
+#endif //__cplusplus
+
+typedef enum {
 	Append = 0x01, New = 0x02, OPEN_ON_WRITE = 0x04
-};
+} LogOpenMode;
 
 #define IS_OPEN_ON_WRITE(m) ((m & OPEN_ON_WRITE) == OPEN_ON_WRITE)
 
@@ -46,5 +50,9 @@ Q_EXPORT void ezlog_remove_logfile(const char* path);
 */
 Q_EXPORT void console_appender(const char* msg);
 Q_EXPORT void file_appender(const char* msg);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 #endif // APPENDER_H
