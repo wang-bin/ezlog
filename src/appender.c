@@ -37,6 +37,7 @@ typedef struct {
 #define PATH_MAX 256
 #endif
 typedef struct {
+	char first;
 	FILE *file;
 	char name[PATH_MAX];
 	LogOpenMode mode; //LogOpenMode
@@ -92,10 +93,9 @@ void ezlog_unregisterAllAppenders()
 	}
 }
 
-FILE* __open_logfile(const char *path, int mode)
+FILE* __open_logfile(const char *path, int mode, logfile_node* node)
 {
 	//First time is the same as mode. Then will will append the msg if OPEN_ON_WRITE
-	static int _mode = mode;
 	FILE *file = 0;
 	if(!strcmp(path, "stdout")) {
 		file = stdout;
@@ -103,16 +103,17 @@ FILE* __open_logfile(const char *path, int mode)
 		file = stderr;
 	} else {
 		const char* m = "ab";
-		if ((_mode & New) == New) {
+		if ((mode & New) == New && node->first) {
 			m = "wb";
 		}
 
 		file = fopen(path, m);
 		if(!file) {
 			//perror("open log file failed!"); //wince does not support
+		} else {
+			node->first = 0;
 		}
 	}
-	_mode = Append;
 	return file;
 }
 
@@ -121,8 +122,9 @@ void ezlog_add_logfile(const char *path, int mode)
 	//ezscoped_lock lock(mutex);
 	ezlog_remove_logfile(last_default_logfile);
 	logfile_node *node = (logfile_node*)malloc(sizeof(logfile_node));
+	node->first = 1;
 	if (!IS_OPEN_ON_WRITE(mode)) {
-		FILE *file = __open_logfile(path, mode);
+		FILE *file = __open_logfile(path, mode, node);
 		node->file = file;
 	}
 	strcpy(node->name, path);
@@ -159,7 +161,7 @@ void file_appender(const char *msg)
 	list_for_each(pos, &logfiles_head) { //list_for_each_entry
 		logfile_node* node = list_entry(pos, logfile_node, list);
 		if (IS_OPEN_ON_WRITE(node->mode)) {
-			FILE *file = __open_logfile(node->name, node->mode);
+			FILE *file = __open_logfile(node->name, node->mode, node);
 			fprintf(file, "%s\n", msg);
 			fclose(file);
 		} else {
