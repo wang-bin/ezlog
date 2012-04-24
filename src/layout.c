@@ -38,11 +38,11 @@ typedef struct {
 	const char* msg;
 } ezlog_info;
 
+typedef int (*print_call)(char*, ezlog_info* info);
 typedef struct
 {
 	const char* key;
 	char* delimiter; //0: if key != 0; a string between % and % if key == 0
-	typedef int (*print_call)(char*, ezlog_info* info);
 	print_call print;
 } key_print;
 
