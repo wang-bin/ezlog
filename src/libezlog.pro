@@ -14,7 +14,6 @@ else:win32: SOURCES +=
 
 
 HEADERS += ezlog.h \
-		ezthread.h \
 		eztime.h \
 		ezlog_global.h \
 		list.h \
@@ -25,19 +24,12 @@ HEADERS += ezlog.h \
 SOURCES += \
     appender.c \
     ezlog.c \
-    ezthread.c \
     eztime.c \
     layout.c
 
 #QMAKE_CXXFLAGS += "-std=c++0x"
 
 !*msvc*: LIBS += -lpthread
-
-*msvc* {
-        SOURCES += ezthread_win.c
-} else:*cc* {
-        SOURCES += ezthread_posix.c
-}
 
 lib.files =
 sources.files = ezlog_global.h ezlog.h appender.h layout.h

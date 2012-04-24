@@ -21,7 +21,6 @@
 #include <stdarg.h>
 #include <stdlib.h>
 #include <string.h>
-#include "ezthread.h"
 #include "eztime.h"
 #include "layout.h"
 
@@ -64,7 +63,32 @@ void ezlog_init_default()
 	ezlog_registerAppender(console_appender);
 }
 
+#if !COMPILER(MSVC)
+#include <unistd.h>
+#include <pthread.h>
+#endif
 
+static ALWAYS_INLINE unsigned long threadId()
+{
+#if COMPILER(MSVC)
+	return GetCurrentThreadId();
+#else
+#if defined(OS_WIN) && (__GNUC_MINOR__ < 6)
+	return pthread_self().x;
+#else
+	return (unsigned long)pthread_self();
+#endif
+#endif
+}
+
+static ALWAYS_INLINE long pid()
+{
+#if COMPILER(MSVC)
+	return GetCurrentProcessId();
+#else
+	return getpid();
+#endif
+}
 
 void _ezlog_print(const char* level, const char* file, const int line, const char* func, const char* fmt, ...)
 {
@@ -97,3 +121,4 @@ void _ezlog_print(const char* level, const char* file, const int line, const cha
 void ezlog_fini() {
 	ezlog_unregisterAllAppenders();
 }
+
