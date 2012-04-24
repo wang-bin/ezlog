@@ -23,20 +23,20 @@ HEADERS += ezlog.h \
 
 
 SOURCES += \
-		ezlog.cpp \
-		ezthread.cpp \
-		appender.cpp \
-		layout.cpp \
-    eztime.cpp
+    appender.c \
+    ezlog.c \
+    ezthread.c \
+    eztime.c \
+    layout.c
 
 #QMAKE_CXXFLAGS += "-std=c++0x"
 
 !*msvc*: LIBS += -lpthread
 
 *msvc* {
-	SOURCES += ezthread_win.cpp
+        SOURCES += ezthread_win.c
 } else:*cc* {
-	SOURCES += ezthread_posix.cpp
+        SOURCES += ezthread_posix.c
 }
 
 lib.files =
