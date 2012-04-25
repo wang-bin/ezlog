@@ -9,6 +9,7 @@ include(../src/libezlog.pri)
 
 #win32:LIBS += -lUser32
 
-SOURCES += main.cpp
+SOURCES += \
+    main.cpp
 HEADERS +=
-!*msvc*: LIBS += -lpthread
+unix: LIBS += -lpthread

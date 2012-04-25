@@ -63,14 +63,14 @@ void ezlog_init_default()
 	ezlog_registerAppender(console_appender);
 }
 
-#if !COMPILER(MSVC)
+#if !COMPILER(MSVC) && !COMPILER(MINGW)
 #include <unistd.h>
 #include <pthread.h>
 #endif
 
 static ALWAYS_INLINE unsigned long threadId()
 {
-#if COMPILER(MSVC)
+#if COMPILER(MSVC) || COMPILER(MINGW)
 	return GetCurrentThreadId();
 #else
 #if defined(OS_WIN) && (__GNUC_MINOR__ < 6)
@@ -83,7 +83,7 @@ static ALWAYS_INLINE unsigned long threadId()
 
 static ALWAYS_INLINE long pid()
 {
-#if COMPILER(MSVC)
+#if COMPILER(MSVC) || COMPILER(MINGW)
 	return GetCurrentProcessId();
 #else
 	return getpid();

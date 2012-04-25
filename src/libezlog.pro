@@ -29,7 +29,7 @@ SOURCES += \
 
 #QMAKE_CXXFLAGS += "-std=c++0x"
 
-!*msvc*: LIBS += -lpthread
+unix: LIBS += -lpthread
 
 lib.files =
 sources.files = ezlog_global.h ezlog.h appender.h layout.h
