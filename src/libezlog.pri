@@ -42,7 +42,7 @@
 LIBQDEVICEWATCHER_PRI_INCLUDED = 1
 
 staticlink = 0  #1 or 0. use static lib or not
-LIB_VERSION = 1.2.0 #0.x.y may be wrong for dll
+LIB_VERSION = 1.2.2 #0.x.y may be wrong for dll
 #QT += network
 
 NAME = ezlog
