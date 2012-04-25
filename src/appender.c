@@ -86,9 +86,16 @@ void ezlog_unregisterAllAppenders()
 	struct list_head *pos = &appenders_head;
 	list_for_each(pos, &appenders_head) {
 		appender_node* node = list_entry(pos, appender_node, list);
-		//FIXME: seg fault!
-		//list_del(&node->list);
+		list_del(&node->list);
 		free(node);
+		if (pos->next == 0 && pos->prev == 0) {
+			pos->next = pos;
+			pos->prev = pos;
+			appender_node* node = list_entry(pos, appender_node, list);
+			list_del(&node->list);
+			/*free(node);*/
+			return;
+		}
 		node = 0;
 	}
 }
