@@ -95,8 +95,8 @@ static ALWAYS_INLINE void __list_del(struct list_head *prev, struct list_head *n
 static ALWAYS_INLINE void list_del(struct list_head *entry)
 {
 	__list_del(entry->prev, entry->next);
-    entry->next = (struct list_head *) 0;
-    entry->prev = (struct list_head *) 0;
+	entry->next = (struct list_head *) 0;
+	entry->prev = (struct list_head *) 0;
 }
 
 /**
@@ -105,8 +105,8 @@ static ALWAYS_INLINE void list_del(struct list_head *entry)
 */
 static ALWAYS_INLINE void INIT_LIST_HEAD(struct list_head *list)
 {
-	   list->next = list;
-	   list->prev = list;
+	list->next = list;
+	list->prev = list;
 }
 
 static ALWAYS_INLINE void list_del_init(struct list_head *entry)
