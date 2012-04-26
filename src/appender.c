@@ -48,8 +48,16 @@ LIST_HEAD(appenders_head);
 LIST_HEAD(logfiles_head);
 
 #define SIZE_LOGFILENAME 19 //yyyyMMddhhmmss.log
+
 static char default_logfile[SIZE_LOGFILENAME];
 static char last_default_logfile[SIZE_LOGFILENAME];
+
+/*!
+ * \brief ezlog_registerAppender
+ * \param handle
+ *
+ * if filename is not specified by ezlog_add_logfile, the default name formated by time will be used.
+ */
 void ezlog_registerAppender(appender handle)
 {
 	appender_node *node = (appender_node*)malloc(sizeof(appender_node));
@@ -116,7 +124,10 @@ FILE* __open_logfile(const char *path, int mode, logfile_node* node)
 
 		file = fopen(path, m);
 		if(!file) {
-			//perror("open log file failed!"); //wince does not support
+#ifndef OS_WINCE
+			perror("Error opening log file"); //wince does not support
+#endif
+			return 0;
 		} else {
 			node->first = 0;
 		}
@@ -124,20 +135,22 @@ FILE* __open_logfile(const char *path, int mode, logfile_node* node)
 	return file;
 }
 
+/*!
+ * \brief ezlog_add_logfile: add a log file will disable default log file name.
+ * \param path
+ * \param mode
+ */
 void ezlog_add_logfile(const char *path, int mode)
 {
 	logfile_node *node;
-	//ezscoped_lock lock(mutex);
 	ezlog_remove_logfile(last_default_logfile);
 	node = (logfile_node*)malloc(sizeof(logfile_node));
 	node->first = 1;
 	if (!IS_OPEN_ON_WRITE(mode)) {
-		FILE *file = __open_logfile(path, mode, node);
-		node->file = file;
+		node->file = __open_logfile(path, mode, node);
 	}
 	strcpy(node->name, path);
 	node->mode = (LogOpenMode)mode;
-	//printf("%s: %p\n", node->name, node->file);
 	list_add_tail(&(node->list), &logfiles_head);
 }
 
@@ -156,6 +169,25 @@ void ezlog_remove_logfile(const char *path)
 	}
 }
 
+void ezlog_remove_logfiles()
+{
+	struct list_head *pos = &logfiles_head;
+	list_for_each(pos, &logfiles_head) { //list_for_each_entry
+		logfile_node* node = list_entry(pos, logfile_node, list);
+		if (!IS_OPEN_ON_WRITE(node->mode))
+			fclose(node->file);
+		list_del(&(node->list));
+		free(node);
+		if (pos->next == 0 && pos->prev == 0) {
+			pos->next = pos;
+			pos->prev = pos;
+			logfile_node* node = list_entry(pos, logfile_node, list);
+			list_del(&node->list);
+			/*free(node);*/
+			return;
+		}
+	}
+}
 
 void console_appender(const char *msg)
 {
@@ -170,8 +202,10 @@ void file_appender(const char *msg)
 		logfile_node* node = list_entry(pos, logfile_node, list);
 		if (IS_OPEN_ON_WRITE(node->mode)) {
 			FILE *file = __open_logfile(node->name, node->mode, node);
-			fprintf(file, "%s\n", msg);
-			fclose(file);
+			if (file) {
+				fprintf(file, "%s\n", msg);
+				fclose(file);
+			}
 		} else {
 			fprintf(node->file, "%s\n", msg);
 			fflush(node->file);  //condition?

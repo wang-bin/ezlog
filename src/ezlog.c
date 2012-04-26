@@ -119,6 +119,7 @@ void _ezlog_print(const char* level, const char* file, const int line, const cha
 
 
 void ezlog_fini() {
+	ezlog_remove_logfiles();
 	ezlog_unregisterAllAppenders();
 }
 

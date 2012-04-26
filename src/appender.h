@@ -44,6 +44,7 @@ Q_EXPORT void ezlog_unregisterAllAppenders();
 */
 Q_EXPORT void ezlog_add_logfile(const char* path, int mode); //LogOpenMode
 Q_EXPORT void ezlog_remove_logfile(const char* path);
+Q_EXPORT void ezlog_remove_logfiles();
 /*
   pre defined appenders: file, console
   just output the formated message.
