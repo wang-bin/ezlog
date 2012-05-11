@@ -18,7 +18,9 @@ HEADERS += ezlog.h \
 		ezlog_global.h \
 		list.h \
 		appender.h \
-		layout.h
+		layout.h \
+    os.h \
+    cpu.h
 
 
 SOURCES += \
