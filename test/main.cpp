@@ -21,6 +21,8 @@
 
 int main(int argc, char** argv)
 {
+	(void)argc;
+	(void)argv;
 	ezlog_init_default();
 	ezlog_registerAppender(file_appender);
 	ezlog_add_logfile("ezlog.txt", Append | OPEN_ON_WRITE);
