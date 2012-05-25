@@ -3,7 +3,7 @@ QT =
 QT	   -= gui
 CONFIG   += console
 CONFIG   -= app_bundle
-
+#DEFINES += NO_EZLOG
 TARGET = tst_ezlog
 include(../src/libezlog.pri)
 
