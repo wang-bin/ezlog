@@ -23,6 +23,7 @@
 #include <string.h>
 #include "eztime.h"
 #include "layout.h"
+#include "ezmutex.h"
 
 typedef struct {
 	const char* level;
@@ -92,6 +93,7 @@ static ALWAYS_INLINE long pid()
 
 void _ezlog_print(const char* level, const char* file, const int line, const char* func, const char* fmt, ...)
 {
+	_ezmutex_lock();
 	static char result_msg[1024];
 	ezlog_info info; //static
 	eztime t;
@@ -113,6 +115,7 @@ void _ezlog_print(const char* level, const char* file, const int line, const cha
 	info.msg = msg;
 
 	memset(result_msg, 0, sizeof(result_msg));
+	_ezmutex_unlock();
 	__format_msg(result_msg, &info);
 	__log_to_appenders(result_msg);
 }

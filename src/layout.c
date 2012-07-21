@@ -26,6 +26,7 @@
 
 #include "eztime.h"
 #include "list.h"
+#include "ezmutex.h"
 
 typedef struct {
 	const char* level;
@@ -103,6 +104,7 @@ LIST_HEAD(key_print_head);
 */
 void ezlog_init_layout(const char *format)
 {
+	_ezmutex_lock();
 	int format_strlen;
 	struct list_head *pos;
 	char *pch;
@@ -206,11 +208,13 @@ void ezlog_init_layout(const char *format)
 		*(pch+strlen(pch)) = '%'; //strtok will replace '%' with '\0'.
 		pch = strtok (NULL, "%"); //why NULL?
 	}
+	_ezmutex_unlock();
 }
 
 //the result string. use by ezlog.cpp to be put into appenders.
 void __format_msg(char* result_msg, ezlog_info* info)
 {
+	_ezmutex_lock();
 	int index = 0;
 	struct list_head *pos = &key_print_head;
 	list_for_each(pos, &key_print_head) {
@@ -221,5 +225,6 @@ void __format_msg(char* result_msg, ezlog_info* info)
 		else
 			index += node->printer->print(result_msg + index, info);
 	}
+	_ezmutex_unlock();
 }
 

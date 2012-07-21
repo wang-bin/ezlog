@@ -24,6 +24,7 @@
 #include <string.h>
 #include "eztime.h"
 #include "list.h"
+#include "ezmutex.h"
 
 typedef struct {
 	appender handle;
@@ -60,6 +61,7 @@ static char last_default_logfile[SIZE_LOGFILENAME];
  */
 void ezlog_registerAppender(appender handle)
 {
+	_ezmutex_lock();
 	appender_node *node = (appender_node*)malloc(sizeof(appender_node));
 	node->handle = handle;
 	list_add_tail(&(node->list), &appenders_head);
@@ -73,10 +75,12 @@ void ezlog_registerAppender(appender handle)
 		ezlog_add_logfile(default_logfile, New | OPEN_ON_WRITE);
 		strcpy(last_default_logfile, default_logfile);
 	}
+	_ezmutex_unlock();
 }
 
 void ezlog_unregisterAppender(appender handle)
 {
+	_ezmutex_lock();
 	struct list_head *pos = &appenders_head;
 	list_for_each(pos, &appenders_head) {
 		appender_node* node = list_entry(pos, appender_node, list);
@@ -87,8 +91,10 @@ void ezlog_unregisterAppender(appender handle)
 			break;
 		}
 	}
+	_ezmutex_unlock();
 }
 
+/* TODO: lock*/
 void ezlog_unregisterAllAppenders()
 {
 	struct list_head *pos = &appenders_head;
@@ -140,6 +146,7 @@ FILE* __open_logfile(const char *path, int mode, logfile_node* node)
  * \param path
  * \param mode
  */
+/* DO NOT LOCK! It is called by ezlog_registerAppender() which will lock*/
 void ezlog_add_logfile(const char *path, int mode)
 {
 	logfile_node *node;
@@ -171,6 +178,7 @@ void ezlog_remove_logfile(const char *path)
 
 void ezlog_remove_logfiles()
 {
+	_ezmutex_lock();
 	struct list_head *pos = &logfiles_head;
 	list_for_each(pos, &logfiles_head) { //list_for_each_entry
 		logfile_node* node = list_entry(pos, logfile_node, list);
@@ -187,8 +195,10 @@ void ezlog_remove_logfiles()
 			return;
 		}
 	}
+	_ezmutex_unlock();
 }
 
+/* DO NOT LOCK */
 void console_appender(const char *msg)
 {
 	fprintf(stdout, "%s\n", msg);
@@ -214,12 +224,16 @@ void file_appender(const char *msg)
 }
 
 
-//for internal use
+/*
+	for internal use. lock here so that appender need not care about thread issues
+*/
 void __log_to_appenders(const char* msg)
 {
+	_ezmutex_lock();
 	struct list_head *pos = &appenders_head;
 	list_for_each(pos, &appenders_head) { //list_for_each_entry
 		appender_node* node = list_entry(pos, appender_node, list);
 		node->handle(msg);
 	}
+	_ezmutex_unlock();
 }

@@ -20,7 +20,8 @@ HEADERS += ezlog.h \
 		appender.h \
 		layout.h \
     os.h \
-    cpu.h
+    cpu.h \
+    ezmutex.h
 
 
 SOURCES += \
