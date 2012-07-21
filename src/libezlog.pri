@@ -52,6 +52,7 @@ TEMPLATE -= fakelib
 
 
 include(../common.pri)
+include($${PROJECTROOT}/common.pri)
 #load(../common.pri)
 CONFIG += depend_includepath #?
 

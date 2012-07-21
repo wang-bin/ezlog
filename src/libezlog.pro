@@ -6,6 +6,7 @@ CONFIG   -= app_bundle
 
 CONFIG *= ezlog-buildlib
 
+PROJECTROOT = $$PWD/..
 !include(libezlog.pri): error(could not find libezlog.pri)
 
 #src
@@ -34,8 +35,8 @@ SOURCES += \
 
 unix: LIBS += -lpthread
 
-lib.files =
+#lib.files =
 sources.files = ezlog_global.h ezlog.h appender.h layout.h
 sources.path = /opt/usr/src/ezlog
 
-INSTALLS += lib sources
+INSTALLS += sources #lib
