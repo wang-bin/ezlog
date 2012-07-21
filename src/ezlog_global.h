@@ -21,11 +21,11 @@
 #define EZLOG_GLOBAL_H
 
 
-#undef LIB_VERSION //0x010202
+#undef LIB_VERSION //0x010204
 
 #define MAJOR 1	//((LIB_VERSION&0xff0000)>>16)
 #define MINOR 2	//((LIB_VERSION&0xff00)>>8)
-#define PATCH 2	//(LIB_VERSION&0xff)
+#define PATCH 4	//(LIB_VERSION&0xff)
 
 #define VERSION_CHK(major, minor, patch) \
 	(((major&0xff)<<16) | ((minor&0xff)<<8) | (patch&0xff))
