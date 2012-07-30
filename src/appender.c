@@ -179,8 +179,8 @@ void ezlog_remove_logfile(const char *path)
 void ezlog_remove_logfiles()
 {
 	_ezmutex_lock();
-	struct list_head *pos = &logfiles_head;
-	list_for_each(pos, &logfiles_head) { //list_for_each_entry
+	struct list_head *pos = &logfiles_head;/*TODO: check empty*/
+	list_for_each(pos, &logfiles_head) { /*list_for_each_entry*/
 		logfile_node* node = list_entry(pos, logfile_node, list);
 		if (!IS_OPEN_ON_WRITE(node->mode))
 			fclose(node->file);
