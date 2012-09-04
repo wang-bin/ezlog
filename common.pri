@@ -136,7 +136,20 @@ defineReplace(qtLongName) {
 ##############################paths####################################
 #TRANSLATIONS += i18n/$${TARGET}_zh-cn.ts i18n/$${TARGET}_zh_CN.ts
 
-BUILD_DIR=$$PWD
+BUILD_DIR=$$(BUILD_DIR)
+isEmpty(BUILD_DIR) {
+	BUILD_DIR=$$PWD
+	message(BUILD_DIR in env is empty. Use $$PWD)
+}
+message(BUILD_DIR=$$BUILD_DIR)
+
+#for Qt2, Qt3 which does not have QT_VERSION. Qt4: $$[QT_VERSION]
+MOC_DIR = $$BUILD_DIR/.moc/$$TARGET/$${QT_VERSION}
+RCC_DIR = $$BUILD_DIR/.rcc/$$TARGET/$${QT_VERSION}
+UI_DIR  = $$BUILD_DIR/.ui/$$TARGET/$${QT_VERSION}
+#obj is platform dependent
+OBJECTS_DIR = $$qtLongName($$BUILD_DIR/.obj/$$TARGET)
+
 isEqual(TEMPLATE, app) {
 	DESTDIR = $$BUILD_DIR/bin
 	TARGET = $$qtLongName($$TARGET)
@@ -146,12 +159,6 @@ isEqual(TEMPLATE, app) {
 		!isEmpty(QMAKE_STRIP): QMAKE_POST_LINK = -$$QMAKE_STRIP $$DESTDIR/$${TARGET}$${EXE_EXT} #.exe in win
 }
 else: DESTDIR = $$qtLongName($$BUILD_DIR/lib)
-
-OBJECTS_DIR = $$qtLongName($$BUILD_DIR/.obj/)
- #for Qt2, Qt3 which does not have QT_VERSION. Qt4: $$[QT_VERSION]
-MOC_DIR = $$BUILD_DIR/.moc/$${QT_VERSION}
-RCC_DIR = $$BUILD_DIR/.rcc/$${QT_VERSION}
-UI_DIR  = $$BUILD_DIR/.ui/$${QT_VERSION}
 
 !build_pass:message(target: $$DESTDIR/$$TARGET)
 

@@ -56,18 +56,19 @@ include($${PROJECTROOT}/common.pri)
 CONFIG += depend_includepath #?
 
 PROJECT_SRCPATH = $$PWD
-PROJECT_LIBDIR = $$qtLongName($$PWD/../lib)
-#PROJECT_LIBDIR = $$PWD/../bin #for win dll
+BUILD_DIR=$$(BUILD_DIR)
+isEmpty(BUILD_DIR): BUILD_DIR=$$PWD/..
+PROJECT_LIBDIR = $$qtLongName($$BUILD_DIR/lib)
 
-INCLUDEPATH += $$PROJECT_SRCPATH
-DEPENDPATH += $$PROJECT_SRCPATH
+INCLUDEPATH *= $$PROJECT_SRCPATH
+DEPENDPATH *= $$PROJECT_SRCPATH
 QMAKE_LFLAGS_RPATH += #will append to rpath dir
 
 !ezlog-buildlib {
 
 	#The following may not need to change
 	CONFIG *= link_prl
-	LIBS += -L$$PROJECT_LIBDIR -l$$qtLibName($$NAME)
+	LIBS *= -L$$PROJECT_LIBDIR -l$$qtLibName($$NAME)
 	isEqual(staticlink, 1) {
 		PRE_TARGETDEPS += $$PROJECT_LIBDIR/$$qtStaticLib($$NAME)
 	} else {
