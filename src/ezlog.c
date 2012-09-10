@@ -93,12 +93,12 @@ static ALWAYS_INLINE long pid()
 
 void _ezlog_print(const char* level, const char* file, const int line, const char* func, const char* fmt, ...)
 {
-	_ezmutex_lock();
 	static char result_msg[1024];
 	ezlog_info info; //static
 	eztime t;
 	char msg[512];
 	va_list args;
+	_ezmutex_lock();
 	va_start(args, fmt);
 	vsprintf(msg, fmt, args);
 	va_end(args);

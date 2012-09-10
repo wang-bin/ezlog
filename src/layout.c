@@ -104,11 +104,11 @@ LIST_HEAD(key_print_head);
 */
 void ezlog_init_layout(const char *format)
 {
-	_ezmutex_lock();
 	int format_strlen;
 	struct list_head *pos;
 	char *pch;
 	static char* format_str = NULL;
+	_ezmutex_lock();
 	if(format_str!=NULL) {
 		free(format_str);
 		format_str = NULL;
@@ -214,9 +214,10 @@ void ezlog_init_layout(const char *format)
 //the result string. use by ezlog.cpp to be put into appenders.
 void __format_msg(char* result_msg, ezlog_info* info)
 {
-	_ezmutex_lock();
 	int index = 0;
-	struct list_head *pos = &key_print_head;
+	struct list_head *pos;
+	_ezmutex_lock();
+	pos = &key_print_head;
 	list_for_each(pos, &key_print_head) {
 		key_print_node* node = list_entry(pos, key_print_node, list);
 		//printf("index=%d, key=%s, delimiter=%s\n", index, node->printer->key, node->printer->delimiter);

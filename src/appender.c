@@ -61,8 +61,9 @@ static char last_default_logfile[SIZE_LOGFILENAME];
  */
 void ezlog_registerAppender(appender handle)
 {
+	appender_node *node;
 	_ezmutex_lock();
-	appender_node *node = (appender_node*)malloc(sizeof(appender_node));
+	node = (appender_node*)malloc(sizeof(appender_node));
 	node->handle = handle;
 	list_add_tail(&(node->list), &appenders_head);
 
@@ -80,8 +81,9 @@ void ezlog_registerAppender(appender handle)
 
 void ezlog_unregisterAppender(appender handle)
 {
+	struct list_head *pos;
 	_ezmutex_lock();
-	struct list_head *pos = &appenders_head;
+	pos = &appenders_head;
 	list_for_each(pos, &appenders_head) {
 		appender_node* node = list_entry(pos, appender_node, list);
 		if (node->handle == handle) {
@@ -97,6 +99,7 @@ void ezlog_unregisterAppender(appender handle)
 /* TODO: lock*/
 void ezlog_unregisterAllAppenders()
 {
+    appender_node* node;
 	struct list_head *pos = &appenders_head;
 	list_for_each(pos, &appenders_head) {
 		appender_node* node = list_entry(pos, appender_node, list);
@@ -105,7 +108,7 @@ void ezlog_unregisterAllAppenders()
 		if (pos->next == 0 && pos->prev == 0) {
 			pos->next = pos;
 			pos->prev = pos;
-			appender_node* node = list_entry(pos, appender_node, list);
+			node = list_entry(pos, appender_node, list);
 			list_del(&node->list);
 			/*free(node);*/
 			return;
@@ -178,8 +181,10 @@ void ezlog_remove_logfile(const char *path)
 
 void ezlog_remove_logfiles()
 {
+    struct list_head *pos;
+    logfile_node* node;
 	_ezmutex_lock();
-	struct list_head *pos = &logfiles_head;/*TODO: check empty*/
+	pos = &logfiles_head;/*TODO: check empty*/
 	list_for_each(pos, &logfiles_head) { /*list_for_each_entry*/
 		logfile_node* node = list_entry(pos, logfile_node, list);
 		if (!IS_OPEN_ON_WRITE(node->mode))
@@ -189,7 +194,7 @@ void ezlog_remove_logfiles()
 		if (pos->next == 0 && pos->prev == 0) {
 			pos->next = pos;
 			pos->prev = pos;
-			logfile_node* node = list_entry(pos, logfile_node, list);
+			node = list_entry(pos, logfile_node, list);
 			list_del(&node->list);
 			/*free(node);*/
 			return;
@@ -229,8 +234,9 @@ void file_appender(const char *msg)
 */
 void __log_to_appenders(const char* msg)
 {
+    struct list_head *pos;
 	_ezmutex_lock();
-	struct list_head *pos = &appenders_head;
+	pos = &appenders_head;
 	list_for_each(pos, &appenders_head) { //list_for_each_entry
 		appender_node* node = list_entry(pos, appender_node, list);
 		node->handle(msg);
