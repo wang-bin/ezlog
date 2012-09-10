@@ -27,7 +27,7 @@
 
 #include "ezlog_global.h"
 
-#if !COMPILER(MSVC) && (COMPILER(MINGW) || CONFIG_PTHREAD)
+#if COMPILER(GCC) || CONFIG_PTHREAD
 #define USE_PTHREAD
 #include <pthread.h>
 typedef pthread_mutex_t ezmutex;
