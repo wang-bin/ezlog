@@ -27,24 +27,34 @@
 
 #include "ezlog_global.h"
 
-#if !COMPILER(MSVC) || CONFIG_PTHREAD
+#if !COMPILER(MSVC) && (COMPILER(MINGW) || CONFIG_PTHREAD)
 #define USE_PTHREAD
 #include <pthread.h>
 typedef pthread_mutex_t ezmutex;
+static ezmutex g_mutex = PTHREAD_MUTEX_INITIALIZER;
 #else
 #define USE_CRITICAL_SECTION
 #include <windows.h>
 typedef CRITICAL_SECTION ezmutex;
+static ezmutex g_mutex;
+
+static void __cdecl _ezmutex_init()
+{
+	InitializeCriticalSection(&g_mutex);
+}
+/*static int _ezmutex_ok = _ezmutex_init();*/
+#pragma section(".CRT$XIC",long,read)
+#define _CRTALLOC(x) __declspec(allocate(x))
+
+_CRTALLOC(".CRT$XIC") static void (*pinit)() = _ezmutex_init;
+/*
+#pragma data_seg(".CRT$XIU")
+static int autostart[] = { _ezmutex_init };
+*/
 #endif
 
-static ezmutex g_mutex = PTHREAD_MUTEX_INITIALIZER;
 
-static ALWAYS_INLINE void _ezmutex_init()
-{
-#ifdef USE_CRITICAL_SECTION
-	InitializeCriticalSection(g_mutex)
-#endif //USE_CRITICAL_SECTION
-}
+
 
 static ALWAYS_INLINE void _ezmutex_lock()
 {
