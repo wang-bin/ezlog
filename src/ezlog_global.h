@@ -21,17 +21,17 @@
 #define EZLOG_GLOBAL_H
 
 
-#undef LIB_VERSION //0x010204
+#undef LIB_VERSION //0x010206
 
 #define MAJOR 1	//((LIB_VERSION&0xff0000)>>16)
 #define MINOR 2	//((LIB_VERSION&0xff00)>>8)
-#define PATCH 4	//(LIB_VERSION&0xff)
+#define PATCH 6	//(LIB_VERSION&0xff)
 
 #define VERSION_CHK(major, minor, patch) \
 	(((major&0xff)<<16) | ((minor&0xff)<<8) | (patch&0xff))
 
 #define LIB_VERSION VERSION_CHK(MAJOR, MINOR, PATCH)
-//LIB_VERSION_STR="1.2.0"
+//LIB_VERSION_STR="1.2.6"
 
 /*! Stringify \a x. */
 #define _TOSTR(x)   #x
