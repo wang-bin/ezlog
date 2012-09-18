@@ -7,6 +7,7 @@ CONFIG   -= app_bundle
 CONFIG *= ezlog-buildlib
 
 PROJECTROOT = $$PWD/..
+include($$PROJECTROOT/deploy.pri)
 isEmpty(BUILD_DIR):BUILD_DIR=$$(BUILD_DIR)
 isEmpty(BUILD_DIR):BUILD_DIR=$$[BUILD_DIR]
 isEmpty(BUILD_DIR):BUILD_IN_SRC = yes
@@ -25,9 +26,9 @@ HEADERS += ezlog.h \
 		list.h \
 		appender.h \
 		layout.h \
-    os.h \
-    cpu.h \
-    ezmutex.h
+		os.h \
+		cpu.h \
+		ezmutex.h
 
 
 SOURCES += \
@@ -41,7 +42,7 @@ SOURCES += \
 unix: LIBS += -lpthread
 
 #lib.files =
-sources.files = ezlog_global.h ezlog.h appender.h layout.h
-sources.path = /opt/usr/src/ezlog
+#sources.files = ezlog_global.h ezlog.h appender.h layout.h
+#sources.path = /usr/local/include/ezlog
 
-INSTALLS += sources #lib
+#INSTALLS += sources #lib

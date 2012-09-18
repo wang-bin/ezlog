@@ -82,7 +82,7 @@ QMAKE_LFLAGS_RPATH += #will append to rpath dir
 # Working dir search: "."
 # TODO: for macx. see qtcreator/src/rpath.pri. search exe dir first(use QMAKE_LFLAGS = '$$RPATH_FLAG' $$QMAKE_LFLAGS)
 			unix:!macx {
-				QMAKE_RPATHDIR += $$PROJECT_LIBDIR:\'\$\$ORIGIN\':\'\$\$ORIGIN/lib\':.
+				QMAKE_RPATHDIR += $$PROJECT_LIBDIR:\'\$\$ORIGIN\':\'\$\$ORIGIN/lib\':.:/usr/local/lib
 				QMAKE_LFLAGS += -Wl,-z,origin
 			}
 		}
@@ -113,27 +113,7 @@ QMAKE_LFLAGS_RPATH += #will append to rpath dir
 		DLLDESTDIR = $$BUILD_DIR/bin #copy shared lib there
 		CONFIG(release, debug|release):
 			!isEmpty(QMAKE_STRIP): QMAKE_POST_LINK = -$$QMAKE_STRIP $$PROJECT_LIBDIR/$$qtSharedLib($$NAME)
-
-		#copy from the pro creator creates.
-		symbian {
-			MMP_RULES += EXPORTUNFROZEN
-			TARGET.UID3 = 0xE4CC8061
-			TARGET.CAPABILITY =
-			TARGET.EPOCALLOWDLLDATA = 1
-			addFiles.sources = $$qtSharedLib($$NAME, $$LIB_VERSION)
-			addFiles.path = !:/sys/bin
-			DEPLOYMENT += addFiles
-		}
 	}
-	unix:!symbian {
-		maemo5 {
-			target.path = /opt/usr/lib
-		} else {
-			target.path = /usr/lib
-		}
-		INSTALLS += target
-	}
-
 }
 
 unset(LIB_VERSION)
