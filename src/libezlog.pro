@@ -7,6 +7,11 @@ CONFIG   -= app_bundle
 CONFIG *= ezlog-buildlib
 
 PROJECTROOT = $$PWD/..
+isEmpty(BUILD_DIR):BUILD_DIR=$$(BUILD_DIR)
+isEmpty(BUILD_DIR):BUILD_DIR=$$[BUILD_DIR]
+isEmpty(BUILD_DIR):BUILD_IN_SRC = yes
+
+!isEmpty(BUILD_IN_SRC):BUILD_DIR=$$PROJECTROOT/out
 !include(libezlog.pri): error(could not find libezlog.pri)
 
 #src
