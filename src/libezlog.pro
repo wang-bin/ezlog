@@ -1,8 +1,8 @@
 TEMPLATE = lib
 
 QT =
-CONFIG   += console
-CONFIG   -= app_bundle
+CONFIG += console
+CONFIG -= app_bundle
 
 CONFIG *= ezlog-buildlib
 
@@ -21,25 +21,25 @@ else:win32: SOURCES +=
 
 
 HEADERS += ezlog.h \
-		eztime.h \
-		ezlog_global.h \
-		list.h \
-		appender.h \
-		layout.h \
-		os.h \
-		cpu.h \
-		ezmutex.h
+	eztime.h \
+	ezlog_global.h \
+	list.h \
+	appender.h \
+	layout.h \
+	os.h \
+	cpu.h \
+	ezmutex.h
 
 
 SOURCES += \
-    appender.c \
-    ezlog.c \
-    eztime.c \
-    layout.c
+	appender.c \
+	ezlog.c \
+	eztime.c \
+	layout.c
 
 #QMAKE_CXXFLAGS += "-std=c++0x"
 
-unix: LIBS += -lpthread
+unix|*g++: LIBS += -lpthread
 
 #lib.files =
 #sources.files = ezlog_global.h ezlog.h appender.h layout.h
