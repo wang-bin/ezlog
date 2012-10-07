@@ -43,16 +43,16 @@ LIBEZLOG_PRI_INCLUDED = 1
 
 staticlink = 0  #1 or 0. use static lib or not
 LIB_VERSION = 1.2.6 #0.x.y may be wrong for dll
-#QT += network
+#QT *= network
 
 NAME = ezlog
-TEMPLATE += fakelib
+TEMPLATE *= fakelib
 PROJECT_TARGETNAME = $$qtLibraryTarget($$NAME)
 TEMPLATE -= fakelib
 
 
 include($${PROJECTROOT}/common.pri)
-CONFIG += depend_includepath #?
+CONFIG *= depend_includepath #?
 
 PROJECT_SRCPATH = $$PWD
 isEmpty(BUILD_DIR):BUILD_DIR=$$(BUILD_DIR)
@@ -62,7 +62,7 @@ PROJECT_LIBDIR = $$qtLongName($$BUILD_DIR/lib)
 
 INCLUDEPATH *= $$PROJECT_SRCPATH
 DEPENDPATH *= $$PROJECT_SRCPATH
-QMAKE_LFLAGS_RPATH += #will append to rpath dir
+QMAKE_LFLAGS_RPATH *= #will append to rpath dir
 
 !ezlog-buildlib {
 
@@ -70,26 +70,26 @@ QMAKE_LFLAGS_RPATH += #will append to rpath dir
 	CONFIG *= link_prl
 	LIBS *= -L$$PROJECT_LIBDIR -l$$qtLibName($$NAME)
 	isEqual(staticlink, 1) {
-		PRE_TARGETDEPS += $$PROJECT_LIBDIR/$$qtStaticLib($$NAME)
+		PRE_TARGETDEPS *= $$PROJECT_LIBDIR/$$qtStaticLib($$NAME)
 	} else {
 		win32 {
-			PRE_TARGETDEPS += $$PROJECT_LIBDIR/$$qtSharedLib($$NAME, $$LIB_VERSION)
+			PRE_TARGETDEPS *= $$PROJECT_LIBDIR/$$qtSharedLib($$NAME, $$LIB_VERSION)
 		} else {
-			PRE_TARGETDEPS += $$PROJECT_LIBDIR/$$qtSharedLib($$NAME)
+			PRE_TARGETDEPS *= $$PROJECT_LIBDIR/$$qtSharedLib($$NAME)
 # $$[QT_INSTALL_LIBS] and $$DESTDIR will be auto added to rpath
 # Current (sub)project dir is auto added to the first value as prefix. e.g. QMAKE_RPATHDIR = .. ==> -Wl,-rpath,ROOT/..
 # Executable dir search: ld -z origin, g++ -Wl,-R,'$ORIGIN', in makefile -Wl,-R,'$$ORIGIN'
 # Working dir search: "."
 # TODO: for macx. see qtcreator/src/rpath.pri. search exe dir first(use QMAKE_LFLAGS = '$$RPATH_FLAG' $$QMAKE_LFLAGS)
 			unix:!macx {
-				QMAKE_RPATHDIR += $$PROJECT_LIBDIR:\'\$\$ORIGIN\':\'\$\$ORIGIN/lib\':.:/usr/local/lib
-				QMAKE_LFLAGS += -Wl,-z,origin
+				QMAKE_RPATHDIR *= $$PROJECT_LIBDIR:\'\$\$ORIGIN\':\'\$\$ORIGIN/lib\':.:/usr/local/lib
+				QMAKE_LFLAGS *= -Wl,-z,origin
 			}
 		}
 	}
 } else {
 #Add your additional configuration first
-#	win32: LIBS += -lUser32
+#	win32: LIBS *= -lUser32
 
 
 #The following may not need to change
@@ -105,7 +105,7 @@ QMAKE_LFLAGS_RPATH += #will append to rpath dir
 		CONFIG *= staticlib
 	}
 	else {
-		DEFINES += Q_DLL_LIBRARY #win32-msvc*
+		DEFINES *= Q_DLL_LIBRARY #win32-msvc*
 		CONFIG *= shared #shared includes dll
 	}
 
