@@ -117,7 +117,7 @@ void ezlog_unregisterAllAppenders()
 	}
 }
 
-FILE* __open_logfile(const char *path, int mode, logfile_node* node)
+static FILE* __open_logfile(const char *path, int mode, logfile_node* node)
 {
 	//First time is the same as mode. Then will will append the msg if OPEN_ON_WRITE
 	FILE *file = 0;
@@ -133,7 +133,7 @@ FILE* __open_logfile(const char *path, int mode, logfile_node* node)
 
 		file = fopen(path, m);
 		if(!file) {
-#ifndef OS_WINCE
+#ifndef Q_OS_WINCE
 			perror("Error opening log file"); //wince does not support
 #endif
 			return 0;
