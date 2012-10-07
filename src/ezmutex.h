@@ -26,8 +26,8 @@
 */
 
 #include "ezlog_global.h"
-
-#if COMPILER(GCC) || CONFIG_PTHREAD
+/* use pthread: *nix, g++. For windows with vc, no pthread*/
+#if COMPILER(GCC) || !defined(Q_OS_WIN) /*|| CONFIG_PTHREAD*/
 #define USE_PTHREAD
 #include <pthread.h>
 typedef pthread_mutex_t ezmutex;

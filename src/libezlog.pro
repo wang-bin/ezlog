@@ -39,6 +39,7 @@ SOURCES += \
 
 #QMAKE_CXXFLAGS += "-std=c++0x"
 
+#unix: LIBS += -lpthread
 unix|*g++: LIBS += -lpthread
 
 #lib.files =
