@@ -21,33 +21,35 @@
 #define EZLOG_GLOBAL_H
 
 
-#undef LIB_VERSION //0x010206
+#undef EZLOG_VERSION //0x010207
 
-#define MAJOR 1	//((LIB_VERSION&0xff0000)>>16)
-#define MINOR 2	//((LIB_VERSION&0xff00)>>8)
-#define PATCH 6	//(LIB_VERSION&0xff)
+#define EZLOG_VERSION_MAJOR 1	//((EZLOG_VERSION&0xff0000)>>16)
+#define EZLOG_VERSION_MINOR 2	//((EZLOG_VERSION&0xff00)>>8)
+#define EZLOG_VERSION_PATCH 7	//(EZLOG_VERSION&0xff)
 
 #define VERSION_CHK(major, minor, patch) \
 	(((major&0xff)<<16) | ((minor&0xff)<<8) | (patch&0xff))
 
-#define LIB_VERSION VERSION_CHK(MAJOR, MINOR, PATCH)
-//LIB_VERSION_STR="1.2.6"
+#define EZLOG_VERSION VERSION_CHK(EZLOG_VERSION_MAJOR, EZLOG_VERSION_MINOR, EZLOG_VERSION_PATCH)
 
 /*! Stringify \a x. */
 #define _TOSTR(x)   #x
 /*! Stringify \a x, perform macro expansion. */
 #define TOSTR(x)  _TOSTR(x)
 
-static const char* const version_string = TOSTR(MAJOR)"."TOSTR(MINOR)"."TOSTR(PATCH)"(" __DATE__", "__TIME__")";
-#define LIB_VERSION_STR			TOSTR(MAJOR)"."TOSTR(MINOR)"."TOSTR(PATCH)
-#define LIB_VERSION_STR_LONG	LIB_VERSION_STR"(" __DATE__", "__TIME__")"
+static const char* const k_ezlog_version_string = TOSTR(EZLOG_VERSION_MAJOR)"."TOSTR(EZLOG_VERSION_MINOR)"."TOSTR(EZLOG_VERSION_PATCH)"(" __DATE__", "__TIME__")";
+#define EZLOG_VERSION_STR			TOSTR(EZLOG_VERSION_MAJOR)"."TOSTR(EZLOG_VERSION_MINOR)"."TOSTR(EZLOG_VERSION_PATCH)
+#define EZLOG_VERSION_STR_LONG	EZLOG_VERSION_STR"(" __DATE__", "__TIME__")"
 
-
-
-#ifdef __GNUC__
+#if defined(__GNUC__)
+#  define EZLOG_FUNC __PRETTY_FUNCTION__
 #else
-#define __attribute__(...)
-#define __PRETTY_FUNCTION__ __FUNCTION__
+#  define __attribute__(...)
+#   if defined(_MSC_VER)
+#      define EZLOG_FUNC __FUNCSIG__
+#   else
+#      define EZLOG_FUNC __FUNCTION__
+#   endif
 #endif
 
 #if defined(_MSC_VER) || defined(_WINDOWS_) || defined(WIN32) || defined(WINCE) || defined(_WIN32_WCE) || defined(UNDER_CE)

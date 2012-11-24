@@ -52,11 +52,11 @@ Q_EXPORT void ezlog_init_default();
 #define ezlog(level, ...) ezlog_##level(##__VA_ARGS__)
 #define ezlog_msg(...) ezlog_debug(##__VA_ARGS__)
 /*align level string*/
-#define ezlog_debug(fmt, ...) _ezlog_print("DEBUG", __FILE__, __LINE__, __PRETTY_FUNCTION__, ""#fmt, ##__VA_ARGS__)
-#define ezlog_info(fmt, ...) _ezlog_print("INFO ", __FILE__, __LINE__, __PRETTY_FUNCTION__, ""#fmt, ##__VA_ARGS__)
-#define ezlog_warn(fmt, ...) _ezlog_print("WARN ", __FILE__, __LINE__, __PRETTY_FUNCTION__, ""#fmt, ##__VA_ARGS__)
-#define ezlog_error(fmt, ...) _ezlog_print("ERROR", __FILE__, __LINE__, __PRETTY_FUNCTION__, ""#fmt, ##__VA_ARGS__)
-#define ezlog_fatal(fmt, ...) _ezlog_print("FATAL", __FILE__, __LINE__, __PRETTY_FUNCTION__, ""#fmt, ##__VA_ARGS__)
+#define ezlog_debug(fmt, ...) _ezlog_print("DEBUG", __FILE__, __LINE__, EZLOG_FUNC, ""#fmt, ##__VA_ARGS__)
+#define ezlog_info(fmt, ...) _ezlog_print("INFO ", __FILE__, __LINE__, EZLOG_FUNC, ""#fmt, ##__VA_ARGS__)
+#define ezlog_warn(fmt, ...) _ezlog_print("WARN ", __FILE__, __LINE__, EZLOG_FUNC, ""#fmt, ##__VA_ARGS__)
+#define ezlog_error(fmt, ...) _ezlog_print("ERROR", __FILE__, __LINE__, EZLOG_FUNC, ""#fmt, ##__VA_ARGS__)
+#define ezlog_fatal(fmt, ...) _ezlog_print("FATAL", __FILE__, __LINE__, EZLOG_FUNC, ""#fmt, ##__VA_ARGS__)
 #endif
 
 Q_EXPORT void ezlog_fini() __attribute__((destructor)); //other compilers? exit_func;

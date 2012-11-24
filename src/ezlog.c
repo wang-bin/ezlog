@@ -49,12 +49,12 @@ extern void __log_to_appenders(const char* msg);
  */
 int ezlog_version()
 {
-	return LIB_VERSION;
+	return EZLOG_VERSION;
 }
 
 const char* ezlog_version_string()
 {
-	return version_string;
+	return k_ezlog_version_string;
 }
 
 void ezlog_init_default()
