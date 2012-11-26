@@ -28,7 +28,8 @@ HEADERS += ezlog.h \
 	layout.h \
 	os.h \
 	cpu.h \
-	ezmutex.h
+	ezmutex.h \
+	prepost.h
 
 
 SOURCES += \
@@ -40,7 +41,7 @@ SOURCES += \
 #QMAKE_CXXFLAGS += "-std=c++0x"
 
 #unix: LIBS += -lpthread
-unix|*g++: LIBS += -lpthread
+!*msvc*: LIBS += -lpthread
 
 #lib.files =
 #sources.files = ezlog_global.h ezlog.h appender.h layout.h

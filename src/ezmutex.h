@@ -26,31 +26,20 @@
 */
 
 #include "ezlog_global.h"
-/* use pthread: *nix, g++. For windows with vc, no pthread*/
-#if COMPILER(GCC) || !defined(Q_OS_WIN) /*|| CONFIG_PTHREAD*/
-#define USE_PTHREAD
-#include <pthread.h>
-typedef pthread_mutex_t ezmutex;
-static ezmutex g_mutex = PTHREAD_MUTEX_INITIALIZER;
-#else
+#include "prepost.h"
+
+#if COMPILER(MSVC)
 #define USE_CRITICAL_SECTION
 #include <windows.h>
 typedef CRITICAL_SECTION ezmutex;
 static ezmutex g_mutex;
-
-static void __cdecl _ezmutex_init()
-{
-	InitializeCriticalSection(&g_mutex);
-}
-/*static int _ezmutex_ok = _ezmutex_init();*/
-#pragma section(".CRT$XIC",long,read)
-#define _CRTALLOC(x) __declspec(allocate(x))
-
-_CRTALLOC(".CRT$XIC") static void (*pinit)() = _ezmutex_init;
-/*
-#pragma data_seg(".CRT$XIU")
-static int autostart[] = { _ezmutex_init };
-*/
+PRE_FUNC_ADD(InitializeCriticalSection, &g_mutex)
+/* use pthread: *nix, g++. For windows with vc, no pthread*/
+#else //if COMPILER(GCC) || !defined(Q_OS_WIN) /*|| CONFIG_PTHREAD*/
+#define USE_PTHREAD
+#include <pthread.h>
+typedef pthread_mutex_t ezmutex;
+static ezmutex g_mutex = PTHREAD_MUTEX_INITIALIZER;
 #endif
 
 

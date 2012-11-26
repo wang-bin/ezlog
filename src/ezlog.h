@@ -50,7 +50,6 @@ Q_EXPORT void ezlog_init_default();
 #else
 //DO NOT use (fmt, args...), MSVC does not support it. use (fmt, ...)
 #define ezlog(level, ...) ezlog_##level(##__VA_ARGS__)
-#define ezlog_msg(...) ezlog_debug(##__VA_ARGS__)
 /*align level string*/
 #define ezlog_debug(fmt, ...) _ezlog_print("DEBUG", __FILE__, __LINE__, EZLOG_FUNC, ""#fmt, ##__VA_ARGS__)
 #define ezlog_info(fmt, ...) _ezlog_print("INFO ", __FILE__, __LINE__, EZLOG_FUNC, ""#fmt, ##__VA_ARGS__)
@@ -59,7 +58,8 @@ Q_EXPORT void ezlog_init_default();
 #define ezlog_fatal(fmt, ...) _ezlog_print("FATAL", __FILE__, __LINE__, EZLOG_FUNC, ""#fmt, ##__VA_ARGS__)
 #endif
 
-Q_EXPORT void ezlog_fini() __attribute__((destructor)); //other compilers? exit_func;
+/*Usually this is called automatically after main()*/
+Q_EXPORT void ezlog_fini();
 
 /* for internal use */
 Q_EXPORT void _ezlog_print(const char* level, const char* file, const int line, const char* func, const char* fmt, ...);

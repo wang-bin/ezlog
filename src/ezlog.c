@@ -25,6 +25,7 @@
 #include "layout.h"
 #include "ezmutex.h"
 
+POST_FUNC_ADD(ezlog_fini,)
 typedef struct {
 	const char* level;
 	const char* file;
@@ -49,7 +50,7 @@ extern void __log_to_appenders(const char* msg);
  */
 int ezlog_version()
 {
-	return EZLOG_VERSION;
+    return EZLOG_VERSION;
 }
 
 const char* ezlog_version_string()
