@@ -23,15 +23,14 @@ int main(int argc, char** argv)
 {
 	(void)argc;
 	(void)argv;
-	ezlog_init_default();
+    ezlog_init_default();
 	ezlog_registerAppender(file_appender);
 	ezlog_add_logfile("ezlog.txt", Append | OPEN_ON_WRITE);
 	ezlog_debug("Bye, cruel world!");
 	ezlog(info);
-	ezlog_msg();
+    ezlog_debug();
 
 	//ezlog_fini();
-
 	return 0;
 }
 

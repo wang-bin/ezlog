@@ -102,7 +102,7 @@ void ezlog_unregisterAllAppenders()
     appender_node* node;
 	struct list_head *pos = &appenders_head;
 	list_for_each(pos, &appenders_head) {
-		appender_node* node = list_entry(pos, appender_node, list);
+		node = list_entry(pos, appender_node, list);
 		list_del(&node->list);
 		free(node);
 		if (pos->next == 0 && pos->prev == 0) {
@@ -186,7 +186,7 @@ void ezlog_remove_logfiles()
 	_ezmutex_lock();
 	pos = &logfiles_head;/*TODO: check empty*/
 	list_for_each(pos, &logfiles_head) { /*list_for_each_entry*/
-		logfile_node* node = list_entry(pos, logfile_node, list);
+		node = list_entry(pos, logfile_node, list);
 		if (!IS_OPEN_ON_WRITE(node->mode))
 			fclose(node->file);
 		list_del(&(node->list));
