@@ -24,8 +24,17 @@
 #include "eztime.h"
 #include "layout.h"
 #include "ezmutex.h"
+#include "prepost.h"
 
+static void print_version() {
+    printf("ezlog version: %s\n"
+           "Copyright (C) 2011-2012 Wangbin <wbsecg1@gmail.com>  https://github.com/wang-bin/ezlog\n"
+           , ezlog_version_string());
+    fflush(stdout);
+}
+PRE_FUNC_ADD(print_version,)
 POST_FUNC_ADD(ezlog_fini,)
+
 typedef struct {
 	const char* level;
 	const char* file;
@@ -60,7 +69,6 @@ const char* ezlog_version_string()
 
 void ezlog_init_default()
 {
-	printf("ezlog version: %s\n", ezlog_version_string());
 	ezlog_init_layout(layout_format[DEFAULT_LAYOUT]);
 	ezlog_registerAppender(console_appender);
 }
@@ -126,4 +134,3 @@ void ezlog_fini() {
 	ezlog_remove_logfiles();
 	ezlog_unregisterAllAppenders();
 }
-
