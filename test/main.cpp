@@ -17,19 +17,21 @@
 	51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ******************************************************************************/
 
-#include "ezlog.h"
+#include <ezlog/ezlog.h>
 
 int main(int argc, char** argv)
 {
 	(void)argc;
 	(void)argv;
     ezlog_init_default();
-	ezlog_registerAppender(file_appender);
-	ezlog_add_logfile("ezlog.txt", Append | OPEN_ON_WRITE);
+    ezlog_registerAppender(file_appender);
+    ezlog_add_logfile("ezlog.txt", Append);// | OPEN_ON_WRITE);
 	ezlog_debug("Bye, cruel world!");
 	ezlog(info);
-    ezlog_debug();
-
+    //TODO: benchmark
+    for (int i = 0; i < 1024; ++i) {
+        //ezlog_debug("%d\n", i);
+    }
 	//ezlog_fini();
 	return 0;
 }

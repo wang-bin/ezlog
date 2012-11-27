@@ -94,9 +94,9 @@ static const char* const k_ezlog_version_string = TOSTR(EZLOG_VERSION_MAJOR)"."T
    (see __DCC__ above). This one is for C mode files (__EDG is not defined) */
 #if defined(__SUNPRO_CC) || defined(__SUNPRO_C)
 /* 5.0 compiler or better
-	'bool' is enabled by default but can be disabled using -features=nobool
-	in which case _BOOL is not defined
-		this is the default in 4.2 compatibility mode triggered by -compat=4 */
+    'bool' is enabled by default but can be disabled using -features=nobool
+    in which case _BOOL is not defined
+        this is the default in 4.2 compatibility mode triggered by -compat=4 */
 #  if __SUNPRO_CC >= 0x500
 #	define QT_NO_TEMPLATE_TEMPLATE_PARAMETERS
    /* see http://developers.sun.com/sunstudio/support/Ccompare.html */
@@ -174,7 +174,15 @@ static const char* const k_ezlog_version_string = TOSTR(EZLOG_VERSION_MAJOR)"."T
 
 
 /***from webkit/JavascriptCore/wtf***/
-#define COMPILER(WTF_FEATURE) (defined WTF_COMPILER_##WTF_FEATURE  && WTF_COMPILER_##WTF_FEATURE)
+/* OS() - underlying operating system; only to be used for mandated low-level services like
+   virtual memory, not to choose a GUI toolkit */
+#define OS(WTF_FEATURE) (defined Q_OS_##WTF_FEATURE) /*  && WTF_OS_##WTF_FEATURE)*/
+
+#define COMPILER(WTF_FEATURE) (defined WTF_COMPILER_##WTF_FEATURE  && WTF_COMPILER_##WTF_FEATURE) \
+    || defined(Q_CC_##WTF_FEATURE)
+
+/* CPU() - the target CPU architecture */
+#define CPU(WTF_FEATURE) (defined Q_PROCESSOR_##WTF_FEATURE) /*  && WTF_CPU_##WTF_FEATURE)*/
 
 /* COMPILER(MSVC) Microsoft Visual C++ */
 /* COMPILER(MSVC7_OR_LOWER) Microsoft Visual C++ 2003 or lower*/

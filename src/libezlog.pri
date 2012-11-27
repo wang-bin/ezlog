@@ -60,7 +60,8 @@ isEmpty(BUILD_DIR):BUILD_DIR=$$[BUILD_DIR]
 isEmpty(BUILD_DIR):BUILD_DIR=$$OUT_PWD
 PROJECT_LIBDIR = $$qtLongName($$BUILD_DIR/lib)
 
-INCLUDEPATH *= $$PROJECT_SRCPATH
+HEADER_PATH = $$PROJECT_SRCPATH/../include
+INCLUDEPATH *= $$PROJECT_SRCPATH $$HEADER_PATH $$HEADER_PATH/ezlog
 DEPENDPATH *= $$PROJECT_SRCPATH
 QMAKE_LFLAGS_RPATH *= #will append to rpath dir
 
@@ -111,8 +112,7 @@ QMAKE_LFLAGS_RPATH *= #will append to rpath dir
 
 	shared {
 		DLLDESTDIR = $$BUILD_DIR/bin #copy shared lib there
-		CONFIG(release, debug|release):
-			!isEmpty(QMAKE_STRIP): QMAKE_POST_LINK = -$$QMAKE_STRIP $$PROJECT_LIBDIR/$$qtSharedLib($$NAME)
+                CONFIG(release, debug|release): !isEmpty(QMAKE_STRIP): QMAKE_POST_LINK = -$$QMAKE_STRIP $$PROJECT_LIBDIR/$$qtSharedLib($$NAME)
 	}
 }
 

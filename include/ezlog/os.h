@@ -21,10 +21,6 @@
 #ifndef OS_H
 #define OS_H
 
-/* OS() - underlying operating system; only to be used for mandated low-level services like
-   virtual memory, not to choose a GUI toolkit */
-#define OS(WTF_FEATURE) (defined Q_OS_##WTF_FEATURE) /*  && WTF_OS_##WTF_FEATURE)*/
-
 /*
    The operating system, must be one of: (Q_OS_x)
 

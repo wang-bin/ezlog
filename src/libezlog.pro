@@ -20,16 +20,7 @@ unix: SOURCES +=
 else:win32: SOURCES +=
 
 
-HEADERS += ezlog.h \
-	eztime.h \
-	ezlog_global.h \
-	list.h \
-	appender.h \
-	layout.h \
-	os.h \
-	cpu.h \
-	ezmutex.h \
-	prepost.h
+HEADERS += $$HEADER_PATH/ezlog/*.h
 
 
 SOURCES += \
@@ -37,15 +28,13 @@ SOURCES += \
 	ezlog.c \
 	eztime.c \
 	layout.c \
-    ezmutex.c
-
-#QMAKE_CXXFLAGS += "-std=c++0x"
+        ezmutex.c
 
 #unix: LIBS += -lpthread
 !*msvc*: LIBS += -lpthread
 
 #lib.files =
-#sources.files = ezlog_global.h ezlog.h appender.h layout.h
-#sources.path = /usr/local/include/ezlog
+devel.files = $$HEADERS
+devel.path = /usr/local/include/ezlog
 
-#INSTALLS += sources #lib
+INSTALLS += devel #lib

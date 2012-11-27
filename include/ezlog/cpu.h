@@ -21,9 +21,6 @@
 #ifndef CPU_H
 #define CPU_H
 
-/* CPU() - the target CPU architecture */
-#define CPU(WTF_FEATURE) (defined Q_PROCESSOR_##WTF_FEATURE) /*  && WTF_CPU_##WTF_FEATURE)*/
-
 /*
 	This file uses preprocessor #defines to set various Q_PROCESSOR_* #defines
 	based on the following patterns:

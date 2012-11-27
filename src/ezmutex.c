@@ -32,7 +32,6 @@ typedef pthread_mutex_t ezmutex;
 static ezmutex g_mutex = PTHREAD_MUTEX_INITIALIZER;
 #endif
 
-
 #if COMPILER(MSVC)
 PRE_FUNC_ADD(InitializeCriticalSection, &g_mutex)
 #endif
