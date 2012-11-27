@@ -1,5 +1,5 @@
-A tiny and easy to use log library for C/C++.
-Platform tested: linux, win32, wince
+A tiny and easy to use log library for C/C++. Written in C.
+Platform tested: linux, win32, wince, mac
 
 Usage:
 0.  Initialize ezlog. e.g.
@@ -11,7 +11,7 @@ Usage:
     If you need to log to a file
 
         ezlog_registerAppender(file_appender);
-        ezlog_add_logfile("ezlog.txt", Append | OPEN_ON_WRITE);
+        ezlog_add_logfile("ezlog.txt", Append);
 
     If you want to use other target, you can define your own appender.
 
@@ -38,12 +38,12 @@ If you use ezlog_init_default(), skip this step.
 2.  Start your logging. You can add additional messages. It supports printf like format. If nothing
     else you want to put, just keep the parameter empty.
 
-        ezlog_msg("Hello, cruel world!");
-        ezlog_msg("Damn! %s", __DATE__);
-        ezlog_msg();                            //Only display the formated keywords message you defined
+        ezlog_debug("Hello, cruel world!");
+        ezlog_warn("Damn! %s", __DATE__);
+        ezlog_debug();                            //Only display the formated keywords message you defined
 
 
-3.  Clean up. If you use the gcc toolchain, it will be called after main() auto.
+3.  Clean up. If you use the gcc toolchain or vc, it will be called after main() auto.
 
         ezlog_fini();
 
