@@ -26,41 +26,8 @@
 */
 
 #include "ezlog_global.h"
-#include "prepost.h"
 
-#if COMPILER(MSVC)
-#define USE_CRITICAL_SECTION
-#include <windows.h>
-typedef CRITICAL_SECTION ezmutex;
-static ezmutex g_mutex;
-PRE_FUNC_ADD(InitializeCriticalSection, &g_mutex)
-/* use pthread: *nix, g++. For windows with vc, no pthread*/
-#else //if COMPILER(GCC) || !defined(Q_OS_WIN) /*|| CONFIG_PTHREAD*/
-#define USE_PTHREAD
-#include <pthread.h>
-typedef pthread_mutex_t ezmutex;
-static ezmutex g_mutex = PTHREAD_MUTEX_INITIALIZER;
-#endif
-
-
-
-
-static ALWAYS_INLINE void _ezmutex_lock()
-{
-#ifdef USE_PTHREAD
-	pthread_mutex_lock(&g_mutex);
-#else
-	EnterCriticalSection(&g_mutex);
-#endif
-}
-
-static ALWAYS_INLINE void _ezmutex_unlock()
-{
-#ifdef USE_PTHREAD
-	pthread_mutex_unlock(&g_mutex);
-#else
-	LeaveCriticalSection(&g_mutex);
-#endif
-}
+Q_EXPORT ALWAYS_INLINE void _ezmutex_lock();
+Q_EXPORT ALWAYS_INLINE void _ezmutex_unlock();
 
 #endif // EZMUTEX_H

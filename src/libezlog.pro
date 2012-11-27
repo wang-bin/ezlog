@@ -36,7 +36,8 @@ SOURCES += \
 	appender.c \
 	ezlog.c \
 	eztime.c \
-	layout.c
+	layout.c \
+    ezmutex.c
 
 #QMAKE_CXXFLAGS += "-std=c++0x"
 
