@@ -35,16 +35,16 @@
 typedef int (__cdecl *_PF)(); /* why not void? */
 /*static to avoid multiple defination*/
 #define PRE_FUNC_ADD(f, .../*args*/) \
-    static int init_##f() { f(##__VA_ARGS__); return 0;} \
+    static int init_##f() { f(__VA_ARGS__); return 0;} \
     _CRTALLOC(".CRT$XIU") static _PF pinit_##f [] = { init_##f }; /*static void (*pinit_##f)() = init_##f //__cdecl */
 #define POST_FUNC_ADD(f, .../*args*/) \
-    static int deinit_##f() { f(##__VA_ARGS__); return 0;} \
+    static int deinit_##f() { f(__VA_ARGS__); return 0;} \
     _CRTALLOC(".CRT$XPU") static _PF pdeinit_##f [] = { deinit_##f };
 #elif defined(__GNUC__)
 #define PRE_FUNC_ADD(f, ...) \
-    __attribute__((constructor)) static void init_##f() { f(##__VA_ARGS__); }
+    __attribute__((constructor)) static void init_##f() { f(__VA_ARGS__); }
 #define POST_FUNC_ADD(f, ...) \
-    __attribute__((destructor)) static void deinit_##f() { f(##__VA_ARGS__); }
+    __attribute__((destructor)) static void deinit_##f() { f(__VA_ARGS__); }
 
 #else
 #ifndef __cplusplus
@@ -53,7 +53,7 @@ typedef int (__cdecl *_PF)(); /* why not void? */
 #include <stdlib.h>
 /*static var init, atexit*/
 #define PRE_FUNC_ADD(f, ...) \
-    static int init_##f() { f(##__VA_ARGS__); return 0; } \
+    static int init_##f() { f(__VA_ARGS__); return 0; } \
     static int v_init_##f = init_##f();
 /*Works for C++. For C, gcc will throw an error:
  *initializer element is not constant */
