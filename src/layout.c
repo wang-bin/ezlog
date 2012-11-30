@@ -28,6 +28,9 @@
 #include "list.h"
 #include "ezmutex.h"
 
+/*layout_format[DEFAULT_LAYOUT]; VC requires const*/
+extern char* g_global_layout = "%YY%-%MM%-%DD% %hh%:%mm%:%ss% %level% 'tid:%tid% pid:%pid%'[%file%] %func% @%line%: %msg";
+
 typedef struct {
 	const char* level;
 	const char* file;
@@ -96,6 +99,16 @@ typedef struct {
 
 LIST_HEAD(key_print_head);
 
+/*TODO: lock?*/
+void __layout_free_printers(struct list_head* list)
+{
+	key_print_node* node = 0;
+	while (!list_empty(list)) {
+		node = list_entry(list->next, key_print_node, list);
+		list_del(list->next);
+		free(node);
+	}
+}
 
 /*
 	va_list: fmt
@@ -105,7 +118,6 @@ LIST_HEAD(key_print_head);
 void ezlog_init_layout(const char *format)
 {
 	int format_strlen;
-	struct list_head *pos;
 	char *pch;
 	static char* format_str = NULL;
 	int is_key = 1;
@@ -129,13 +141,7 @@ void ezlog_init_layout(const char *format)
 	*(format_str+format_strlen-1) = '%';
 	//init key_print_list
 
-	pos = &key_print_head;
-	list_for_each(pos, &key_print_head) {
-		node = list_entry(pos, key_print_node, list);
-		list_del(&node->list);
-		free(node);
-		node = 0;
-	}
+	__layout_free_printers(&key_print_head);
 
 	//TODO: print the keywords use '\'
 	pch = strtok(format_str,"%");
