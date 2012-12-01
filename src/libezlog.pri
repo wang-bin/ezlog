@@ -42,6 +42,7 @@
 LIBEZLOG_PRI_INCLUDED = 1
 
 staticlink = 0  #1 or 0. use static lib or not
+isEqual(staticlink, 1): error("libezlog does not support static linking!")
 LIB_VERSION = 1.2.6 #0.x.y may be wrong for dll
 #QT *= network
 
