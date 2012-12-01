@@ -95,8 +95,10 @@ static ALWAYS_INLINE void __list_del(struct list_head *prev, struct list_head *n
 static ALWAYS_INLINE void list_del(struct list_head *entry)
 {
 	__list_del(entry->prev, entry->next);
+#if KNOW_WHY_THIS_CASUE_CRASH
 	entry->next = (struct list_head *) 0;
 	entry->prev = (struct list_head *) 0;
+#endif
 }
 
 /**
@@ -229,6 +231,7 @@ static ALWAYS_INLINE void list_splice_init(struct list_head *list,
 * @head:	the head for your list.
 * @member:	the name of the list_struct within the struct.
 */
+/*TODO: VC does not support typeof, use another one. #if COMPILER(MSVC)*/
 #define list_for_each_entry(pos, head, member)				\
 	for (pos = list_entry((head)->next, typeof(*pos), member);	\
 	&pos->member != (head);					 \
