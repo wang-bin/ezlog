@@ -21,11 +21,11 @@
 #define EZLOG_GLOBAL_H
 
 
-#undef EZLOG_VERSION //0x010207
+#undef EZLOG_VERSION //0x010300
 
 #define EZLOG_VERSION_MAJOR 1	//((EZLOG_VERSION&0xff0000)>>16)
-#define EZLOG_VERSION_MINOR 2	//((EZLOG_VERSION&0xff00)>>8)
-#define EZLOG_VERSION_PATCH 8	//(EZLOG_VERSION&0xff)
+#define EZLOG_VERSION_MINOR 3	//((EZLOG_VERSION&0xff00)>>8)
+#define EZLOG_VERSION_PATCH 0	//(EZLOG_VERSION&0xff)
 
 #define VERSION_CHK(major, minor, patch) \
 	(((major&0xff)<<16) | ((minor&0xff)<<8) | (patch&0xff))
