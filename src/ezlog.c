@@ -75,8 +75,6 @@ static void __insert_appender(struct list_head* appenders_head, appender handle)
 
 void ezlog_set_appender_with_layout(appender handle, const char *format)
 {
-	printf("******ezlog_set_appender_with_layout(%p, %s)\n", handle, format);
-	fflush(0);
 	struct list_head *layout_pos = &layout_appenders_map;
 	struct list_head *appender_pos;
 	layout_appenders_map_t *layout_node = 0;
