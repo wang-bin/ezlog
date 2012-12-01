@@ -23,13 +23,17 @@ int main(int argc, char** argv)
 {
 	(void)argc;
 	(void)argv;
-    ezlog_init_default();
+	ezlog_init_default();
 	ezlog_registerAppender(file_appender);
-	ezlog_add_logfile("ezlog.txt", Append | OPEN_ON_WRITE);
+	ezlog_set_appender_with_layout(file_appender, "%mm%: %msg");
+	ezlog_set_appender_with_layout(file_appender, "[%level%] %hh%:%mm%:%ss%: %msg");
+	ezlog_add_logfile("ezlog.txt", Append);
 	ezlog_debug("Bye, cruel world!");
 	ezlog(info);
-    ezlog_debug();
-
+	ezlog_set_global_layout("%tid%: %msg");
+	ezlog_debug();
+	//for (int i = 0; i < 1024; ++i)
+	//	ezlog_debug("%d", i);
 	//ezlog_fini();
 	return 0;
 }

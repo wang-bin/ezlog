@@ -24,41 +24,23 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "eztime.h"
-#include "list.h"
+#include "private.h"
 #include "ezmutex.h"
 
 /*layout_format[DEFAULT_LAYOUT]; VC requires const*/
-extern char* g_global_layout = "%YY%-%MM%-%DD% %hh%:%mm%:%ss% %level% 'tid:%tid% pid:%pid%'[%file%] %func% @%line%: %msg";
-
-typedef struct {
-	const char* level;
-	const char* file;
-	const char* func;
-	int line;
-	const eztime* t;
-	unsigned long tid;
-	long pid;
-	const char* msg;
-} ezlog_context;
-
-typedef int (*print_call)(char*, ezlog_context* info);
-typedef struct
-{
-	const char* key;
-	char* delimiter; //0: if key != 0; a string between % and % if key == 0
-	print_call print;
-} key_print;
-
+/*global layout is a const pointer*/
+char* g_global_layout;
+/* = "%YY%-%MM%-%DD% %hh%:%mm%:%ss% %level% 'tid:%tid% pid:%pid%'[%file%] %func% @%line%: %msg";
+ * DO NOT init here because later we need realloc*/
 
 #define PRINT_DEF(item, tag) \
-	int print_##item(char* str, ezlog_context* info) { \
-		return sprintf(str, "%"#tag, info->item); \
+	int print_##item(char* str, ezlog_context* context) { \
+		return sprintf(str, "%"#tag, context->item); \
 	}
 
 #define PRINT_DEF_T(item, tag) \
-	int print_##item(char* str, ezlog_context* info) { \
-		return sprintf(str, "%"#tag, info->t->item); \
+	int print_##item(char* str, ezlog_context* context) { \
+		return sprintf(str, "%"#tag, context->t->item); \
 	}
 PRINT_DEF(level, s)
 PRINT_DEF(file, s)
@@ -92,12 +74,7 @@ static const key_print tid_print = {"tid", 0, print_tid};
 static const key_print msg_print = {"msg", 0, print_msg};
 
 
-typedef struct {
-	const key_print *printer;
-	struct list_head list;
-} key_print_node;
-
-LIST_HEAD(key_print_head);
+LIST_HEAD(g_global_printers_head);
 
 /*TODO: lock?*/
 void __layout_free_printers(struct list_head* list)
@@ -115,7 +92,8 @@ void __layout_free_printers(struct list_head* list)
 	this will not change the source string. Parameter 'format' MUST BE END WITH '%'!
 	The reason is in strtok(), but i don't know it now :(
 */
-void ezlog_init_layout(const char *format)
+
+void __init_printers_with_layout(struct list_head *printers_head, const char *format)
 {
 	int format_strlen;
 	char *pch;
@@ -123,28 +101,28 @@ void ezlog_init_layout(const char *format)
 	int is_key = 1;
 	key_print_node* node = 0;
 	key_print *dummy_print = 0;
-	_ezmutex_lock();
+	/*_ezmutex_lock(); TODO: remove?*/
 	if(format_str) {
 		free(format_str);
 		format_str = NULL;
 	}
 	format_strlen = strlen(format);
-	if(format[format_strlen]!='%') {
+	if(format[format_strlen] != '%') {
 		format_strlen += 1;
 	}
-	format_str = (char*)malloc(format_strlen+1);
-	memset(format_str, 0, format_strlen+1);
+	format_str = (char*)malloc(format_strlen + 1);
+	memset(format_str, 0, format_strlen + 1);
 	memcpy(format_str, format, strlen(format));
 	/*
 		force end with '%'. If already is, no effect. If not, it will be '%'
 	*/
-	*(format_str+format_strlen-1) = '%';
+	*(format_str + format_strlen - 1) = '%';
 	//init key_print_list
 
-	__layout_free_printers(&key_print_head);
+	__layout_free_printers(printers_head);
 
 	//TODO: print the keywords use '\'
-	pch = strtok(format_str,"%");
+	pch = strtok(format_str, "%");
 	while (pch != NULL) {
 		is_key = 1;
 		//printf ("%s\n",pch);
@@ -203,29 +181,80 @@ void ezlog_init_layout(const char *format)
 			is_key = 0;
 		}
 		if (is_key) {
-			list_add_tail(&(node->list), &key_print_head);
+			list_add_tail(&(node->list), printers_head);
 		}
-		*(pch+strlen(pch)) = '%'; //strtok will replace '%' with '\0'.
+		*(pch + strlen(pch)) = '%'; //strtok will replace '%' with '\0'.
 		pch = strtok (NULL, "%"); //why NULL?
 	}
-	_ezmutex_unlock();
+	/*_ezmutex_unlock();*/
 }
 
-//the result string. use by ezlog.cpp to be put into appenders.
-void __format_msg(char* result_msg, ezlog_context* info)
+extern struct list_head layout_appenders_map;
+/*Deprecate. use ezlog_set_global_layout*/
+void ezlog_set_global_layout(const char *format)
+{
+	size_t format_len = strlen(format);
+	struct list_head *layout_pos;
+	layout_appenders_map_t *layout_entry;
+	char *new_global_layout = realloc(g_global_layout, format_len + 1);
+	g_global_layout = new_global_layout;
+	memset(g_global_layout, 0, format_len + 1);
+	memcpy(g_global_layout, format, format_len);
+	printf("Global layout: %s\n", g_global_layout);
+	__init_printers_with_layout(&g_global_printers_head, format);
+	/*check the layout_appenders map, change it's global printers*/
+	/*compare the printers' address if layout_entry use a printers pointer*/
+	list_for_each(layout_pos, &layout_appenders_map) {
+		layout_entry = list_entry(layout_pos, layout_appenders_map_t, list);
+		if (layout_entry->printers_head == &g_global_printers_head) {
+			free(layout_entry->format);
+			layout_entry->format = (char*)malloc(sizeof(char) * (format_len + 1));
+			memset(layout_entry->format, 0, format_len + 1);
+			memcpy(layout_entry->format, format, format_len);
+			/*If the layout appears mutiple times in the map, it's ok, g_global_printers_head will be cleaned only once*/
+			//layout_entry->printers_head.next = g_global_printers_head.next;
+			//layout_entry->printers_head.prev = g_global_printers_head.prev;
+		}
+	}
+	printf("global layout updated...\n");
+	fflush(0);
+}
+
+void ezlog_init_layout(const char *format)
+{
+	ezlog_set_global_layout(format);
+}
+
+void __format_msg_with_printers(char *result_msg, ezlog_context *context, struct list_head *printers_head)
 {
 	int index = 0;
 	struct list_head *pos;
-	_ezmutex_lock();
-	pos = &key_print_head;
-	list_for_each(pos, &key_print_head) {
+	/*_ezmutex_lock(); TODO: remove. use in ezlog.c when a log event comes*/
+	list_for_each(pos, printers_head) {
+		key_print_node* node = list_entry(pos, key_print_node, list);
+		if (node->printer->key == 0)
+			index += sprintf(result_msg + index, "%s", node->printer->delimiter);
+		else
+			index += node->printer->print(result_msg + index, context);
+	}
+	/*_ezmutex_unlock();*/
+}
+
+//the result string. use by ezlog.cpp to be put into appenders.
+void __format_msg(char* result_msg, ezlog_context* context)
+{
+	int index = 0;
+	struct list_head *pos;
+	/*_ezmutex_lock();*/
+	pos = &g_global_printers_head;
+	list_for_each(pos, &g_global_printers_head) {
 		key_print_node* node = list_entry(pos, key_print_node, list);
 		//printf("index=%d, key=%s, delimiter=%s\n", index, node->printer->key, node->printer->delimiter);
 		if (node->printer->key == 0)
 			index += sprintf(result_msg + index, "%s", node->printer->delimiter);
 		else
-			index += node->printer->print(result_msg + index, info);
+			index += node->printer->print(result_msg + index, context);
 	}
-	_ezmutex_unlock();
+	/*_ezmutex_unlock();*/
 }
 

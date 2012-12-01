@@ -38,6 +38,9 @@ Q_EXPORT int ezlog_version();
 Q_EXPORT const char* ezlog_version_string();
 
 Q_EXPORT void ezlog_init_default();
+/* If appender not exists, insert it. If already exists, set the new format, because
+ * an appender only has 1 layout, a layout can attach many appenders*/
+Q_EXPORT void ezlog_set_appender_with_layout(appender handle, const char* format);
 
 #if defined(NO_EZLOG) || defined(NO_DEBUG)
 #define ezlog(...)

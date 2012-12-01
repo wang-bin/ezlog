@@ -29,7 +29,8 @@ HEADERS += ezlog.h \
 	os.h \
 	cpu.h \
 	ezmutex.h \
-	prepost.h
+	prepost.h \
+	private.h
 
 
 SOURCES += \
@@ -37,7 +38,8 @@ SOURCES += \
 	ezlog.c \
 	eztime.c \
 	layout.c \
-    ezmutex.c
+	ezmutex.c \
+	private.c
 
 #QMAKE_CXXFLAGS += "-std=c++0x"
 

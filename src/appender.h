@@ -34,7 +34,7 @@ typedef enum {
 
 typedef void (*appender)(const char* msg);
 
-
+/*bind to global layout (not const)*/
 Q_EXPORT void ezlog_registerAppender(appender handle); //installHandler(handler)
 Q_EXPORT void ezlog_unregisterAppender(appender handle);
 Q_EXPORT void ezlog_unregisterAllAppenders();

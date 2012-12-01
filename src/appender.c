@@ -25,10 +25,10 @@
 #include "eztime.h"
 #include "list.h"
 #include "ezmutex.h"
-/*
-extern char* g_global_layout;
+
+extern char* const g_global_layout;
 extern void ezlog_set_appender_with_layout(appender handle, const char* format);
-*/
+
 typedef struct {
 	appender handle;
 	struct list_head list;
@@ -80,7 +80,7 @@ void ezlog_registerAppender(appender handle)
 		ezlog_add_logfile(default_logfile, New | OPEN_ON_WRITE);
 		strcpy(last_default_logfile, default_logfile);
 	}
-/*	ezlog_set_appender_with_layout(handle, g_global_layout);*/
+	ezlog_set_appender_with_layout(handle, g_global_layout);
 	_ezmutex_unlock();
 }
 
@@ -89,6 +89,7 @@ void ezlog_unregisterAppender(appender handle)
 	struct list_head *pos;
 	_ezmutex_lock();
 	pos = &appenders_head;
+	/*TODO: use while(!list_empty())*/
 	list_for_each(pos, &appenders_head) {
 		appender_node* node = list_entry(pos, appender_node, list);
 		if (node->handle == handle) {
@@ -169,7 +170,7 @@ void ezlog_remove_logfile(const char *path)
 		if (strcmp(node->name, path) == 0) {
 			if (!IS_OPEN_ON_WRITE(node->mode))
 				fclose(node->file);
-			list_del(&(node->list));
+			list_del(&(node->list)); /*TODO: DO NOT list_del() in for_each*/
 			break;
 		}
 	}
@@ -218,14 +219,19 @@ void file_appender(const char *msg)
 /*
 	for internal use. lock here so that appender need not care about thread issues
 */
+void __log_to_appender(appender handle, const char* msg)
+{
+	handle(msg);
+}
+
 void __log_to_appenders(const char* msg)
 {
 	struct list_head *pos;
-	_ezmutex_lock();
+	/*_ezmutex_lock();*/
 	pos = &appenders_head;
 	list_for_each(pos, &appenders_head) { //list_for_each_entry
 		appender_node* node = list_entry(pos, appender_node, list);
 		node->handle(msg);
 	}
-	_ezmutex_unlock();
+	/*_ezmutex_unlock();*/
 }
