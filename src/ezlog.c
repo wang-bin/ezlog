@@ -31,6 +31,8 @@ extern struct list_head g_global_printers_head;
 extern void __format_msg(char* result_msg, ezlog_context* context);
 extern void __log_to_appenders(const char* msg);
 extern void __init_printers_with_layout(struct list_head *printers_head, const char *format);
+extern void __log_to_appender(appender handle, const char* msg);
+extern void __format_msg_with_printers(char *result_msg, ezlog_context *context, struct list_head *printers_head);
 
 static void print_version() {
 	printf("ezlog version: %s\n"
