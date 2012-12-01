@@ -23,17 +23,29 @@ Usage:
             log_widget::instance()->appendText(msg);
         }
 
-1.  Setup log message format. If you use ezlog_init_default() before and wanna keep the default
+1.  Setup log message format (aka layout).
+    ezlog supports global layout and appender specified layout.
+    If you use ezlog_init_default() before and wanna keep the default
     format, skip this step. Log message will use the last format you defined.
+
     Key words: YY, MM, DD, hh, mm, ss, ms, tid, pid, file, func, line, msg.
     It's easy to understand what they mean, so I will not explain these. A key word must between two "%",
     except the first and the last. If string between "%" is not a key word, ezlog will print it with out any change.
     If use key word func, the complete function name including return type, class, parameters will be supported
     if compiled with gcc.
 
+  set the global layout:
+        ezlog_set_global_layout("MM%-%DD% %hh%:%mm%:%ss% [tid:%tid%]-[%file%] %func% @%line%: %msg");
+  or the deprecated one
         ezlog_init_layout("MM%-%DD% %hh%:%mm%:%ss% [tid:%tid%]-[%file%] %func% @%line%: %msg");
 
-If you use ezlog_init_default(), skip this step.
+  If you use ezlog_init_default(), skip this step.
+
+  Set an appender's layout:
+        void ezlog_set_appender_with_layout(appender handle, const char* format);
+
+  This function will add the appender if not exists.
+
 
 2.  Start your logging. You can add additional messages. It supports printf like format. If nothing
     else you want to put, just keep the parameter empty.
@@ -43,7 +55,7 @@ If you use ezlog_init_default(), skip this step.
         ezlog_debug();                            //Only display the formated keywords message you defined
 
 
-3.  Clean up. If you use the gcc toolchain or vc, it will be called after main() auto.
+3.  Clean up. If you use the gcc/clang toolchain (VC not supported yet), it will be called after main() auto.
 
         ezlog_fini();
 
@@ -52,3 +64,4 @@ If you use ezlog_init_default(), skip this step.
 
 wbsecg1@gmail.com
 20120224
+Last updated: 20121202
