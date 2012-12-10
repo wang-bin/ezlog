@@ -27,7 +27,8 @@
 
 #include "ezlog_global.h"
 
-Q_EXPORT ALWAYS_INLINE void _ezmutex_lock();
-Q_EXPORT ALWAYS_INLINE void _ezmutex_unlock();
+/*DO NOT ALWAYS_INLINE because function body not available*/
+Q_EXPORT void _ezmutex_lock();
+Q_EXPORT void _ezmutex_unlock();
 
 #endif // EZMUTEX_H
