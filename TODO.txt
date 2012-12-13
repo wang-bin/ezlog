@@ -1,3 +1,4 @@
+#include <ezlog/xxx.h>
 Auto ezlog_init_default
 More understandable type and var name: e.g. appender_t
 Thread safe check
