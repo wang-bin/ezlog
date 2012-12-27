@@ -20,6 +20,30 @@
 #ifndef EZLOG_H
 #define EZLOG_H
 
+#if defined(NO_EZLOG) || defined(NO_DEBUG)
+#define ezlog(...)
+#define ezlog_msg(...)
+#define ezlog_debug(...)
+#define ezlog_info(...)
+#define ezlog_warn(...)
+#define ezlog_error(...)
+#define ezlog_fatal(...)
+#define ezlog_version(...)
+#define ezlog_version_string(...)
+#define ezlog_init_default(...)
+#define ezlog_set_appender_with_layout(...)
+#define ezlog_fini(...)
+#define ezlog_set_global_layout(...)
+#define ezlog_init_layout(...)
+#define ezlog_registerAppender(...)
+#define ezlog_unregisterAppender(...)
+#define ezlog_unregisterAllAppenders(...)
+#define ezlog_add_logfile(...)
+#define ezlog_remove_logfile(...)
+#define ezlog_remove_logfiles(...)
+#define console_appender(...)
+#define file_appender(...)
+#else
 #include <stdio.h>
 #include "ezlog_global.h"
 #include "appender.h"
@@ -42,15 +66,6 @@ Q_EXPORT void ezlog_init_default();
  * an appender only has 1 layout, a layout can attach many appenders*/
 Q_EXPORT void ezlog_set_appender_with_layout(appender handle, const char* format);
 
-#if defined(NO_EZLOG) || defined(NO_DEBUG)
-#define ezlog(...)
-#define ezlog_msg(...)
-#define ezlog_debug(...)
-#define ezlog_info(...)
-#define ezlog_warn(...)
-#define ezlog_error(...)
-#define ezlog_fatal(...)
-#else
 //DO NOT use (fmt, args...), MSVC does not support it. use (fmt, ...)
 #define ezlog(level, ...) ezlog_##level(##__VA_ARGS__)
 /*align level string*/
@@ -59,7 +74,6 @@ Q_EXPORT void ezlog_set_appender_with_layout(appender handle, const char* format
 #define ezlog_warn(fmt, ...) _ezlog_print("WARN ", __FILE__, __LINE__, EZLOG_FUNC, ""#fmt, ##__VA_ARGS__)
 #define ezlog_error(fmt, ...) _ezlog_print("ERROR", __FILE__, __LINE__, EZLOG_FUNC, ""#fmt, ##__VA_ARGS__)
 #define ezlog_fatal(fmt, ...) _ezlog_print("FATAL", __FILE__, __LINE__, EZLOG_FUNC, ""#fmt, ##__VA_ARGS__)
-#endif
 
 /*Usually this is called automatically after main()*/
 Q_EXPORT void ezlog_fini();
@@ -70,5 +84,6 @@ Q_EXPORT void _ezlog_print(const char* level, const char* file, const int line, 
 #ifdef __cplusplus
 }
 #endif //__cplusplus
+#endif
 
 #endif //EZLOG_H
