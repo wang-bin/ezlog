@@ -23,6 +23,11 @@ Usage:
             log_widget::instance()->appendText(msg);
         }
 
+    and for android
+        void android_console_appender(const char* msg) {
+            __android_log_print(ANDROID_LOG_DEBUG, "%s", msg); //TODO: logtag
+        }
+
 1.  Setup log message format (aka layout).
     ezlog supports global layout and appender specified layout.
     If you use ezlog_init_default() before and wanna keep the default
