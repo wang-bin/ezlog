@@ -1,20 +1,22 @@
 /******************************************************************************
-	ezlog: A tiny log for C/C++
-	Copyright (C) 2011 Wang Bin <wbsecg1@gmail.com>
+    ezlog:  a tiny any flexible log system written in C
+    Copyright (C) 2011-2013 Wang Bin <wbsecg1@gmail.com>
 
-	This program is free software; you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation; either version 2 of the License, or
-	(at your option) any later version.
+*   This file is part of ezlog
 
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU General Public License for more details.
+    This library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Lesser General Public
+    License as published by the Free Software Foundation; either
+    version 2.1 of the License, or (at your option) any later version.
 
-	You should have received a copy of the GNU General Public License along
-	with this program; if not, write to the Free Software Foundation, Inc.,
-	51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public
+    License along with this library; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 ******************************************************************************/
 
 #ifndef EZLOG_H
@@ -69,7 +71,7 @@ Q_EXPORT void ezlog_set_appender_with_layout(appender handle, const char* format
 //DO NOT use (fmt, args...), MSVC does not support it. use (fmt, ...)
 #define ezlog(level, ...) ezlog_##level(##__VA_ARGS__)
 /*align level string*/
-#define ezlog_debug(fmt, ...) _ezlog_print("DEBUG", __FILE__, __LINE__, EZLOG_FUNC, ""#fmt, ##__VA_ARGS__)
+#define ezlog_debug(fmt, ...) _ezlog_print("DEBUG", __FILE__, __LINE__, EZLOG_FUNC, #fmt, ##__VA_ARGS__)
 #define ezlog_info(fmt, ...) _ezlog_print("INFO ", __FILE__, __LINE__, EZLOG_FUNC, ""#fmt, ##__VA_ARGS__)
 #define ezlog_warn(fmt, ...) _ezlog_print("WARN ", __FILE__, __LINE__, EZLOG_FUNC, ""#fmt, ##__VA_ARGS__)
 #define ezlog_error(fmt, ...) _ezlog_print("ERROR", __FILE__, __LINE__, EZLOG_FUNC, ""#fmt, ##__VA_ARGS__)

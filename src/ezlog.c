@@ -1,20 +1,22 @@
 /******************************************************************************
-	ezlog: A tiny log for C/C++
-	Copyright (C) 2011 Wang Bin <wbsecg1@gmail.com>
+    ezlog:  a tiny any flexible log system written in C
+    Copyright (C) 2011-2013 Wang Bin <wbsecg1@gmail.com>
 
-	This program is free software; you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation; either version 2 of the License, or
-	(at your option) any later version.
+*   This file is part of ezlog
 
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU General Public License for more details.
+    This library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Lesser General Public
+    License as published by the Free Software Foundation; either
+    version 2.1 of the License, or (at your option) any later version.
 
-	You should have received a copy of the GNU General Public License along
-	with this program; if not, write to the Free Software Foundation, Inc.,
-	51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public
+    License along with this library; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 ******************************************************************************/
 
 #include "ezlog.h"
@@ -36,7 +38,8 @@ extern void __format_msg_with_printers(char *result_msg, ezlog_context *context,
 
 static void print_version() {
 	printf("ezlog version: %s\n"
-		   "Copyright (C) 2011-2012 Wangbin <wbsecg1@gmail.com>  https://github.com/wang-bin/ezlog\n"
+           "Distributed under the terms of LGPLv2.1 or later."
+           "Copyright (C) 2011-2013 Wangbin <wbsecg1@gmail.com>  https://github.com/wang-bin/ezlog\n"
 		   , ezlog_version_string());
 	fflush(stdout);
 }
