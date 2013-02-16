@@ -1,26 +1,19 @@
 TEMPLATE = lib
-
+TARGET = ezlog
 QT =
 CONFIG += console
 CONFIG -= app_bundle
 
 CONFIG *= ezlog-buildlib
 
+#var with '_' can not pass to pri?
+STATICLINK = 0
 PROJECTROOT = $$PWD/..
-include($$PROJECTROOT/deploy.pri)
-isEmpty(BUILD_DIR):BUILD_DIR=$$(BUILD_DIR)
-isEmpty(BUILD_DIR):BUILD_DIR=$$[BUILD_DIR]
-isEmpty(BUILD_DIR):BUILD_IN_SRC = yes
-
-!isEmpty(BUILD_IN_SRC):BUILD_DIR=$$OUT_PWD/../out
-!include(libezlog.pri): error(could not find libezlog.pri)
+!include(libezlog.pri): error("could not find libezlog.pri")
+preparePaths($$OUT_PWD/../out)
 
 win32:RC_FILE = $${PROJECTROOT}/res/ezlog.rc
 OTHER_FILES += $$RC_FILE
-
-#src
-unix: SOURCES +=
-else:win32: SOURCES +=
 
 
 HEADERS += ezlog.h \

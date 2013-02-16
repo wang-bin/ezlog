@@ -57,7 +57,7 @@ enum Level {
 	debug, info, warn, error, fatal
 };
 
-
+/* runtime version. used to compare with compile time version */
 Q_EXPORT int ezlog_version();
 Q_EXPORT const char* ezlog_version_string();
 
