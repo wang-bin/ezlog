@@ -10,6 +10,9 @@ PROJECTROOT = $$PWD/../..
 !include($$PROJECTROOT/src/libezlog.pri): error("Could not find libezlog.pri")
 preparePaths($$OUT_PWD/../../out)
 
+win32:RC_FILE = $${PROJECTROOT}/res/ezlog-qt.rc
+OTHER_FILES += $$RC_FILE
+
 DEFINES += QTEZLOG_LIBRARY
 
 SOURCES += qtezlog.cpp

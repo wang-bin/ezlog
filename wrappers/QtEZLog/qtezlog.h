@@ -1,5 +1,5 @@
 /******************************************************************************
-    QtEZLog:  an ezlog wrapper for Qt logging
+    QtEZLog:  a Qt wrapper for ezlog
     Copyright (C) 2012-2013 Wang Bin <wbsecg1@gmail.com>
 
 *   This file is part of ezlog

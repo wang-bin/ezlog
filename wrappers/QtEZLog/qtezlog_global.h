@@ -1,5 +1,5 @@
 /******************************************************************************
-    QtEZLog:  an ezlog wrapper for Qt logging
+    QtEZLog:  a Qt wrapper for ezlog
     Copyright (C) 2012-2013 Wang Bin <wbsecg1@gmail.com>
 
 *   This file is part of ezlog
@@ -26,7 +26,7 @@
 
 
 #define QTEZLOG_MAJOR 1	//((QTEZLOG_VERSION&0xff0000)>>16)
-#define QTEZLOG_MINOR 3	//((QTEZLOG_VERSION&0xff00)>>8)
+#define QTEZLOG_MINOR 4	//((QTEZLOG_VERSION&0xff00)>>8)
 #define QTEZLOG_PATCH 0	//(QTEZLOG_VERSION&0xff)
 
 

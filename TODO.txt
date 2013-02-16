@@ -1,4 +1,10 @@
 #include <ezlog/xxx.h>
+log_tag
+log level: stderr, stdout
+printer: the non-keyword print combind as one to reduce the list size
+eztime: ref to QDateTime
+android log appender implemention
+print to debugger in windows like qDebug
 Auto ezlog_init_default
 More understandable type and var name: e.g. appender_t
 Thread safe check

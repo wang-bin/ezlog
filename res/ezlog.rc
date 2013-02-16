@@ -3,8 +3,8 @@
 //IDI_ICON1               ICON    DISCARDABLE     "ezlog.ico"
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,3,0,0
- PRODUCTVERSION 1,3,0,0
+ FILEVERSION 1,4,0,0
+ PRODUCTVERSION 1,4,0,0
  FILEFLAGS 0x0L
  FILEFLAGSMASK 0x3fL
  FILEOS 0x00040004L
@@ -16,13 +16,13 @@ BEGIN
         BLOCK "000004b0"
         BEGIN
             VALUE "CompanyName", "Shanghai University | wbsecg1@gmail.com"
-            VALUE "FileDescription", "A tiny and easy to use log library written in C. https://github.com/wang-bin/ezlog"
-            VALUE "FileVersion", "1.3.0.0"
-            VALUE "LegalCopyright", "Copyright (C) 2011-2012 WangBin"
+            VALUE "FileDescription", "a tiny any flexible log system written in C. https://github.com/wang-bin/ezlog"
+            VALUE "FileVersion", "1.4.0.0"
+            VALUE "LegalCopyright", "Copyright (C) 2011-2013 WangBin"
             VALUE "InternalName", "ezlog"
             VALUE "OriginalFilename", "ezlog.dll"
-            VALUE "ProductName", "QtAV"
-            VALUE "ProductVersion", "1.3.0.0"
+            VALUE "ProductName", "ezlog"
+            VALUE "ProductVersion", "1.4.0.0"
         END
     END
     BLOCK "VarFileInfo"
