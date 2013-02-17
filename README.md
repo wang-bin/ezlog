@@ -3,7 +3,7 @@
 ### Platform tested: linux, win32, wince, mac
 
 ## Usage:
-####0.  Initialize ezlog. e.g.
+####0.  `#include "ezlog.h"` then Initialize ezlog. e.g.
 
     ezlog_init_default();
 
@@ -63,11 +63,10 @@ This function will add the appender if not exists.
 ####2.  Start your logging. You can add additional messages. It supports printf like format. If nothing  
 else you want to put, just keep the parameter empty.
 
-`
     ezlog_debug("Hello, cruel world!");  
     ezlog_warn("Damn! %s", __DATE__);  
     ezlog_debug();                            //Only display the formated keywords message you defined  
-`
+
 
 ####3. Clean up. If you use the gcc/clang toolchain (VC not supported yet), it will be called after main() auto.
 
