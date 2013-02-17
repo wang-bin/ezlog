@@ -1,4 +1,5 @@
 TEMPLATE = subdirs
 
-SUBDIRS += \
-    QtEZLog
+SUBDIRS += qt
+
+qt.file = qt/libezlog-qt.pro

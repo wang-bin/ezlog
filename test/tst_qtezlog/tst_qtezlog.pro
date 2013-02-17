@@ -5,7 +5,7 @@ CONFIG   += console
 TARGET = tst_qtezlog
 STATICLINK = 0
 PROJECTROOT = $$PWD/../..
-include($$PROJECTROOT/wrappers/QtEZLog/libezlog-qt.pri)
+include($$PROJECTROOT/wrappers/qt/libezlog-qt.pri)
 preparePaths($$OUT_PWD/../../out)
 
 SOURCES += main.cpp
