@@ -20,6 +20,8 @@
 ******************************************************************************/
 
 #include "qtezlog.h"
+
+
 #include <ezlog.h>
 
 unsigned QtEZlog_Version()
@@ -85,6 +87,15 @@ void setLayout(const QString &fmt)
     ezlog_set_global_layout(qPrintable(fmt));
 }
 
-} //namespace ezlog
 } //namespace QtEZLog
+} //namespace ezlog
 
+#if !WITH_EZLOG
+#undef qDebug
+
+void QtEZLogContext(const char* level, const char* file, const int line, const char* func, const char* fmt, ...)
+{
+
+}
+
+#endif //WITH_EZLOG

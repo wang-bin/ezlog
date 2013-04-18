@@ -47,4 +47,39 @@ QTEZLOGSHARED_EXPORT void setLayout(const QString& fmt);
  */
 } //namespace QtEZLog
 } //namespace ezlog
+
+
+#define WITH_EZLOG 1
+#ifndef EZLOG_FUNC
+#if defined(__GNUC__)
+#  define EZLOG_FUNC __PRETTY_FUNCTION__
+#else
+#  define __attribute__(...)
+#   if defined(_MSC_VER)
+#      define EZLOG_FUNC __FUNCSIG__
+#   else
+#      define EZLOG_FUNC __FUNCTION__
+#   endif
+#endif
+#endif //EZLOG_FUNC
+
+#if WITH_EZLOG
+extern "C" {
+void _ezlog_print(const char* level, const char* file, const int line, const char* func, const char* fmt, ...);
+}
+#define qDebug(fmt, ...) _ezlog_print("DEBUG", __FILE__, __LINE__, EZLOG_FUNC, #fmt, ##__VA_ARGS__)
+#define qWarning(fmt, ...) _ezlog_print("DEBUG", __FILE__, __LINE__, EZLOG_FUNC, #fmt, ##__VA_ARGS__)
+#define qCritical(fmt, ...) _ezlog_print("DEBUG", __FILE__, __LINE__, EZLOG_FUNC, #fmt, ##__VA_ARGS__)
+#define qFatal(fmt, ...) _ezlog_print("DEBUG", __FILE__, __LINE__, EZLOG_FUNC, #fmt, ##__VA_ARGS__)
+#else
+/* for internal use. call qDebug() etc*/
+QTEZLOGSHARED_EXPORT void QtEZLogContext(const char* level, const char* file, const int line, const char* func, const char* fmt, ...);
+
+#define qDebug(fmt, ...) QtEZLogContext("DEBUG", __FILE__, __LINE__, EZLOG_FUNC, ""#fmt, ##__VA_ARGS__)
+#define qWarning(fmt, ...) QtEZLogContext("WARN", __FILE__, __LINE__, EZLOG_FUNC, ""#fmt, ##__VA_ARGS__)
+#define qCritical(fmt, ...) QtEZLogContext("ERROR", __FILE__, __LINE__, EZLOG_FUNC, ""#fmt, ##__VA_ARGS__)
+#define qFatal(fmt, ...) QtEZLogContext("FATAL", __FILE__, __LINE__, EZLOG_FUNC, ""#fmt, ##__VA_ARGS__)
+
+#endif //WITH_EZLOG
+
 #endif // QTEZLOG_H
