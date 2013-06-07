@@ -25,7 +25,7 @@ void getTime(eztime* t)
 {
 #ifdef Q_OS_WIN   //WINCE
 	SYSTEMTIME stUTC;
-	GetSystemTime(&stUTC);
+    GetLocalTime(&stUTC);
 	t->year = stUTC.wYear, t->month = stUTC.wMonth, t->day = stUTC.wDay;
 	t->hour = stUTC.wHour, t->min = stUTC.wMinute, t->sec = stUTC.wSecond;
 	t->msec = stUTC.wMilliseconds;
