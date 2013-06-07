@@ -35,7 +35,6 @@ QTEZLOGSHARED_EXPORT void install();
 QTEZLOGSHARED_EXPORT void uninstall();
 /*set global layout*/
 QTEZLOGSHARED_EXPORT void setLayout(const QString& fmt);
-
 /*
  class QTEZLOGSHARED_EXPORT Appender
  {
@@ -43,11 +42,11 @@ QTEZLOGSHARED_EXPORT void setLayout(const QString& fmt);
     install();
     uninstall();
     virtual void write(...);
- }
- */
+ };
+*/
 } //namespace QtEZLog
 } //namespace ezlog
-
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
 
 #define WITH_EZLOG 1
 #ifndef EZLOG_FUNC
@@ -79,7 +78,6 @@ QTEZLOGSHARED_EXPORT void QtEZLogContext(const char* level, const char* file, co
 #define qWarning(fmt, ...) QtEZLogContext("WARN", __FILE__, __LINE__, EZLOG_FUNC, ""#fmt, ##__VA_ARGS__)
 #define qCritical(fmt, ...) QtEZLogContext("ERROR", __FILE__, __LINE__, EZLOG_FUNC, ""#fmt, ##__VA_ARGS__)
 #define qFatal(fmt, ...) QtEZLogContext("FATAL", __FILE__, __LINE__, EZLOG_FUNC, ""#fmt, ##__VA_ARGS__)
-
 #endif //WITH_EZLOG
-
+#endif //QT_VERSION
 #endif // QTEZLOG_H

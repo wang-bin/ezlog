@@ -21,7 +21,6 @@
 
 #include "qtezlog.h"
 
-
 #include <ezlog.h>
 
 unsigned QtEZlog_Version()
@@ -50,26 +49,28 @@ static Initializer sInitInternal;
 void EZLogHandler(QtMsgType type, const char *msg)
 {
 #else
-void EZLogHandler(QtMsgType type, const QMessageLogContext &, const QString& qmsg)
+void EZLogHandler(QtMsgType type, const QMessageLogContext &ctx, const QString& qmsg)
 {
     const char* msg = qPrintable(qmsg);
 #endif
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
      switch (type) {
      case QtDebugMsg:
-         ezlog_debug("%s", msg);
+         _ezlog_print("DEBUG", ctx.file, ctx.line, ctx.function, "%s", msg);
          break;
      case QtWarningMsg:
-         ezlog_warn("%s", msg);
+         _ezlog_print("WARN", ctx.file, ctx.line, ctx.function, "%s", msg);
          //if (QT_FATAL_WARNINGS)
          break;
      case QtCriticalMsg:
-         ezlog_error("%s", msg);
+         _ezlog_print("ERROR", ctx.file, ctx.line, ctx.function, "%s", msg);
          break;
      case QtFatalMsg:
-         ezlog_fatal("%s", msg);
+         _ezlog_print("FATAL", ctx.file, ctx.line, ctx.function, "%s", msg);
          abort();
      }
      fflush(0);
+#endif //QT_VERSION
 }
 
 void install()
