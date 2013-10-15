@@ -46,11 +46,11 @@ NAME = ezlog
         error("lib$${NAME}.pri already included")
         unset(NAME)
 }
-#!isEmpty(LIBQTAV_PRI_INCLUDED):error("libQtAV.pri already included")
+#!isEmpty(LIBEZLOG_PRI_INCLUDED):error("libezlog.pri already included")
 eval(LIB$$upper($$NAME)_PRI_INCLUDED = 1)
 
 LIB_VERSION = 1.4.0 #0.x.y may be wrong for dll
-isEmpty(STATICLINK): STATICLINK = 0  #1 or 0. use static lib or not
+isEmpty(STATICLINK): STATICLINK = 1  #1 or 0. use static lib or not
 
 TEMPLATE += fakelib
 PROJECT_TARGETNAME = $$qtLibraryTarget($$NAME)
@@ -69,12 +69,12 @@ PROJECT_LIBDIR = $$qtLongName($$BUILD_DIR/lib)
 } else {
     QMAKE_CXXFLAGS += -isystem $$PROJECT_SRCPATH/..
 }
-INCLUDEPATH *= $$PROJECT_SRCPATH $$PROJECT_SRCPATH/.. $$PROJECT_SRCPATH/QtAV
+INCLUDEPATH *= $$PROJECT_SRCPATH $$PROJECT_SRCPATH/.. $$PROJECT_SRCPATH/ezlog
 DEPENDPATH *= $$PROJECT_SRCPATH
 QMAKE_LFLAGS_RPATH += #will append to rpath dir
 
 #eval() ?
-#!qtav-buildlib {
+#!ezlog-buildlib {
 !contains(CONFIG, $$lower($$NAME)-buildlib) {
         #The following may not need to change
         CONFIG *= link_prl
