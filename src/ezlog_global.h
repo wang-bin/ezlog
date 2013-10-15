@@ -39,9 +39,9 @@
 /*! Stringify \a x, perform macro expansion. */
 #define TOSTR(x)  _TOSTR(x)
 
-static const char* const k_ezlog_version_string = TOSTR(EZLOG_VERSION_MAJOR)"."TOSTR(EZLOG_VERSION_MINOR)"."TOSTR(EZLOG_VERSION_PATCH)"(" __DATE__", "__TIME__")";
-#define EZLOG_VERSION_STR			TOSTR(EZLOG_VERSION_MAJOR)"."TOSTR(EZLOG_VERSION_MINOR)"."TOSTR(EZLOG_VERSION_PATCH)
-#define EZLOG_VERSION_STR_LONG	EZLOG_VERSION_STR"(" __DATE__", "__TIME__")"
+static const char* const k_ezlog_version_string = TOSTR(EZLOG_VERSION_MAJOR) "." TOSTR(EZLOG_VERSION_MINOR) "." TOSTR(EZLOG_VERSION_PATCH) "(" __DATE__ ", " __TIME__ ")";
+#define EZLOG_VERSION_STR			TOSTR(EZLOG_VERSION_MAJOR) "." TOSTR(EZLOG_VERSION_MINOR) "." TOSTR(EZLOG_VERSION_PATCH)
+#define EZLOG_VERSION_STR_LONG	EZLOG_VERSION_STR "(" __DATE__ ", " __TIME__ ")"
 
 #if defined(__GNUC__)
 #  define EZLOG_FUNC __PRETTY_FUNCTION__
