@@ -40,8 +40,8 @@ SOURCES += \
 #QMAKE_CXXFLAGS += "-std=c++0x"
 
 #unix: LIBS += -lpthread
-!*msvc*: LIBS += -lpthread
-
+!*msvc*:!*android*: LIBS += -lpthread
+QMAKE_LFLAGS += -u _deinit_ezlog_fini -u _init_print_version
 #lib.files =
 #sources.files = ezlog_global.h ezlog.h appender.h layout.h
 #sources.path = /usr/local/include/ezlog

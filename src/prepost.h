@@ -43,9 +43,11 @@ typedef int (__cdecl *_PF)(); /* why not void? */
     _CRTALLOC(".CRT$XPU") static _PF pdeinit_##f [] = { deinit_##f };
 #elif defined(__GNUC__)
 #define PRE_FUNC_ADD(f, ...) \
-    __attribute__((constructor)) static void init_##f() { f(__VA_ARGS__); }
+    extern  void init_##f(); \
+    __attribute__((constructor)) void init_##f() { f(__VA_ARGS__); }
 #define POST_FUNC_ADD(f, ...) \
-    __attribute__((destructor)) static void deinit_##f() { f(__VA_ARGS__); }
+    extern  void deinit_##f(); \
+    __attribute__((destructor)) void deinit_##f() { f(__VA_ARGS__); }
 
 #else
 #ifndef __cplusplus
