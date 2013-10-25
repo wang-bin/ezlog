@@ -34,11 +34,14 @@ typedef enum {
 
 #define IS_OPEN_ON_WRITE(m) ((m & OPEN_ON_WRITE) == OPEN_ON_WRITE)
 
-typedef void (*appender)(const char* msg);
+typedef struct {
+    void (*handle)(const char* msg, void*);
+    void *opaque;
+} appender_t;
 
 /*bind to global layout (not const)*/
-Q_EXPORT void ezlog_registerAppender(appender handle); //installHandler(handler)
-Q_EXPORT void ezlog_unregisterAppender(appender handle);
+Q_EXPORT void ezlog_registerAppender(appender_t* appender); //installHandler(handler)
+Q_EXPORT void ezlog_unregisterAppender(appender_t* appender);
 Q_EXPORT void ezlog_unregisterAllAppenders();
 /*
  *The default log file's name is yyyyMMddhhmmss.log. The default log file will be ignored if
@@ -50,9 +53,11 @@ Q_EXPORT void ezlog_remove_logfiles();
 /*
   pre defined appenders: file, console
   just output the formated message.
+  TODO: how to release?
 */
-Q_EXPORT void console_appender(const char* msg);
-Q_EXPORT void file_appender(const char* msg);
+Q_EXPORT appender_t* console_appender();
+/* return a file appender with file name */
+Q_EXPORT appender_t* file_appender(const char* name);
 
 #ifdef __cplusplus
 }

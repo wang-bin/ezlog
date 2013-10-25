@@ -32,7 +32,7 @@ extern char* const g_global_layout;
 extern void ezlog_set_appender_with_layout(appender handle, const char* format);
 
 typedef struct {
-	appender handle;
+    appender_t *appender;
 	struct list_head list;
 } appender_node;
 
@@ -64,7 +64,7 @@ static char last_default_logfile[SIZE_LOGFILENAME];
  *
  * if filename is not specified by ezlog_add_logfile, the default name formated by time will be used.
  */
-void ezlog_registerAppender(appender handle)
+void ezlog_registerAppender(appender_t* handle)
 {
 	appender_node *node;
 	_ezmutex_lock();
@@ -193,13 +193,20 @@ void ezlog_remove_logfiles()
 }
 
 /* DO NOT LOCK */
-void console_appender(const char *msg)
+void console_appender_handle(const char* msg, void*)
 {
-	fprintf(stdout, "%s\n", msg);
-	fflush(stdout);  //condition?
+    fprintf(stdout, "%s\n", msg);
+    fflush(stdout);  //condition?
 }
 
-void file_appender(const char *msg)
+appender_t *console_appender()
+{
+    appender_t *a = (appender_t*)malloc(sizeof(appender_t));
+    a->handle = console_appender_handle;
+    return a;
+}
+
+appender_t *file_appender(const char *name)
 {
 	struct list_head *pos = &logfiles_head;
 	list_for_each(pos, &logfiles_head) { //list_for_each_entry
@@ -207,11 +214,11 @@ void file_appender(const char *msg)
 		if (IS_OPEN_ON_WRITE(node->mode)) {
 			FILE *file = __open_logfile(node->name, node->mode, node);
 			if (file) {
-				fprintf(file, "%s\n", msg);
+                fprintf(file, "%s\n", name);
 				fclose(file);
 			}
 		} else {
-			fprintf(node->file, "%s\n", msg);
+            fprintf(node->file, "%s\n", name);
 			fflush(node->file);  //condition?
 		}
 	}
@@ -233,7 +240,7 @@ void __log_to_appenders(const char* msg)
 	pos = &appenders_head;
 	list_for_each(pos, &appenders_head) { //list_for_each_entry
 		appender_node* node = list_entry(pos, appender_node, list);
-		node->handle(msg);
+        node->appender->handle(msg, node->appender->opaque);
 	}
 	/*_ezmutex_unlock();*/
 }
