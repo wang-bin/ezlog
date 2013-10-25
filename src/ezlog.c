@@ -33,8 +33,13 @@ extern struct list_head g_global_printers_head;
 extern void __format_msg(char* result_msg, ezlog_context* context);
 extern void __log_to_appenders(const char* msg);
 extern void __init_printers_with_layout(struct list_head *printers_head, const char *format);
-extern void __log_to_appender(appender handle, const char* msg);
+extern void __log_to_appender(appender_t *appender, const char* msg);
 extern void __format_msg_with_printers(char *result_msg, ezlog_context *context, struct list_head *printers_head);
+
+typedef struct {
+    appender_t *appender;
+    struct list_head list;
+} appenders_t;
 
 static void print_version() {
 	printf("ezlog version: %s\n"
@@ -66,19 +71,19 @@ const char* ezlog_version_string()
 void ezlog_init_default()
 {
 	ezlog_init_layout(layout_format[DEFAULT_LAYOUT]);
-	ezlog_registerAppender(console_appender);
+    ezlog_registerAppender(console_appender());
 }
 
 LIST_HEAD(layout_appenders_map); /*layout_appenders_map_t*/
 
-static void __insert_appender(struct list_head* appenders_head, appender handle)
+static void __insert_appender(struct list_head* appenders_head, appender_t *appender)
 {
 	appenders_t *appender_node = (appenders_t*)malloc(sizeof(appenders_t));
-	appender_node->handle = handle;
+    appender_node->appender = appender;
 	list_add_tail(&appender_node->list, appenders_head);
 }
 
-void ezlog_set_appender_with_layout(appender handle, const char *format)
+void ezlog_set_appender_with_layout(appender_t *appender, const char *format)
 {
 	struct list_head *layout_pos = &layout_appenders_map;
 	struct list_head *appender_pos;
@@ -102,7 +107,7 @@ void ezlog_set_appender_with_layout(appender handle, const char *format)
 		list_for_each(appender_pos, &layout_node->appenders_head) {
 			appender_node = list_entry(appender_pos, appenders_t, list);
 			/*old appender found. remove it from list*/
-			if (appender_node->handle == handle) {
+            if (appender_node->appender == appender) {
 				printf("===Appender exists...\n");
 				if (layout_appender_exists) {
 					printf("===The appender's layout is the same as new\n");
@@ -132,7 +137,7 @@ void ezlog_set_appender_with_layout(appender handle, const char *format)
 	if (layout_exists) { /*printers(layout) exists*/
 		printf("===Old layout %s to appender\n", format);
 		fflush(0);
-		__insert_appender(&old_layout_node->appenders_head, handle);
+        __insert_appender(&old_layout_node->appenders_head, appender);
 	} else { /*add new appender to new layout*/
 		printf("===New layout %s to appender\n", format);
 		fflush(0);
@@ -151,7 +156,7 @@ void ezlog_set_appender_with_layout(appender handle, const char *format)
 			__init_printers_with_layout(layout_node->printers_head, format);
 		}
 		INIT_LIST_HEAD(&layout_node->appenders_head);
-		__insert_appender(&layout_node->appenders_head, handle);
+        __insert_appender(&layout_node->appenders_head, appender);
 		list_add_tail(&layout_node->list, &layout_appenders_map);
 	}
 }
@@ -256,7 +261,7 @@ void _ezlog_print(const char* level, const char* file, const int line, const cha
 		/*TODO: format msg with layout_node->printers*/
 		list_for_each(appender_pos, &layout_node->appenders_head) {
 			appender_node = list_entry(appender_pos, appenders_t, list);
-			__log_to_appender(appender_node->handle, result_msg);
+            __log_to_appender(appender_node->appender, result_msg);
 		}
 	}
 #endif
@@ -264,7 +269,6 @@ void _ezlog_print(const char* level, const char* file, const int line, const cha
 }
 
 void ezlog_fini() {
-	ezlog_remove_logfiles();
 	ezlog_unregisterAllAppenders();
 	cleanup_layout_appender_map();
 }

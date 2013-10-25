@@ -28,31 +28,31 @@
 extern "C" {
 #endif //__cplusplus
 
-typedef enum {
-	Append = 0x01, New = 0x02, OPEN_ON_WRITE = 0x04
-} LogOpenMode;
-
-#define IS_OPEN_ON_WRITE(m) ((m & OPEN_ON_WRITE) == OPEN_ON_WRITE)
-
-typedef void (*appender)(const char* msg);
+typedef struct {
+    void (*handle)(const char* msg, void* opaque);
+    void (*close)(void* opaque);
+    void *opaque;
+} appender_t;
 
 /*bind to global layout (not const)*/
-Q_EXPORT void ezlog_registerAppender(appender handle); //installHandler(handler)
-Q_EXPORT void ezlog_unregisterAppender(appender handle);
+Q_EXPORT void ezlog_registerAppender(appender_t* appender); //installHandler(handler)
+Q_EXPORT void ezlog_unregisterAppender(appender_t* appender);
 Q_EXPORT void ezlog_unregisterAllAppenders();
-/*
- *The default log file's name is yyyyMMddhhmmss.log. The default log file will be ignored if
- *ezlog_add_logfile() is called.
-*/
-Q_EXPORT void ezlog_add_logfile(const char* path, int mode); //LogOpenMode
-Q_EXPORT void ezlog_remove_logfile(const char* path);
-Q_EXPORT void ezlog_remove_logfiles();
+
 /*
   pre defined appenders: file, console
   just output the formated message.
 */
-Q_EXPORT void console_appender(const char* msg);
-Q_EXPORT void file_appender(const char* msg);
+Q_EXPORT appender_t* console_appender();
+
+typedef enum {
+    Append = 0x01, New = 0x02, OPEN_ON_WRITE = 0x04
+} LogOpenMode;
+#define IS_OPEN_ON_WRITE(m) ((m & OPEN_ON_WRITE) == OPEN_ON_WRITE)
+/*
+ * use default file name if name == 0. The default log file's name is yyyyMMddhhmmss.log.
+*/
+Q_EXPORT appender_t* file_appender(const char* name, LogOpenMode om);
 
 #ifdef __cplusplus
 }

@@ -50,13 +50,6 @@ typedef struct {
     struct list_head list;
 } key_print_node; /*TODO: printer_t*/
 
-
-typedef void (*appender_t)(const char* msg);
-typedef struct {
-    appender_t handle;
-    struct list_head list;
-} appenders_t;
-
 typedef struct {
     char *format;
     /*key_print_node *printers;*/

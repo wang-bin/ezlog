@@ -40,9 +40,6 @@
 #define ezlog_registerAppender(...)
 #define ezlog_unregisterAppender(...)
 #define ezlog_unregisterAllAppenders(...)
-#define ezlog_add_logfile(...)
-#define ezlog_remove_logfile(...)
-#define ezlog_remove_logfiles(...)
 #define console_appender(...)
 #define file_appender(...)
 #else
@@ -66,7 +63,7 @@ Q_EXPORT const char* ezlog_version_string();
 Q_EXPORT void ezlog_init_default();
 /* If appender not exists, insert it. If already exists, set the new format, because
  * an appender only has 1 layout, a layout can attach many appenders*/
-Q_EXPORT void ezlog_set_appender_with_layout(appender handle, const char* format);
+Q_EXPORT void ezlog_set_appender_with_layout(appender_t *appender, const char* format);
 
 //DO NOT use (fmt, args...), MSVC does not support it. use (fmt, ...)
 #define ezlog(level, ...) ezlog_##level(##__VA_ARGS__)
