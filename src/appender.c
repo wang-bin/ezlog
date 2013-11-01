@@ -129,7 +129,7 @@ appender_t* ezlog_get_default_appender()
 }
 
 /* DO NOT LOCK */
-void console_appender_handle(const char* msg, void* opaque)
+static void console_appender_handle(const char* msg, void* opaque)
 {
 #ifdef Q_OS_ANDROID
     __android_log_print(ANDROID_LOG_INFO, "ezlog", "%s", msg); //TODO: logtag
@@ -146,62 +146,63 @@ appender_t *console_appender()
     return a;
 }
 
-static FILE* __open_logfile(const char *path, int mode, logfile_t* lf)
-{
-	//First time is the same as mode. Then will will append the msg if OPEN_ON_WRITE
-	FILE *file = 0;
-	if(!strcmp(path, "stdout")) {
-		file = stdout;
-        lf->is_open = 1;
-	} else if(!strcmp(path, "stderr")) {
-		file = stderr;
-        lf->is_open = 1;
-	} else {
-		const char* m = "ab";
-        if ((mode & New) == New && lf->first) {
-			m = "wb";
-		}
 
-		file = fopen(path, m);
-		if(!file) {
-#ifndef Q_OS_WINCE
-			perror("Error opening log file"); //wince does not support
-#endif
-            lf->is_open = 0;
-			return 0;
-		} else {
-            lf->first = 0;
-            lf->is_open = 1;
-		}
-	}
-	return file;
-}
-
-void file_appender_handle(const char* msg, void* opaque)
+static void file_appender_handle(const char* msg, void* opaque)
 {
     logfile_t* lf = (logfile_t*)opaque;
     if (IS_OPEN_ON_WRITE(lf->mode) || !lf->is_open) {
-        FILE *file = __open_logfile(lf->name, lf->mode, lf);
-        if (!file) {
-            return;
-        }
-        lf->file = file;
+        if (!file_appender_open(lf)) {
+			return;
+		}
     }
     fprintf(lf->file, "%s\n", msg);
     //fflush(lf->file);  //condition?
     if (IS_OPEN_ON_WRITE(lf->mode) && lf->file != stdout && lf->file != stderr) {
-        lf->is_open = 0;
-        fclose(lf->file); //TODO: check error
+        file_appender_close(lf);
     }
 }
 
-void file_appender_close(void *opaque)
+static int file_appender_open(void *opaque)
+{
+	logfile_t *lf = (logfile_t*)opaque;
+    //First time is the same as mode. Then will will append the msg if OPEN_ON_WRITE
+    if(!strcmp(lf->name, "stdout")) {
+        lf->file = stdout;
+        lf->is_open = 1;
+    } else if(!strcmp(lf->name, "stderr")) {
+        lf->file = stderr;
+        lf->is_open = 1;
+    } else {
+        const char* m = "ab";
+        if ((lf->mode & New) == New && lf->first) {
+            m = "wb";
+        }
+
+        lf->file = fopen(lf->name, m);
+        if(!lf->file) {
+#ifndef Q_OS_WINCE
+            perror("Error opening log file"); //wince does not support
+#endif
+            lf->is_open = 0;
+            return -1;
+        } else {
+            lf->first = 0;
+            lf->is_open = 1;
+        }
+    }
+    return 0;
+}
+
+int file_appender_close(void *opaque)
 {
     logfile_t* lf = (logfile_t*)opaque;
     if (lf->is_open) {
         lf->is_open = 0;
-        fclose(lf->file); //TODO: check error
+        if (!fclose(lf->file)) {
+            return -1;
+        }
     }
+    return 0;
 }
 
 appender_t *file_appender(const char *name, LogOpenMode om)
@@ -230,6 +231,7 @@ appender_t *file_appender(const char *name, LogOpenMode om)
     }
     appender->opaque = lf;
     appender->handle = file_appender_handle;
+	appender->open = file_appender_open;
     appender->close = file_appender_close;
     //open file here?
     return appender;
@@ -238,6 +240,7 @@ appender_t *file_appender(const char *name, LogOpenMode om)
 
 /*
 	for internal use. lock here so that appender need not care about thread issues
+	TODO: check open?
 */
 void __log_to_appender(appender_t *appender, const char* msg)
 {

@@ -30,7 +30,8 @@ extern "C" {
 
 typedef struct {
     void (*handle)(const char* msg, void* opaque);
-    void (*close)(void* opaque);
+    int (*open)(void* opaque);
+    int (*close)(void* opaque);
     void *opaque;
 } appender_t;
 
