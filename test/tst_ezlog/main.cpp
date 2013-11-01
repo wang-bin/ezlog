@@ -29,10 +29,10 @@ int main(int argc, char** argv)
 	(void)argc;
 	(void)argv;
 	ezlog_init_default();
-	ezlog_registerAppender(file_appender);
-	ezlog_set_appender_with_layout(file_appender, "%mm%: %msg");
-	ezlog_set_appender_with_layout(file_appender, "[%level%] %hh%:%mm%:%ss%: %msg");
-	ezlog_add_logfile("ezlog.txt", Append);
+    appender_t *filelog = file_appender(0, New);
+	ezlog_registerAppender(filelog);
+	ezlog_set_appender_with_layout(filelog, "%mm%: %msg");
+	ezlog_set_appender_with_layout(filelog, "[%level%] %hh%:%mm%:%ss%: %msg");
 	ezlog_debug("Bye, cruel world!");
 	ezlog(info);
 	ezlog_set_global_layout("%tid%: %msg");

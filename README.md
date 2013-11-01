@@ -11,22 +11,29 @@ This will display the message to console, and use the format "YY%-%MM%-%DD% %hh%
 
 If you need to log to a file
 
-    ezlog_registerAppender(file_appender);
-    ezlog_add_logfile("ezlog.txt", Append);
+    ezlog_registerAppender(file_appender("ezlog.txt", Append));
 
 If you want to use other target, you can define your own appender.
 
-    typedef void (*appender)(const char* msg);
 
+    typede (*appender)(consttruct {
+        void (*handle)(const char* msg, void* opaque);
+        void (*close)(void* opaque);
+        void *opaque;
+    } appender_t;
 e.g.
 
-    void widget_appender(const char* msg) {
-        log_widget::instance()->appendText(msg);
+appender_t.handle is
+
+    void widget_appender_handle(const char* msg, void *opaque) {
+        ((Widget*)opaque)->showText(msg);
     }
+
+appender_t.opaque is your widget instance
 
 and for android
 
-    void android_console_appender(const char* msg) {
+    void android_appender_handle(const char* msg, void *) {
         __android_log_print(ANDROID_LOG_DEBUG, "%s", msg); //TODO: logtag
     }
 
