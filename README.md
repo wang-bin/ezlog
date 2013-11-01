@@ -13,7 +13,7 @@ If you don't want to log to console, you can call `ezlog_set_default_appender(0)
 
 If you need to log to a file
 
-    ezlog_registerAppender(file_appender("ezlog.txt", Append));
+    ezlog_register_appender(file_appender("ezlog.txt", Append));
 
 If you want to use other target, you can define your own appender.
 

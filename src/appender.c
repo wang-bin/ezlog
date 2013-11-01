@@ -59,11 +59,11 @@ LIST_HEAD(appenders_head);
 #define SIZE_LOGFILENAME 19 //yyyyMMddhhmmss.log
 
 /*!
- * \brief ezlog_registerAppender
+ * \brief ezlog_register_appender
  * \param handle
  *
  */
-void ezlog_registerAppender(appender_t* appender)
+void ezlog_register_appender(appender_t* appender)
 {
 	appender_node *node;
 	_ezmutex_lock();
@@ -76,7 +76,7 @@ void ezlog_registerAppender(appender_t* appender)
 	_ezmutex_unlock();
 }
 
-void ezlog_unregisterAppender(appender_t *appender)
+void ezlog_unregister_appender(appender_t *appender)
 {
 	struct list_head *pos;
 	_ezmutex_lock();
@@ -98,7 +98,7 @@ void ezlog_unregisterAppender(appender_t *appender)
 }
 
 /* TODO: lock*/
-void ezlog_unregisterAllAppenders()
+void ezlog_unregister_appenders()
 {
 	appender_node* node;
 	while (!list_empty(&appenders_head)) {
@@ -117,10 +117,10 @@ void ezlog_set_default_appender(appender_t *appender)
         return;
     }
     if (s_default_appender) {
-        ezlog_unregisterAppender(s_default_appender);
+        ezlog_unregister_appender(s_default_appender);
     }
     s_default_appender = appender;
-    ezlog_registerAppender(s_default_appender);
+    ezlog_register_appender(s_default_appender);
 }
 
 appender_t* ezlog_get_default_appender()

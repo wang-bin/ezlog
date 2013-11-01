@@ -31,7 +31,7 @@ int main(int argc, char** argv)
 	(void)argv;
 	ezlog_init_default();
     filelog = file_appender(0, New);
-	ezlog_registerAppender(filelog);
+	ezlog_register_appender(filelog);
 	ezlog_set_appender_with_layout(ezlog_get_default_appender(), "%mm%: %msg");
 	ezlog_set_appender_with_layout(filelog, "[%level%] %hh%:%mm%:%ss%: %msg");
 	ezlog_debug("Bye, cruel world!");

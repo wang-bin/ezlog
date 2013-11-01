@@ -2,7 +2,7 @@
   'targets': [
     {
       'target_name': 'ezlog',
-      'type': 'shared_library',
+      'type': 'static_library',
       'dependencies': [
 
       ],

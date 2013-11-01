@@ -37,9 +37,9 @@
 #define ezlog_fini(...)
 #define ezlog_set_global_layout(...)
 #define ezlog_init_layout(...)
-#define ezlog_registerAppender(...)
-#define ezlog_unregisterAppender(...)
-#define ezlog_unregisterAllAppenders(...)
+#define ezlog_register_appender(...)
+#define ezlog_unregister_appender(...)
+#define ezlog_unregister_appenders(...)
 #define console_appender(...)
 #define file_appender(...)
 #else

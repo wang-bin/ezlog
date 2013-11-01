@@ -36,9 +36,9 @@ typedef struct {
 } appender_t;
 
 /*bind to global layout (not const)*/
-EZLOG_EXPORT void ezlog_registerAppender(appender_t* appender); //installHandler(handler)
-EZLOG_EXPORT void ezlog_unregisterAppender(appender_t* appender);
-EZLOG_EXPORT void ezlog_unregisterAllAppenders();
+EZLOG_EXPORT void ezlog_register_appender(appender_t* appender); //installHandler(handler)
+EZLOG_EXPORT void ezlog_unregister_appender(appender_t* appender);
+EZLOG_EXPORT void ezlog_unregister_appenders();
 /*!
    unregister old one.
    appender==0 means disable default appender. console appender is the default appender by default
