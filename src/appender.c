@@ -163,7 +163,7 @@ void file_appender_handle(const char* msg, void* opaque)
         lf->file = file;
     }
     fprintf(lf->file, "%s\n", msg);
-    fflush(lf->file);  //condition?
+    //fflush(lf->file);  //condition?
     if (IS_OPEN_ON_WRITE(lf->mode) && lf->file != stdout && lf->file != stderr) {
         lf->is_open = 0;
         fclose(lf->file); //TODO: check error
@@ -191,8 +191,10 @@ appender_t *file_appender(const char *name, LogOpenMode om)
     if (!lf) {
         return 0;
     }
+    memset(lf, 0, sizeof(logfile_t));
     lf->mode = om;
     lf->first = 1;
+    lf->is_open = 0;
     if (!name) {
         getTime(&t);
         memset(lf->name, 0, sizeof(lf->name));
