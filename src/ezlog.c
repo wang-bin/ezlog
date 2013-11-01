@@ -71,7 +71,7 @@ const char* ezlog_version_string()
 void ezlog_init_default()
 {
 	ezlog_init_layout(layout_format[DEFAULT_LAYOUT]);
-    ezlog_registerAppender(console_appender());
+    ezlog_set_default_appender(console_appender());
 }
 
 LIST_HEAD(layout_appenders_map); /*layout_appenders_map_t*/

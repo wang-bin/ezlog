@@ -38,7 +38,12 @@ typedef struct {
 EZLOG_EXPORT void ezlog_registerAppender(appender_t* appender); //installHandler(handler)
 EZLOG_EXPORT void ezlog_unregisterAppender(appender_t* appender);
 EZLOG_EXPORT void ezlog_unregisterAllAppenders();
-
+/*!
+   unregister old one.
+   appender==0 means disable default appender. console appender is the default appender by default
+*/
+EZLOG_EXPORT void ezlog_set_default_appender(appender_t *appender);
+EZLOG_EXPORT appender_t* ezlog_get_default_appender();
 /*
   pre defined appenders: file, console
   just output the formated message.

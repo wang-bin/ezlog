@@ -64,7 +64,7 @@ static const char* const k_ezlog_version_string = TOSTR(EZLOG_VERSION_MAJOR) "."
 
 
 /*
- *Q_EXPORT: steal from qglobal.h
+ *EZLOG_EXPORT: steal from qglobal.h
 */
 #if defined(__ARMCC__) || defined(__CC_ARM)
 #  define Q_CC_RVCT
@@ -165,11 +165,11 @@ static const char* const k_ezlog_version_string = TOSTR(EZLOG_VERSION_MAJOR) "."
 
 
 #if defined(Q_DLL_LIBRARY)
-#  undef Q_EXPORT
-#  define Q_EXPORT Q_DECL_EXPORT
+#  undef EZLOG_EXPORT
+#  define EZLOG_EXPORT Q_DECL_EXPORT
 #else
-#  undef Q_EXPORT
-#  define Q_EXPORT //Q_DECL_IMPORT //only for vc?
+#  undef EZLOG_EXPORT
+#  define EZLOG_EXPORT //Q_DECL_IMPORT //only for vc?
 #endif
 
 

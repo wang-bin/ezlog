@@ -30,6 +30,7 @@
 
 extern char* const g_global_layout;
 extern void ezlog_set_appender_with_layout(appender_t *appender, const char* format);
+static appender_t* s_default_appender = 0;
 
 typedef struct {
     appender_t *appender;
@@ -107,6 +108,37 @@ void ezlog_unregisterAllAppenders()
 	}
 }
 
+void ezlog_set_default_appender(appender_t *appender)
+{
+    if (s_default_appender == appender) {
+        return;
+    }
+    if (s_default_appender) {
+        ezlog_unregisterAppender(s_default_appender);
+    }
+    s_default_appender = appender;
+    ezlog_registerAppender(s_default_appender);
+}
+
+appender_t* ezlog_get_default_appender()
+{
+    return s_default_appender;
+}
+
+/* DO NOT LOCK */
+void console_appender_handle(const char* msg, void* opaque)
+{
+    fprintf(stdout, "%s\n", msg);
+    fflush(stdout);  //condition?
+}
+
+appender_t *console_appender()
+{
+    appender_t *a = (appender_t*)malloc(sizeof(appender_t));
+    a->handle = console_appender_handle;
+    return a;
+}
+
 static FILE* __open_logfile(const char *path, int mode, logfile_t* lf)
 {
 	//First time is the same as mode. Then will will append the msg if OPEN_ON_WRITE
@@ -136,20 +168,6 @@ static FILE* __open_logfile(const char *path, int mode, logfile_t* lf)
 		}
 	}
 	return file;
-}
-
-/* DO NOT LOCK */
-void console_appender_handle(const char* msg, void* opaque)
-{
-    fprintf(stdout, "%s\n", msg);
-    fflush(stdout);  //condition?
-}
-
-appender_t *console_appender()
-{
-    appender_t *a = (appender_t*)malloc(sizeof(appender_t));
-    a->handle = console_appender_handle;
-    return a;
 }
 
 void file_appender_handle(const char* msg, void* opaque)

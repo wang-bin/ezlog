@@ -9,6 +9,8 @@
 
 This will display the message to console, and use the format "YY%-%MM%-%DD% %hh%:%mm%:%ss% {tid:%tid% pid:%pid}[%file%] %func% @%line%: %msg".
 
+If you don't want to log to console, you can call `ezlog_set_default_appender(0)` after `ezlog_init_default()`, or just don't call `ezlog_init_default()` at all.
+
 If you need to log to a file
 
     ezlog_registerAppender(file_appender("ezlog.txt", Append));
@@ -21,6 +23,7 @@ If you want to use other target, you can define your own appender.
         void (*close)(void* opaque);
         void *opaque;
     } appender_t;
+
 e.g.
 
 appender_t.handle is
