@@ -26,7 +26,7 @@
 #include <QtCore/QString>
 
 /* runtime version. used to compare with compile time version */
-Q_EXPORT unsigned QtEZlog_Version();
+EZLOG_EXPORT unsigned QtEZlog_Version();
 
 namespace ezlog {
 namespace QtEZLog {

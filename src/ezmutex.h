@@ -30,7 +30,7 @@
 #include "ezlog_global.h"
 
 /*DO NOT ALWAYS_INLINE because function body not available*/
-Q_EXPORT void _ezmutex_lock();
-Q_EXPORT void _ezmutex_unlock();
+EZLOG_EXPORT void _ezmutex_lock();
+EZLOG_EXPORT void _ezmutex_unlock();
 
 #endif // EZMUTEX_H

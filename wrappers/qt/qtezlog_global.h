@@ -53,11 +53,11 @@ static const char* const qtezlog_version_string = TOSTR(QTEZLOG_MAJOR) "." TOSTR
 
 
 #if defined(Q_DLL_LIBRARY)
-#  undef Q_EXPORT
-#  define Q_EXPORT Q_DECL_EXPORT
+#  undef EZLOG_EXPORT
+#  define EZLOG_EXPORT Q_DECL_EXPORT
 #else
-#  undef Q_EXPORT
-#  define Q_EXPORT //Q_DECL_IMPORT //only for vc?
+#  undef EZLOG_EXPORT
+#  define EZLOG_EXPORT //Q_DECL_IMPORT //only for vc?
 #endif
 
 #if defined(QTEZLOG_LIBRARY)

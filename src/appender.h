@@ -35,15 +35,15 @@ typedef struct {
 } appender_t;
 
 /*bind to global layout (not const)*/
-Q_EXPORT void ezlog_registerAppender(appender_t* appender); //installHandler(handler)
-Q_EXPORT void ezlog_unregisterAppender(appender_t* appender);
-Q_EXPORT void ezlog_unregisterAllAppenders();
+EZLOG_EXPORT void ezlog_registerAppender(appender_t* appender); //installHandler(handler)
+EZLOG_EXPORT void ezlog_unregisterAppender(appender_t* appender);
+EZLOG_EXPORT void ezlog_unregisterAllAppenders();
 
 /*
   pre defined appenders: file, console
   just output the formated message.
 */
-Q_EXPORT appender_t* console_appender();
+EZLOG_EXPORT appender_t* console_appender();
 
 typedef enum {
     Append = 0x01, New = 0x02, OPEN_ON_WRITE = 0x04
@@ -52,7 +52,7 @@ typedef enum {
 /*
  * use default file name if name == 0. The default log file's name is yyyyMMddhhmmss.log.
 */
-Q_EXPORT appender_t* file_appender(const char* name, LogOpenMode om);
+EZLOG_EXPORT appender_t* file_appender(const char* name, LogOpenMode om);
 
 #ifdef __cplusplus
 }

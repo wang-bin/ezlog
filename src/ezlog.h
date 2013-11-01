@@ -57,13 +57,13 @@ enum Level {
 };
 
 /* runtime version. used to compare with compile time version */
-Q_EXPORT int ezlog_version();
-Q_EXPORT const char* ezlog_version_string();
+EZLOG_EXPORT int ezlog_version();
+EZLOG_EXPORT const char* ezlog_version_string();
 
-Q_EXPORT void ezlog_init_default();
+EZLOG_EXPORT void ezlog_init_default();
 /* If appender not exists, insert it. If already exists, set the new format, because
  * an appender only has 1 layout, a layout can attach many appenders*/
-Q_EXPORT void ezlog_set_appender_with_layout(appender_t *appender, const char* format);
+EZLOG_EXPORT void ezlog_set_appender_with_layout(appender_t *appender, const char* format);
 
 //DO NOT use (fmt, args...), MSVC does not support it. use (fmt, ...)
 #define ezlog(level, ...) ezlog_##level(##__VA_ARGS__)
@@ -75,10 +75,10 @@ Q_EXPORT void ezlog_set_appender_with_layout(appender_t *appender, const char* f
 #define ezlog_fatal(fmt, ...) _ezlog_print("FATAL", __FILE__, __LINE__, EZLOG_FUNC, ""#fmt, ##__VA_ARGS__)
 
 /*Usually this is called automatically after main()*/
-Q_EXPORT void ezlog_fini();
+EZLOG_EXPORT void ezlog_fini();
 
 /* for internal use */
-Q_EXPORT void _ezlog_print(const char* level, const char* file, const int line, const char* func, const char* fmt, ...);
+EZLOG_EXPORT void _ezlog_print(const char* level, const char* file, const int line, const char* func, const char* fmt, ...);
 
 #ifdef __cplusplus
 }

@@ -46,9 +46,9 @@ static const char* const layout_format[] = {
   Setup the log message format.
 */
 
-Q_EXPORT void ezlog_set_global_layout(const char* format);
+EZLOG_EXPORT void ezlog_set_global_layout(const char* format);
 /*deprecate, use ezlog_set_global_layout() instead*/
-Q_EXPORT void ezlog_init_layout(const char* format);
+EZLOG_EXPORT void ezlog_init_layout(const char* format);
 //char* ezlog_layout_msg(const char* msg_extra);
 
 #ifdef __cplusplus
