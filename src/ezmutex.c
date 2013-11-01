@@ -41,7 +41,7 @@ PRE_FUNC_ADD(InitializeCriticalSection, &g_mutex)
 #endif
 
 
-ALWAYS_INLINE void _ezmutex_lock()
+void _ezmutex_lock()
 {
 #ifdef USE_PTHREAD
     pthread_mutex_lock(&g_mutex);
@@ -50,7 +50,7 @@ ALWAYS_INLINE void _ezmutex_lock()
 #endif
 }
 
-ALWAYS_INLINE void _ezmutex_unlock()
+void _ezmutex_unlock()
 {
 #ifdef USE_PTHREAD
     pthread_mutex_unlock(&g_mutex);

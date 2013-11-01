@@ -26,17 +26,18 @@
 
 int main(int argc, char** argv)
 {
+	appender_t *filelog;
 	(void)argc;
 	(void)argv;
 	ezlog_init_default();
-    appender_t *filelog = file_appender(0, New);
+    filelog = file_appender(0, New);
 	ezlog_registerAppender(filelog);
 	ezlog_set_appender_with_layout(filelog, "%mm%: %msg");
 	ezlog_set_appender_with_layout(filelog, "[%level%] %hh%:%mm%:%ss%: %msg");
 	ezlog_debug("Bye, cruel world!");
-	ezlog(info);
+	ezlog(info, "");
 	ezlog_set_global_layout("%tid%: %msg");
-    ezlog_debug();
+    ezlog_debug("");
 	//for (int i = 0; i < 1024; ++i)
 	//	ezlog_debug("%d", i);
 	//ezlog_fini();
