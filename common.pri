@@ -21,7 +21,7 @@ isEmpty(COMMON_PRI_INCLUDED): { #begin COMMON_PRI_INCLUDED
 
 CONFIG += profile
 #profiling, -pg is not supported for msvc
-debug:!*msvc*:profile {
+debug:!*msvc*:!android:profile {
         QMAKE_CXXFLAGS_DEBUG += -pg
         QMAKE_LFLAGS_DEBUG += -pg
         QMAKE_CXXFLAGS_DEBUG = $$unique(QMAKE_CXXFLAGS_DEBUG)

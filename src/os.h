@@ -70,6 +70,7 @@
 /* OS(ANDROID) - Android */
 #ifdef ANDROID
 #define Q_OS_ANDROID 1
+#define Q_OS_LINUX 1
 #endif
 
 /* OS(HAIKU) - Haiku */

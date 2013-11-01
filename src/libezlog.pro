@@ -7,7 +7,7 @@ CONFIG -= app_bundle
 CONFIG *= ezlog-buildlib
 
 #var with '_' can not pass to pri?
-STATICLINK = 1
+STATICLINK = 0
 PROJECTROOT = $$PWD/..
 !include(libezlog.pri): error("could not find libezlog.pri")
 preparePaths($$OUT_PWD/../out)

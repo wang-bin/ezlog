@@ -24,6 +24,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#ifdef Q_OS_ANDROID
+#include <android/log.h>
+#endif //Q_OS_ANDROID
 #include "eztime.h"
 #include "list.h"
 #include "ezmutex.h"
@@ -128,8 +131,12 @@ appender_t* ezlog_get_default_appender()
 /* DO NOT LOCK */
 void console_appender_handle(const char* msg, void* opaque)
 {
+#ifdef Q_OS_ANDROID
+    __android_log_print(ANDROID_LOG_INFO, "ezlog", "%s", msg); //TODO: logtag
+#else
     fprintf(stdout, "%s\n", msg);
     fflush(stdout);  //condition?
+#endif
 }
 
 appender_t *console_appender()

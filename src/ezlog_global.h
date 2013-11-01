@@ -66,6 +66,11 @@ static const char* const k_ezlog_version_string = TOSTR(EZLOG_VERSION_MAJOR) "."
 /*
  *EZLOG_EXPORT: steal from qglobal.h
 */
+#ifdef ANDROID
+#define Q_OS_ANDROID
+#define Q_OS_LINUX
+#endif
+
 #if defined(__ARMCC__) || defined(__CC_ARM)
 #  define Q_CC_RVCT
 #endif
