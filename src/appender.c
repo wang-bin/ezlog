@@ -215,6 +215,7 @@ appender_t *file_appender(const char *name, LogOpenMode om)
     }
     lf = (logfile_t*)malloc(sizeof(logfile_t));
     if (!lf) {
+        free(appender);
         return 0;
     }
     memset(lf, 0, sizeof(logfile_t));
