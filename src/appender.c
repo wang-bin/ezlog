@@ -103,10 +103,10 @@ void ezlog_unregister_appenders()
 	appender_node* node;
 	while (!list_empty(&appenders_head)) {
 		node = list_entry(appenders_head.next, appender_node, list);
-		list_del(appenders_head.next);
         if (node->appender->close) {
             node->appender->close(node->appender->opaque);
         }
+		list_del(appenders_head.next);
 		free(node);
 	}
 }
