@@ -80,7 +80,6 @@ void ezlog_unregister_appender(appender_t *appender)
 {
 	struct list_head *pos;
 	_ezmutex_lock();
-	pos = &appenders_head;
 	/*TODO: use while(!list_empty())*/
 	list_for_each(pos, &appenders_head) {
 		appender_node* node = list_entry(pos, appender_node, list);
@@ -252,7 +251,6 @@ void __log_to_appenders(const char* msg)
 {
 	struct list_head *pos;
 	/*_ezmutex_lock();*/
-	pos = &appenders_head;
 	list_for_each(pos, &appenders_head) { //list_for_each_entry
 		appender_node* node = list_entry(pos, appender_node, list);
         node->appender->handle(msg, node->appender->opaque);

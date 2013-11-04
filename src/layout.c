@@ -207,16 +207,20 @@ void ezlog_set_global_layout(const char *format)
 	/*compare the printers' address if layout_entry use a printers pointer*/
 	list_for_each(layout_pos, &layout_appenders_map) {
 		layout_entry = list_entry(layout_pos, layout_appenders_map_t, list);
-		if (layout_entry->printers_head == &g_global_printers_head) {
-			free(layout_entry->format);
-			layout_entry->format = (char*)malloc(sizeof(char) * (format_len + 1));
-			memset(layout_entry->format, 0, format_len + 1);
-			memcpy(layout_entry->format, format, format_len);
+        free(layout_entry->format);
+        layout_entry->format = (char*)malloc(sizeof(char) * (format_len + 1));
+        memset(layout_entry->format, 0, format_len + 1);
+        memcpy(layout_entry->format, format, format_len);
+        if (layout_entry->printers_head == &g_global_printers_head) {
 			/*If the layout appears mutiple times in the map, it's ok, g_global_printers_head will be cleaned only once*/
 			//layout_entry->printers_head.next = g_global_printers_head.next;
 			//layout_entry->printers_head.prev = g_global_printers_head.prev;
-		}
+        } else {
+            //set to global. TODO: merge instead
+            __init_printers_with_layout(layout_entry->printers_head, format);
+        }
 	}
+    // TODO: merge same layout
 	printf("global layout updated...\n");
 	fflush(0);
 }
@@ -247,7 +251,6 @@ void __format_msg(char* result_msg, ezlog_context* context)
 	int index = 0;
 	struct list_head *pos;
 	/*_ezmutex_lock();*/
-	pos = &g_global_printers_head;
 	list_for_each(pos, &g_global_printers_head) {
 		key_print_node* node = list_entry(pos, key_print_node, list);
 		//printf("index=%d, key=%s, delimiter=%s\n", index, node->printer->key, node->printer->delimiter);
