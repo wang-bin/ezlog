@@ -8,4 +8,4 @@ PROJECTROOT = $$PWD/../..
 include($$PROJECTROOT/src/libezlog.pri)
 preparePaths($$OUT_PWD/../../out)
 
-SOURCES += main.cpp
+SOURCES += main.c

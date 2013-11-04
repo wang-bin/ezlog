@@ -35,9 +35,9 @@ int main(int argc, char** argv)
 	ezlog_set_appender_with_layout(ezlog_get_default_appender(), "%mm%: %msg");
 	ezlog_set_appender_with_layout(filelog, "[%level%] %hh%:%mm%:%ss%: %msg");
 	ezlog_debug("Bye, cruel world!");
-	ezlog(info, "");
+	ezlog(info, );
 	ezlog_set_global_layout("%tid%: %msg");
-    ezlog_debug("global layout: %tid%: %msg");
+    ezlog_debug("global layout: %%tid%%: %%msg");
 
 	//for (int i = 0; i < 1024; ++i)
 	//	ezlog_debug("%d", i);
