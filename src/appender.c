@@ -147,21 +147,6 @@ appender_t *console_appender()
 }
 
 
-static void file_appender_handle(const char* msg, void* opaque)
-{
-    logfile_t* lf = (logfile_t*)opaque;
-    if (IS_OPEN_ON_WRITE(lf->mode) || !lf->is_open) {
-        if (!file_appender_open(lf)) {
-			return;
-		}
-    }
-    fprintf(lf->file, "%s\n", msg);
-    //fflush(lf->file);  //condition?
-    if (IS_OPEN_ON_WRITE(lf->mode) && lf->file != stdout && lf->file != stderr) {
-        file_appender_close(lf);
-    }
-}
-
 static int file_appender_open(void *opaque)
 {
 	logfile_t *lf = (logfile_t*)opaque;
@@ -203,6 +188,21 @@ int file_appender_close(void *opaque)
         }
     }
     return 0;
+}
+
+static void file_appender_handle(const char* msg, void* opaque)
+{
+    logfile_t* lf = (logfile_t*)opaque;
+    if (IS_OPEN_ON_WRITE(lf->mode) || !lf->is_open) {
+        if (!file_appender_open(lf)) {
+            return;
+        }
+    }
+    fprintf(lf->file, "%s\n", msg);
+    //fflush(lf->file);  //condition?
+    if (IS_OPEN_ON_WRITE(lf->mode) && lf->file != stdout && lf->file != stderr) {
+        file_appender_close(lf);
+    }
 }
 
 appender_t *file_appender(const char *name, LogOpenMode om)
